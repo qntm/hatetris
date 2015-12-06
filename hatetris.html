@@ -414,14 +414,16 @@
 				}
 
 				// Start listening for hash changes
-				window.location.prevHash = null;
+				window.location.prevHash = "";
 				window.setInterval(function() {
 					var hash = window.location.hash;
+					if(!hash) {
+						hash = "";
+					}
 					if(hash.charAt(0) === "#") {
 						hash = hash.substr(1);
 					}
 					if(hash !== window.location.prevHash) {
-						console.log(hash);
 						window.location.prevHash = hash;
 						startReplay(hash);
 					}
