@@ -1,0 +1,35 @@
+body {
+	font-family: arial;
+	margin: 50px 0 0 50px;
+}
+.left {
+	float: left;
+	margin: 0 50px 50px 0;
+}
+.right {
+	margin: 0 50px 50px 0;
+}
+p {
+	margin: 10px;
+}
+td.cell {
+	width: 25px;
+	height: 25px;
+	color: white;
+	background-color: black;
+	padding: 0;
+	text-align: center;
+	vertical-align: middle;
+}
+td.bar {
+	border-top: 1px solid red;
+}
+td.manual {
+	cursor: pointer;
+}
+td.landed {
+	background-color: blue;
+}
+td.live {
+	background-color: red;
+}

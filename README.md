@@ -1,1 +1,3 @@
-See http://qntm.org/hatetris
+# hatetris
+
+This is the source code for [HATETRIS](https://qntm.org/hatetris).
