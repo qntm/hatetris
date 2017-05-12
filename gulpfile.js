@@ -4,8 +4,18 @@ var browserify = require("browserify");
 var del = require("del");
 var gulp = require("gulp");
 var gulpConcatCss = require("gulp-concat-css");
+var gulpJasmine = require("gulp-jasmine");
 var runSequence = require("run-sequence");
 var vinylSourceStream = require("vinyl-source-stream");
+
+gulp.task('jasmine', function () {
+  return gulp
+    .src('./test/*.js')
+    .pipe(gulpJasmine({
+      verbose: true,
+      includeStackTrace: true
+    }))
+})
 
 gulp.task("delete", function() {
 	del.sync("./dist");
@@ -44,9 +54,13 @@ gulp.task("html", function() {
 });
 
 gulp.task("build", function(cb) {
-	runSequence("delete", "css", "img", "js", "html", cb);
+	runSequence("jasmine", "delete", "css", "img", "js", "html", cb);
 });
 
 gulp.task("default", ["build"], function() {
-	gulp.watch("./src/**/*.*", ["build"]);
+	gulp.watch([
+		"./src/**/*.*",
+		"./test/**/*.*"
+	], ["build"]);
 });
+

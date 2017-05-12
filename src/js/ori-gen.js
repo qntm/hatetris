@@ -7,8 +7,24 @@
 var dim = 4;
 var directions = 4;
 var doPiece = function(piece) {
-	var id = piece.id;
-	var bits = piece.bits;
+	if(piece.length !== dim) {
+		throw Error("Pieces must be " + String(dim) + " by " + String(dim));
+	}
+
+	var bits = [];
+	piece.forEach(function(string, y) {
+		if(string.length !== dim) {
+			throw Error("Pieces must be " + String(dim) + " by " + String(dim));
+		}
+
+		for(var x = 0; x < string.length; x++) {
+			if(string.charAt(x) === "#") {
+				bits.push({x: x, y: y});
+			} else if(string.charAt(x) !== ".") {
+				throw Error("Misconfigured pieces");
+			}
+		}
+	});
 
 	var layouts = [];
 	for(var o = 0; o < directions; o++) {
@@ -86,11 +102,7 @@ var doPiece = function(piece) {
 };
 
 module.exports = function(pieces) {
-	var orientations = {};
-	pieces.forEach(function(piece) {
-		orientations[piece.id] = doPiece(piece);
-	});
-	return orientations;
+	return pieces.map(doPiece);
 };
 
 module.exports._doPiece = doPiece;

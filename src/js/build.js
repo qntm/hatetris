@@ -4,87 +4,14 @@
 
 "use strict";
 
-var oriGen = require("./ori-gen.js");
+var firstState = require("./first-state.js");
+var moves = require("./moves.js");
+var nextState = require("./next-state.js");
 var replay = require("./replay.js");
 
 var minWidth = 4;
 
-// Fixed attributes of all of Tetris
-
-// Note that the order here is significant,
-// the least convenient piece is placed first.
-var pieces = [
-	{
-		id: "S",
-		bits: [
-			{x: 1, y: 2},
-			{x: 2, y: 1},
-			{x: 2, y: 2},
-			{x: 3, y: 1}
-		]
-	},
-	{
-		id: "Z",
-		bits: [
-			{x: 1, y: 1},
-			{x: 2, y: 1},
-			{x: 2, y: 2},
-			{x: 3, y: 2}
-		]
-	},
-	{
-		id: "O",
-		bits: [
-			{x: 1, y: 1},
-			{x: 1, y: 2},
-			{x: 2, y: 1},
-			{x: 2, y: 2}
-		]
-	},
-	{
-		id: "I",
-		bits: [
-			{x: 0, y: 1},
-			{x: 1, y: 1},
-			{x: 2, y: 1},
-			{x: 3, y: 1}
-		]
-	},
-	{
-		id: "L",
-		bits: [
-			{x: 1, y: 1},
-			{x: 1, y: 2},
-			{x: 2, y: 1},
-			{x: 3, y: 1}
-		]
-	},
-	{
-		id: "J",
-		bits: [
-			{x: 1, y: 1},
-			{x: 1, y: 2},
-			{x: 1, y: 3},
-			{x: 2, y: 1}
-		]
-	},
-	{
-		id: "T",
-		bits: [
-			{x: 1, y: 1},
-			{x: 2, y: 1},
-			{x: 2, y: 2},
-			{x: 3, y: 1}
-		]
-	}
-];
-var pieceIds = pieces.map(function(piece) {
-	return piece.id;
-});
-var moves = ["L", "R", "D", "U"];
-var orientations = oriGen(pieces);
-
-module.exports = function(bar, wellDepth, wellWidth, searchDepth, replayTimeout) {
+module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, replayTimeout) {
 	if(wellDepth < bar) {
 		throw Error("Can't have well with depth " + String(wellDepth) + " less than bar at " + String(bar));
 	}
@@ -93,249 +20,13 @@ module.exports = function(bar, wellDepth, wellWidth, searchDepth, replayTimeout)
 	}
 
 	// Internals
-	var liveState = {
-		well: [],
-		score: 0,
-		highestBlue: wellDepth,
-		piece: null
-	};
+	var liveState;
 	var replayString = "";
 	var replayOut;
 	var replayIn;
 	var replayTimeoutId;
 
-	/**
-		Input {well, score, highestBlue, piece} and a move, return
-		the new {well, score, highestBlue, piece}.
-	*/
-	var nextState = function(state, move) {
-		var nextWell = state.well;
-		var nextScore = state.score;
-		var nextHighestBlue = state.highestBlue;
-		var nextPiece = {
-			id : state.piece.id,
-			x  : state.piece.x,
-			y  : state.piece.y,
-			o  : state.piece.o
-		};
-
-		// apply transform (very fast now)
-		if(move === "L") {
-			nextPiece.x--;
-		}
-		if(move === "R") {
-			nextPiece.x++;
-		}
-		if(move === "D") {
-			nextPiece.y++;
-		}
-		if(move === "U") {
-			nextPiece.o = (nextPiece.o + 1) % 4;
-		}
-
-		var orientation = orientations[nextPiece.id][nextPiece.o];
-		var xActual = nextPiece.x + orientation.xMin;
-		var yActual = nextPiece.y + orientation.yMin;
-
-		if(
-			   xActual < 0                            // off left side
-			|| xActual + orientation.xDim > wellWidth // off right side
-			|| yActual < 0                            // off top (??)
-			|| yActual + orientation.yDim > wellDepth // off bottom
-			|| orientation.rows.some(function(row, y) {
-				return state.well[yActual + y] & (row << xActual);
-			}) // obstruction
-		) {
-			if(move === "D") {
-				// Lock piece
-				nextWell = state.well.slice();
-
-				var orientation = orientations[state.piece.id][state.piece.o];
-
-				// this is the top left point in the bounding box of this orientation of this piece
-				var xActual = state.piece.x + orientation.xMin;
-				var yActual = state.piece.y + orientation.yMin;
-
-				// update the "highestBlue" value to account for newly-placed piece
-				nextHighestBlue = Math.min(nextHighestBlue, yActual);
-
-				// row by row bitwise line alteration
-				// because we do this from the top down, we can remove lines as we go
-				for(var row = 0; row < orientation.yDim; row++ ) {
-					// can't negative bit-shift, but alas X can be negative
-					nextWell[yActual + row] |= (orientation.rows[row] << xActual);
-
-					// check for a complete line now
-					// NOTE: completed lines don't count if you've lost
-					if(
-						   yActual >= bar
-						&& nextWell[yActual + row] === (1 << wellWidth) - 1
-					) {
-						// move all lines above this point down
-						for(var k = yActual + row; k > 1; k--) {
-							nextWell[k] = nextWell[k - 1];
-						}
-
-						// insert a new blank line at the top
-						// though of course the top line will always be blank anyway
-						nextWell[0] = 0;
-
-						nextScore++;
-						nextHighestBlue++;
-					}
-				}
-				nextPiece = null;
-			}
-
-			// No move
-			else {
-				nextPiece = state.piece;
-			}
-		}
-
-		return {
-			well: nextWell,
-			score: nextScore,
-			highestBlue: nextHighestBlue,
-			piece: nextPiece
-		};
-	};
-
-	/**
-		Given a well and a piece, find the best possible location to put it.
-		Return the best rating found.
-	*/
-	function bestWellRating(well, highestBlue, pieceId, d) {
-		/**
-			Generate a unique integer to describe the position and orientation of this piece.
-			`x` varies between -3 and (`wellWidth` - 1) inclusive, so range = `wellWidth` + 3
-			`y` varies between 0 and (`wellDepth` + 2) inclusive, so range = `wellDepth` + 3
-			`o` varies between 0 and 3 inclusive, so range = 4
-		*/
-		function hashCode(x, y, o) {
-			return (x * (wellDepth + 3) + y) * 4 + o;
-		}
-
-		var piece = {
-			id : pieceId,
-			x  : 0,
-			y  : 0,
-			o  : 0
-		};
-
-		// iterate over all possible resulting positions and get
-		// best rating
-		var bestRating = null;
-
-		// move the piece down to a lower position before we have to
-		// start pathfinding for it
-		// move through empty rows
-		while(
-			   piece.y + 4 < wellDepth // piece is above the bottom
-			&& well[piece.y + 4] === 0 // nothing immediately below it
-		) {
-			piece = nextState({
-				well: well,
-				score: 0,
-				highestBlue: 0,
-				piece: piece
-			}, "D").piece;
-		}
-
-		// push first position
-		var piecePositions = [piece];
-
-		var seen = [];
-		seen[hashCode(piece.x, piece.y, piece.o)] = 1;
-
-		// a simple for loop won't work here because
-		// we are increasing the list as we go
-		var i = 0;
-		while(i < piecePositions.length) {
-			piece = piecePositions[i];
-
-			// apply all possible moves
-			moves.forEach(function(move) {
-				var newState = nextState({
-					well: well,
-					score: 0,
-					highestBlue: highestBlue,
-					piece: piece
-				}, move);
-				var newPiece = newState.piece;
-
-				// transformation failed?
-				if(newPiece === null) {
-
-					// piece locked? better add that to the list
-					// do NOT check locations, they aren't significant here
-					if(move === "D") {
-
-						var newWell = newState.well;
-
-						// here is the clever recursive search bit
-						// higher is better
-						var currentRating = newState.highestBlue + (
-							d === 0 ?
-								0
-							:
-								// deeper lines are worth less than immediate lines
-								// this is so the game will never give you a line if it can avoid it
-								// NOTE: make sure rating doesn't return a range of more than 100 values...
-								worstPieceRating(newWell, newState.highestBlue, d - 1) / 100
-						);
-
-						// store
-						if(bestRating === null || currentRating > bestRating) {
-							bestRating = currentRating;
-						}
-					}
-				}
-
-				// transform succeeded?
-				else {
-
-					// new location? append to list
-					// check locations, they are significant
-					var newHashCode = hashCode(newPiece.x, newPiece.y, newPiece.o);
-
-					if(seen[newHashCode] === undefined) {
-						piecePositions.push(newPiece);
-						seen[newHashCode] = 1;
-					}
-				}
-			});
-			i++;
-		}
-
-		return bestRating;
-	}
-
-	// initialise all variables for a new game or replay
-	function clearField() {
-
-		// empty well
-		// zero score
-		// top blue = wellDepth = 20
-		liveState.well = [];
-		for(var row = 0; row < wellDepth; row++) {
-			liveState.well.push(0);
-		}
-		liveState.score = 0;
-		liveState.highestBlue = wellDepth;
-
-		// first piece
-		liveState.piece = worstPiece(liveState.well, liveState.highestBlue);
-
-		// Don't trash the replay, though
-
-		draw(liveState, replayString);
-
-		// new replay
-		replayOut = [];
-	}
-
-	function draw(state, replayString) {
+	var draw = function(state, replayString) {
 		var well = state.well;
 		var piece = state.piece;
 
@@ -379,18 +70,33 @@ module.exports = function(bar, wellDepth, wellWidth, searchDepth, replayTimeout)
 		if(replayString !== "") {
 			elem.appendChild(document.createTextNode("replay of last game: " + replayString));
 		}
-	}
+	};
+
+	// initialise all variables for a new game or replay
+	var clearField = function() {
+
+		// empty well
+		// zero score
+		// top blue = wellDepth = 20
+		liveState = firstState(wellDepth);
+
+		// first piece
+		liveState.piece = worstPiece(liveState.well, liveState.highestBlue);
+
+		// Don't trash the replay, though
+
+		draw(liveState, replayString);
+
+		// new replay
+		replayOut = [];
+	};
 
 	// accepts the input of a move and attempts to apply that
 	// transform to the live piece in the live well.
 	// returns false if the game is over afterwards,
 	// returns true otherwise
-	function inputHandler(move) {
-		if(liveState.piece === null) {
-			return;
-		}
-
-		liveState = nextState(liveState, move);
+	var inputHandler = function(move) {
+		liveState = nextState(orientations, bar, wellDepth, wellWidth, liveState, move);
 
 		// update replayOut
 		replayOut.push(move);
@@ -413,9 +119,9 @@ module.exports = function(bar, wellDepth, wellWidth, searchDepth, replayTimeout)
 		draw(liveState, replayString);
 
 		return gameContinues;
-	}
+	};
 
-	function inputKey(event) {
+	var inputKey = function(event) {
 
 		// only handle one key at a time.
 		// if another key may be pressed,
@@ -440,10 +146,10 @@ module.exports = function(bar, wellDepth, wellWidth, searchDepth, replayTimeout)
 		if(gameContinues) {
 			document.onkeydown = inputKey;
 		}
-	}
+	};
 
 	// this has to be done recursively, sigh
-	function inputReplayStep() {
+	var inputReplayStep = function() {
 		var move = replayIn.shift();
 
 		// ignore non-replay characters
@@ -466,10 +172,10 @@ module.exports = function(bar, wellDepth, wellWidth, searchDepth, replayTimeout)
 				document.onkeydown = inputKey;
 			}
 		}
-	}
+	};
 
 	// clear the field and get ready for a new game
-	function startGame() {
+	var startGame = function() {
 
 		// there may be a replay in progress, this
 		// must be killed
@@ -479,9 +185,9 @@ module.exports = function(bar, wellDepth, wellWidth, searchDepth, replayTimeout)
 
 		// prepare to take user input
 		document.onkeydown = inputKey;
-	}
+	};
 
-	function startReplay() {
+	var startReplay = function() {
 
 		// there may be a replay in progress, this
 		// must be killed
@@ -499,70 +205,7 @@ module.exports = function(bar, wellDepth, wellWidth, searchDepth, replayTimeout)
 
 		// line up first step (will trigger own later steps)
 		inputReplayStep();
-	}
-
-	// pick the worst piece that could be put into this well
-	// return the piece
-	// but not its rating
-	function worstPiece(well, highestBlue) {
-
-		// iterate over all the pieces getting ratings
-		// select the lowest
-		var worstRating = null;
-		var worstId = null;
-
-		// we already have a list of possible pieces to iterate over
-		var startTime = new Date().getTime();
-		for(var i = 0; i < pieceIds.length; i++) {
-			var id = pieceIds[i];
-			var currentRating = bestWellRating(well, highestBlue, id, searchDepth);
-
-			// update worstRating
-			if(worstRating === null || currentRating < worstRating) {
-				worstRating = currentRating;
-				worstId = id;
-			}
-
-			// return instantly upon finding a 0
-			if(worstRating === 0) {
-				break;
-			}
-		}
-
-		return {
-			id : worstId,
-			x  : Math.floor((wellWidth - 4) / 2),
-			y  : 0,
-			o  : 0
-		};
-	}
-
-	// pick the worst piece that could be put into this well
-	// return the rating of this piece
-	// but NOT the piece itself...
-	function worstPieceRating(well, highestBlue, d) {
-
-		// iterate over all the pieces getting ratings
-		// select the lowest
-		var worstRating = null;
-
-		// we already have a list of possible pieces to iterate over
-		for(var i = 0; i < pieceIds.length; i++) {
-			var id = pieceIds[i];
-			var currentRating = bestWellRating(well, highestBlue, id, d);
-			if(worstRating === null || currentRating < worstRating) {
-				worstRating = currentRating;
-			}
-
-			// if we have a 0 then that suffices, no point in searching further
-			// (except for benchmarking purposes)
-			if(worstRating === 0) {
-				return 0;
-			}
-		}
-
-		return worstRating;
-	}
+	};
 
 	/**
 		This function performs initial draw.

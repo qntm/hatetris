@@ -30,7 +30,7 @@ module.exports = {
 		if(rle.length % 2 === 1) {
 			rle.push({key: "L", rl: 1});
 		}
-		
+
 		rle = rle.map(function(run) {
 			return {
 				key: {
