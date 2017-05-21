@@ -1,6 +1,6 @@
 {
   "name": "hatetris",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tetris which always gives you the worst piece",
   "main": "index.js",
   "scripts": {
@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ferno/hatetris.git"
+    "url": "git+https://github.com/qntm/hatetris.git"
   },
   "keywords": [
     "tetris"
   ],
-  "author": "ferno",
+  "author": "qntm",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ferno/hatetris/issues"
+    "url": "https://github.com/qntm/hatetris/issues"
   },
-  "homepage": "https://github.com/ferno/hatetris#readme",
+  "homepage": "https://github.com/qntm/hatetris#readme",
   "devDependencies": {
     "base65536": "^1.0.3",
     "browserify": "^13.3.0",
