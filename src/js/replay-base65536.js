@@ -5,6 +5,7 @@
 "use strict";
 
 var base65536 = require("base65536");
+var runLength = require("./run-length.js");
 
 module.exports = {
 	/**
@@ -12,23 +13,11 @@ module.exports = {
 	*/
 	encode: function(keys) {
 
-		var rle = [];
-		var current = null;
-		keys.forEach(function(key) {
-			if(
-				rle.length > 0 &&
-				rle[rle.length - 1].key === key &&
-				rle[rle.length - 1].rl < 4
-			) {
-				rle[rle.length - 1].rl++;
-			} else {
-				rle.push({key: key, rl: 1});
-			}
-		});
+		var rle = runLength.encode(keys, 4);
 
 		// Can't have an odd number of runs. This would break in mid-byte!
 		if(rle.length % 2 === 1) {
-			rle.push({key: "L", rl: 1});
+			rle.push({entry: "L", length: 1});
 		}
 
 		rle = rle.map(function(run) {
@@ -38,8 +27,8 @@ module.exports = {
 					R: 1,
 					D: 2,
 					U: 3
-				}[run.key],
-				rl: run.rl - 1
+				}[run.entry],
+				rl: run.length - 1
 			};
 		});
 		rle = rle.map(function(run) {
@@ -74,22 +63,16 @@ module.exports = {
 
 		rle = rle.map(function(run) {
 			return {
-				key: {
+				entry: {
 					0: "L",
 					1: "R",
 					2: "D",
 					3: "U"
 				}[run.key],
-				rl: run.rl + 1
+				length: run.rl + 1
 			};
 		});
 
-		var moves = [];
-		rle.forEach(function(run) {
-			for(var j = 0; j < run.rl; j++) {
-				moves.push(run.key);
-			}
-		});
-		return moves;
+		return runLength.decode(rle);
 	}
 };
