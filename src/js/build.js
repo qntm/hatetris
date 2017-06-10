@@ -6,7 +6,7 @@
 
 var firstState = require("./first-state.js");
 var moves = require("./moves.js");
-var nextState = require("./next-state.js");
+var nextStateFactory = require("./next-state-factory.js");
 var replay = require("./replay.js");
 
 var minWidth = 4;
@@ -18,6 +18,8 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	if(wellWidth < minWidth) {
 		throw Error("Can't have well with width " + String(wellWidth) + " less than " + String(minWidth));
 	}
+
+	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
 
 	// Internals
 	var liveState;
@@ -96,7 +98,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	// returns false if the game is over afterwards,
 	// returns true otherwise
 	var inputHandler = function(move) {
-		liveState = nextState(orientations, bar, wellDepth, wellWidth, liveState, move);
+		liveState = nextState(liveState, move);
 
 		// update replayOut
 		replayOut.push(move);
@@ -228,14 +230,15 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 		// put some buttons on the playing field
 		var buttons = [
-			{y: 0, x: 1, move: "U", symbol: "\u27F3"},
-			{y: 1, x: 0, move: "L", symbol: "\u2190"},
-			{y: 1, x: 1, move: "D", symbol: "\u2193"},
-			{y: 1, x: 2, move: "R", symbol: "\u2192"}
+			{y: 0, x: 1, move: "U", symbol: "\u27F3", title: "Up to rotate"},
+			{y: 1, x: 0, move: "L", symbol: "\u2190", title: "Left"},
+			{y: 1, x: 1, move: "D", symbol: "\u2193", title: "Down"},
+			{y: 1, x: 2, move: "R", symbol: "\u2192", title: "Right"}
 		];
 		buttons.forEach(function(button) {
 			var td = tbody.rows[button.y].cells[button.x];
 			td.appendChild(document.createTextNode(button.symbol));
+			td.title = button.title;
 			td.addEventListener("click", function() {
 				inputHandler(button.move);
 			});

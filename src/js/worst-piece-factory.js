@@ -1,9 +1,13 @@
+"use strict";
+
 var moves = require("./moves.js");
-var nextState = require("./next-state.js");
+var nextStateFactory = require("./next-state-factory.js");
 
 var searchDepth = 0; // min = 0, suggested max = 1
 
 module.exports = function(orientations, bar, wellDepth, wellWidth) {
+
+	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
 
 	/**
 		Given a well and a piece, find the best possible location to put it.
@@ -38,7 +42,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth) {
 				 piece.y + 4 < wellDepth // piece is above the bottom
 			&& well[piece.y + 4] === 0 // nothing immediately below it
 		) {
-			piece = nextState(orientations, bar, wellDepth, wellWidth, {
+			piece = nextState({
 				well: well,
 				score: 0,
 				highestBlue: 0,
@@ -60,7 +64,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth) {
 
 			// apply all possible moves
 			moves.forEach(function(move) {
-				var newState = nextState(orientations, bar, wellDepth, wellWidth, {
+				var newState = nextState({
 					well: well,
 					score: 0,
 					highestBlue: highestBlue,

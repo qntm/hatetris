@@ -1,5 +1,7 @@
+"use strict";
+
 var firstState = require("./../src/js/first-state.js");
-var nextState = require("./../src/js/next-state.js");
+var nextStateFactory = require("./../src/js/next-state-factory.js");
 var oriGen = require("./../src/js/ori-gen.js");
 var replay = require("./../src/js/replay.js");
 var worstPieceFactory = require("./../src/js/worst-piece-factory.js");
@@ -97,22 +99,23 @@ describe("check known replays", function() {
 	var wellDepth = 20; // min = bar
 	var wellWidth = 10; // min = 4
 	var worstPiece = worstPieceFactory(orientations, bar, wellDepth, wellWidth);
+	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
 
-	var getReplayScore = function(string) {
+	var getReplay = function(string) {
 		var moves = replay.decode(string);
 		var state = firstState(wellDepth);
 		moves.forEach(function(move) {
 			if(state.piece === null) {
 				state.piece = worstPiece(state.well, state.highestBlue);
 			}
-			state = nextState(orientations, bar, wellDepth, wellWidth, state, move);
+			state = nextState(state, move);
 		});
-		return state.score;
+		return state;
 	};
 
 	knowns.forEach(function(known) {
 		it(known.name, function() {
-			expect(getReplayScore(known.string)).toBe(known.score);
+			expect(getReplay(known.string).score).toBe(known.score);
 		});
 	});
 });
