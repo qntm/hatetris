@@ -24,8 +24,8 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
 
 	var draw = function(model) {
-		var wellState = model.wellState;
-		if(wellState) {
+		if(model.wellStates.length > 0) {
+			var wellState = model.wellStates[model.wellStates.length - 1];
 			var well = wellState.well;
 			var piece = wellState.piece;
 
@@ -77,7 +77,8 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	// returns false if the game is over afterwards,
 	// returns true otherwise
 	var handleMove = function(model, move) {
-		var wellState = nextState(model.wellState, move);
+		var lastWellState = model.wellStates[model.wellStates.length - 1];
+		var wellState = nextState(lastWellState, move);
 
 		// update replayOut
 		var replayOut = model.replayOut.concat([move]);
@@ -96,21 +97,18 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			mode = "GAME_OVER";
 		}
 
-		var replayIn = model.replayIn;
-		var replayTimeoutId = undefined;
-
 		return {
 			mode: mode,
-			wellState: wellState,
+			wellStates: model.wellStates.concat([wellState]),
 			replayOut: replayOut,
-			replayIn: replayIn,
-			replayTimeoutId: replayTimeoutId
+			replayIn: model.replayIn,
+			replayTimeoutId: undefined
 		};
 	};
 
 	var model = {
 		mode: "GAME_OVER",
-		wellState: undefined,
+		wellStates: [],
 		replayOut: undefined,
 		replayIn: undefined,
 		replayTimeoutId: undefined
@@ -150,7 +148,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			// clear the field and get ready for a new game
 			model = {
 				mode: "PLAYING",
-				wellState: firstState(wellDepth, worstPiece),
+				wellStates: [firstState(wellDepth, worstPiece)],
 				replayOut: [],
 				replayIn: undefined,
 				replayTimeoutId: undefined
@@ -172,7 +170,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			// GO
 			model = {
 				mode: "REPLAYING",
-				wellState: firstState(wellDepth, worstPiece),
+				wellStates: [firstState(wellDepth, worstPiece)],
 				replayOut: [],
 				replayIn: replayIn,
 
@@ -197,6 +195,28 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 				model = handleMove(model, event.substring("click".length));
 			} else {
 				console.warn("Ignoring event", event, "because mode is", model.mode);
+			}
+		}
+
+		// Undo
+		else if(event === "Z" || event === "clickZ") {
+			// there may be a replay in progress, this
+			// must be killed
+			if(model.replayTimeoutId) {
+				clearTimeout(model.replayTimeoutId);
+				model.replayTimeoutId = undefined;
+			}
+
+			if(model.wellStates.length > 1) {
+				model = {
+					mode: "PLAYING",
+					wellStates: model.wellStates.slice(0, -1),
+					replayOut: model.replayOut.slice(0, -1),
+					replayIn: undefined,
+					replayTimeoutId: undefined
+				};
+			} else {
+				console.warn("Ignoring event", event, "because start of history has been reached");
 			}
 		}
 
@@ -228,6 +248,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 		// put some buttons on the playing field
 		var buttons = [
+			{y: 0, x: 0, event: "clickZ", symbol: "\u21B6", title: "Ctrl+Z to undo"},
 			{y: 0, x: 1, event: "clickU", symbol: "\u27F3", title: "Up to rotate"},
 			{y: 1, x: 0, event: "clickL", symbol: "\u2190", title: "Left"},
 			{y: 1, x: 1, event: "clickD", symbol: "\u2193", title: "Down"},

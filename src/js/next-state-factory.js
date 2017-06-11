@@ -3,8 +3,8 @@
 module.exports = function(orientations, bar, wellDepth, wellWidth) {
 
 	/**
-		Input {well, score, highestBlue, piece, replay} and a move, return
-		the new {well, score, highestBlue, piece, replay}.
+		Input {well, score, highestBlue, piece} and a move, return
+		the new {well, score, highestBlue, piece}.
 	*/
 	return function(state, move) {
 		var nextWell = state.well;
