@@ -28,8 +28,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 		mode: "GAME_OVER",
 		wellState: undefined,
 		replayOut: undefined,
-		replayIn: undefined,
-		replayTimeoutId: undefined
+		replayIn: undefined
 	};
 
 	var draw = function(model) {
@@ -132,11 +131,11 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	};
 
 	var inputKey = function(event) {
+		if(model.mode !== "PLAYING") {
+			console.warn("Ignoring keystroke", event);
+			return;
+		}
 
-		// only handle one key at a time.
-		// if another key may be pressed,
-		// this will be reactivated later
-		document.onkeydown = null;
 		event = event || window.event; // add for IE
 		var move = null;
 
@@ -145,17 +144,12 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			case 39: move = "R"; break;
 			case 40: move = "D"; break;
 			case 38: move = "U"; break;
-			default: document.onkeydown = inputKey; return;
+			default: return;
 		}
 
 		// make that move
 		// move is sanitised
-		var gameContinues = inputHandler(move);
-
-		// optionally: continue the game
-		if(gameContinues) {
-			document.onkeydown = inputKey;
-		}
+		inputHandler(move);
 	};
 
 	var setMode = function(mode) {
@@ -165,23 +159,21 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 	// this has to be done recursively, sigh
 	var inputReplayStep = function() {
-		var move = model.replayIn.shift();
-
-		// make that move
-		// move is sanitised
-		var gameContinues = inputHandler(move);
-
-		// optionally: continue the game
-		if(gameContinues) {
+		if(model.mode === "REPLAYING") {
 			// if there is still replay left, time in another step from the replay
 			// otherwise, allow the user to continue the game
-			if(model.replayIn.length > 0) {
-				model.replayTimeoutId = setTimeout(inputReplayStep, replayTimeout);
+			if(model.replayIn.length === 0) {
+				setMode("PLAYING");
 			} else {
-				document.onkeydown = inputKey;
-				setMode("GAME_OVER");
+				var move = model.replayIn.shift();
+				inputHandler(move);
+
+				model.replayTimeoutId = setTimeout(inputReplayStep, replayTimeout);
 			}
 		}
+
+		// Ignore the call to inputReplayStep in "GAME_OVER"
+		// or "PLAYING" modes.
 	};
 
 	// clear the field and get ready for a new game
@@ -190,12 +182,12 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 		// there may be a replay in progress, this
 		// must be killed
-		clearTimeout(model.replayTimeoutId);
+		if('replayTimeoutId' in model) {
+			clearTimeout(model.replayTimeoutId);
+			delete model.replayTimeoutId;
+		}
 
 		clearField();
-
-		// prepare to take user input
-		document.onkeydown = inputKey;
 	};
 
 	var startReplay = function() {
@@ -203,10 +195,10 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 		// there may be a replay in progress, this
 		// must be killed
-		clearTimeout(model.replayTimeoutId);
-
-		// disable user input while showing a replay
-		document.onkeydown = null;
+		if('replayTimeoutId' in model) {
+			clearTimeout(model.replayTimeoutId);
+			delete model.replayTimeoutId;
+		}
 
 		// user inputs replay string
 		var string = prompt() || ""; // change for IE
@@ -270,5 +262,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 		document.getElementById("replay").addEventListener("click", function() {
 			handleEvent("startReplay");
 		});
+
+		document.onkeydown = inputKey;
 	})();
 };
