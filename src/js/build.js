@@ -5,13 +5,15 @@
 "use strict";
 
 var firstState = require("./first-state.js");
-var moves = require("./moves.js");
 var nextStateFactory = require("./next-state-factory.js");
 var replay = require("./replay.js");
 
 var minWidth = 4;
 
 module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, replayTimeout) {
+	if(orientations.length < 1) {
+		throw Error("Have to have at least one piece!");
+	}
 	if(wellDepth < bar) {
 		throw Error("Can't have well with depth " + String(wellDepth) + " less than bar at " + String(bar));
 	}
@@ -22,55 +24,62 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
 
 	// Internals
-	var liveState;
-	var replayString = "";
-	var replayOut;
-	var replayIn;
-	var replayTimeoutId;
+	var model = {
+		mode: "GAME_OVER",
+		wellState: undefined,
+		replayOut: undefined,
+		replayIn: undefined,
+		replayTimeoutId: undefined
+	};
 
-	var draw = function(state, replayString) {
-		var well = state.well;
-		var piece = state.piece;
+	var draw = function(model) {
+		var mode = model.mode;
 
-		// Draw the well, and the current live piece in the well if any
-		for(var y = 0; y < wellDepth; y++) {
-			for(var x = 0; x < wellWidth; x++) {
-				var td = document.getElementById("welltbody").rows[y].cells[x];
-				if(well[y] & (1 << x)) {
-					td.classList.add("landed");
-				} else {
-					td.classList.remove("landed");
-				}
+		var wellState = model.wellState;
+		if(wellState) {
+			var well = wellState.well;
+			var piece = wellState.piece;
 
-				if(piece === null) {
-					td.classList.remove("live");
-				} else {
-					var orientation = piece === null ? null : orientations[piece.id][piece.o];
-					var y2 = y - piece.y - orientation.yMin;
-					var x2 = x - piece.x - orientation.xMin;
-					if(
-						0 <= y2 && y2 < orientation.yDim
-						&& 0 <= x2 && x2 < orientation.xDim
-						&& (orientation.rows[y2] & (1 << x2))
-					) {
-						td.classList.add("live");
+			// Draw the well, and the current live piece in the well if any
+			for(var y = 0; y < wellDepth; y++) {
+				for(var x = 0; x < wellWidth; x++) {
+					var td = document.getElementById("welltbody").rows[y].cells[x];
+					if(well[y] & (1 << x)) {
+						td.classList.add("landed");
 					} else {
+						td.classList.remove("landed");
+					}
+
+					if(piece === null) {
 						td.classList.remove("live");
+					} else {
+						var orientation = piece === null ? null : orientations[piece.id][piece.o];
+						var y2 = y - piece.y - orientation.yMin;
+						var x2 = x - piece.x - orientation.xMin;
+						if(
+							0 <= y2 && y2 < orientation.yDim
+							&& 0 <= x2 && x2 < orientation.xDim
+							&& (orientation.rows[y2] & (1 << x2))
+						) {
+							td.classList.add("live");
+						} else {
+							td.classList.remove("live");
+						}
 					}
 				}
 			}
-		}
 
-		// Set the score
-		document.getElementById("score").innerHTML = state.score;
+			// Set the score
+			document.getElementById("score").innerHTML = String(wellState.score);
+		}
 
 		// Spit out a replay, if there is one
 		var elem = document.getElementById("replayOut");
 		while(elem.hasChildNodes()) {
 			elem.removeChild(elem.firstChild);
 		}
-		if(replayString !== "") {
-			elem.appendChild(document.createTextNode("replay of last game: " + replayString));
+		if(mode === "GAME_OVER") {
+			elem.appendChild(document.createTextNode("replay of last game: " + replay.encode(model.replayOut)));
 		}
 	};
 
@@ -80,17 +89,17 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 		// empty well
 		// zero score
 		// top blue = wellDepth = 20
-		liveState = firstState(wellDepth);
+		model.wellState = firstState(wellDepth);
 
 		// first piece
-		liveState.piece = worstPiece(liveState.well, liveState.highestBlue);
+		model.wellState.piece = worstPiece(model.wellState.well, model.wellState.highestBlue);
 
 		// Don't trash the replay, though
 
-		draw(liveState, replayString);
+		draw(model);
 
 		// new replay
-		replayOut = [];
+		model.replayOut = [];
 	};
 
 	// accepts the input of a move and attempts to apply that
@@ -98,27 +107,26 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	// returns false if the game is over afterwards,
 	// returns true otherwise
 	var inputHandler = function(move) {
-		liveState = nextState(liveState, move);
+		model.wellState = nextState(model.wellState, move);
 
 		// update replayOut
-		replayOut.push(move);
+		model.replayOut.push(move);
 
 		// is the game over?
 		// it is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1)
 		// so there is only one line which we need to check
-		var gameContinues = liveState.well[bar - 1] === 0;
+		var gameContinues = model.wellState.well[bar - 1] === 0;
 		if(gameContinues) {
 			// no live piece? make a new one
 			// suited to the new world, of course
-			if(liveState.piece === null) {
-				liveState.piece = worstPiece(liveState.well, liveState.highestBlue);
+			if(model.wellState.piece === null) {
+				model.wellState.piece = worstPiece(model.wellState.well, model.wellState.highestBlue);
 			}
 		} else {
-			// GAME OVER STUFF:
-			replayString = replay.encode(replayOut);
+			setMode("GAME_OVER");
 		}
 
-		draw(liveState, replayString);
+		draw(model);
 
 		return gameContinues;
 	};
@@ -150,15 +158,14 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 		}
 	};
 
+	var setMode = function(mode) {
+		console.log(mode);
+		model.mode = mode;
+	};
+
 	// this has to be done recursively, sigh
 	var inputReplayStep = function() {
-		var move = replayIn.shift();
-
-		// ignore non-replay characters
-		// so that move is sanitised
-		while(moves.indexOf(move) === -1 && replayIn.length > 0) {
-			move = replayIn.shift();
-		}
+		var move = model.replayIn.shift();
 
 		// make that move
 		// move is sanitised
@@ -168,20 +175,22 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 		if(gameContinues) {
 			// if there is still replay left, time in another step from the replay
 			// otherwise, allow the user to continue the game
-			if(replayIn.length > 0) {
-				replayTimeoutId = setTimeout(inputReplayStep, replayTimeout);
+			if(model.replayIn.length > 0) {
+				model.replayTimeoutId = setTimeout(inputReplayStep, replayTimeout);
 			} else {
 				document.onkeydown = inputKey;
+				setMode("GAME_OVER");
 			}
 		}
 	};
 
 	// clear the field and get ready for a new game
 	var startGame = function() {
+		setMode("PLAYING");
 
 		// there may be a replay in progress, this
 		// must be killed
-		clearTimeout(replayTimeoutId);
+		clearTimeout(model.replayTimeoutId);
 
 		clearField();
 
@@ -190,23 +199,34 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	};
 
 	var startReplay = function() {
+		setMode("REPLAYING");
 
 		// there may be a replay in progress, this
 		// must be killed
-		clearTimeout(replayTimeoutId);
+		clearTimeout(model.replayTimeoutId);
 
 		// disable user input while showing a replay
 		document.onkeydown = null;
 
 		// user inputs replay string
 		var string = prompt() || ""; // change for IE
-		replayIn = replay.decode(string);
+		model.replayIn = replay.decode(string);
 
 		// GO
 		clearField();
 
 		// line up first step (will trigger own later steps)
 		inputReplayStep();
+	};
+
+	var handleEvent = function(event) {
+		if(event === "startGame") {
+			startGame();
+		}
+
+		if(event === "startReplay") {
+			startReplay();
+		}
 	};
 
 	/**
@@ -244,7 +264,11 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			});
 			td.classList.add("manual");
 		});
-		document.getElementById("start").addEventListener("click", startGame);
-		document.getElementById("replay").addEventListener("click", startReplay);
+		document.getElementById("start").addEventListener("click", function() {
+			handleEvent("startGame");
+		});
+		document.getElementById("replay").addEventListener("click", function() {
+			handleEvent("startReplay");
+		});
 	})();
 };

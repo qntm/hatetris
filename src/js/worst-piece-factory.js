@@ -122,32 +122,17 @@ module.exports = function(orientations, bar, wellDepth, wellWidth) {
 	// pick the worst piece that could be put into this well
 	// return the piece but not its rating
 	var worstPieceDetails = function(well, highestBlue, depthRemaining) {
-
-		// iterate over all the pieces getting ratings
-		// select the lowest
-		var worstRating = null;
-		var worstId = null;
-
-		// we already have a list of possible pieces to iterate over
-		for(var pieceId = 0; pieceId < orientations.length; pieceId++) {
-			var currentRating = bestWellRating(well, highestBlue, pieceId, depthRemaining);
-
-			// update worstRating
-			if(worstRating === null || currentRating < worstRating) {
-				worstRating = currentRating;
-				worstId = pieceId;
-			}
-
-			// return instantly upon finding a 0
-			if(worstRating === 0) {
-				break;
-			}
-		}
-
-		return {
-			rating: worstRating,
-			id: worstId
-		};
+		return Object
+			.keys(orientations)
+			.map(function(pieceId) {
+				return {
+					id: pieceId,
+					rating: bestWellRating(well, highestBlue, pieceId, depthRemaining)
+				};
+			})
+			.sort(function(a, b) {
+				return a.rating - b.rating;
+			})[0];
 	};
 
 	// pick the worst piece that could be put into this well
