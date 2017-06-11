@@ -23,17 +23,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
 
-	// Internals
-	var model = {
-		mode: "GAME_OVER",
-		wellState: undefined,
-		replayOut: undefined,
-		replayIn: undefined
-	};
-
 	var draw = function(model) {
-		var mode = model.mode;
-
 		var wellState = model.wellState;
 		if(wellState) {
 			var well = wellState.well;
@@ -77,148 +67,144 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 		while(elem.hasChildNodes()) {
 			elem.removeChild(elem.firstChild);
 		}
-		if(mode === "GAME_OVER") {
+		if(model.mode === "GAME_OVER" && model.replayOut) {
 			elem.appendChild(document.createTextNode("replay of last game: " + replay.encode(model.replayOut)));
 		}
-	};
-
-	// initialise all variables for a new game or replay
-	var clearField = function() {
-
-		// empty well
-		// zero score
-		// top blue = wellDepth = 20
-		model.wellState = firstState(wellDepth);
-
-		// first piece
-		model.wellState.piece = worstPiece(model.wellState.well, model.wellState.highestBlue);
-
-		// Don't trash the replay, though
-
-		draw(model);
-
-		// new replay
-		model.replayOut = [];
 	};
 
 	// accepts the input of a move and attempts to apply that
 	// transform to the live piece in the live well.
 	// returns false if the game is over afterwards,
 	// returns true otherwise
-	var inputHandler = function(move) {
-		model.wellState = nextState(model.wellState, move);
+	var handleMove = function(model, move) {
+		var wellState = nextState(model.wellState, move);
 
 		// update replayOut
-		model.replayOut.push(move);
+		var replayOut = model.replayOut.concat([move]);
 
 		// is the game over?
 		// it is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1)
 		// so there is only one line which we need to check
-		var gameContinues = model.wellState.well[bar - 1] === 0;
-		if(gameContinues) {
+		var mode = model.mode;
+		if(wellState.well[bar - 1] === 0) {
 			// no live piece? make a new one
 			// suited to the new world, of course
-			if(model.wellState.piece === null) {
-				model.wellState.piece = worstPiece(model.wellState.well, model.wellState.highestBlue);
+			if(wellState.piece === null) {
+				wellState.piece = worstPiece(wellState.well, wellState.highestBlue);
 			}
 		} else {
-			setMode("GAME_OVER");
+			mode = "GAME_OVER";
 		}
 
-		draw(model);
+		var replayIn = model.replayIn;
+		var replayTimeoutId = undefined;
 
-		return gameContinues;
+		return {
+			mode: mode,
+			wellState: wellState,
+			replayOut: replayOut,
+			replayIn: replayIn,
+			replayTimeoutId: replayTimeoutId
+		};
 	};
 
-	var inputKey = function(event) {
-		if(model.mode !== "PLAYING") {
-			console.warn("Ignoring keystroke", event);
-			return;
-		}
-
-		event = event || window.event; // add for IE
-		var move = null;
-
-		switch(event.keyCode) {
-			case 37: move = "L"; break;
-			case 39: move = "R"; break;
-			case 40: move = "D"; break;
-			case 38: move = "U"; break;
-			default: return;
-		}
-
-		// make that move
-		// move is sanitised
-		inputHandler(move);
-	};
-
-	var setMode = function(mode) {
-		console.log(mode);
-		model.mode = mode;
-	};
-
-	// this has to be done recursively, sigh
-	var inputReplayStep = function() {
-		if(model.mode === "REPLAYING") {
-			// if there is still replay left, time in another step from the replay
-			// otherwise, allow the user to continue the game
-			if(model.replayIn.length === 0) {
-				setMode("PLAYING");
-			} else {
-				var move = model.replayIn.shift();
-				inputHandler(move);
-
-				model.replayTimeoutId = setTimeout(inputReplayStep, replayTimeout);
-			}
-		}
-
-		// Ignore the call to inputReplayStep in "GAME_OVER"
-		// or "PLAYING" modes.
-	};
-
-	// clear the field and get ready for a new game
-	var startGame = function() {
-		setMode("PLAYING");
-
-		// there may be a replay in progress, this
-		// must be killed
-		if('replayTimeoutId' in model) {
-			clearTimeout(model.replayTimeoutId);
-			delete model.replayTimeoutId;
-		}
-
-		clearField();
-	};
-
-	var startReplay = function() {
-		setMode("REPLAYING");
-
-		// there may be a replay in progress, this
-		// must be killed
-		if('replayTimeoutId' in model) {
-			clearTimeout(model.replayTimeoutId);
-			delete model.replayTimeoutId;
-		}
-
-		// user inputs replay string
-		var string = prompt() || ""; // change for IE
-		model.replayIn = replay.decode(string);
-
-		// GO
-		clearField();
-
-		// line up first step (will trigger own later steps)
-		inputReplayStep();
+	var model = {
+		mode: "GAME_OVER",
+		wellState: undefined,
+		replayOut: undefined,
+		replayIn: undefined,
+		replayTimeoutId: undefined
 	};
 
 	var handleEvent = function(event) {
-		if(event === "startGame") {
-			startGame();
+		if(event === "inputReplayStep") {
+			model.replayTimeoutId = undefined;
+			if(model.mode === "REPLAYING") {
+				// if there is still replay left, time in another step from the replay
+				// otherwise, allow the user to continue the game
+				if(model.replayIn.length === 0) {
+					model.mode = "PLAYING";
+				} else {
+					var move = model.replayIn.shift();
+					model = handleMove(model, move);
+
+					model.replayTimeoutId = setTimeout(function() {
+						handleEvent("inputReplayStep");
+					}, replayTimeout);
+				}
+			} else {
+				// Ignore the call to inputReplayStep in "GAME_OVER"
+				// or "PLAYING" modes.
+				console.warn("Ignoring event", event, "because mode is", model.mode);
+			}
 		}
 
-		if(event === "startReplay") {
-			startReplay();
+		else if(event === "startGame") {
+			// there may be a replay in progress, this
+			// must be killed
+			if(model.replayTimeoutId) {
+				clearTimeout(model.replayTimeoutId);
+				model.replayTimeoutId = undefined;
+			}
+
+			// clear the field and get ready for a new game
+			model = {
+				mode: "PLAYING",
+				wellState: firstState(wellDepth, worstPiece),
+				replayOut: [],
+				replayIn: undefined,
+				replayTimeoutId: undefined
+			};
 		}
+
+		else if(event === "startReplay") {
+			// there may be a replay in progress, this
+			// must be killed
+			if(model.replayTimeoutId) {
+				clearTimeout(model.replayTimeoutId);
+				model.replayTimeoutId = undefined;
+			}
+
+			// user inputs replay string
+			var string = prompt() || ""; // change for IE
+			var replayIn = replay.decode(string);
+
+			// GO
+			model = {
+				mode: "REPLAYING",
+				wellState: firstState(wellDepth, worstPiece),
+				replayOut: [],
+				replayIn: replayIn,
+
+				// line up first step (will trigger own later steps)
+				replayTimeoutId: setTimeout(function() {
+					handleEvent("inputReplayStep");
+				}, 0)
+			};
+		}
+
+		// Key moves
+		else if(event === "L" || event === "R" || event === "D" || event === "U") {
+			if(model.mode === "PLAYING") {
+				model = handleMove(model, event);
+			} else {
+				console.warn("Ignoring event", event, "because mode is", model.mode);
+			}
+		}
+
+		else if(event === "clickL" || event === "clickR" || event === "clickD" || event === "clickU") {
+			if(model.mode === "PLAYING") {
+				model = handleMove(model, event.substring("click".length));
+			} else {
+				console.warn("Ignoring event", event, "because mode is", model.mode);
+			}
+		}
+
+		else {
+			throw Error("Ignoring unrecognised event: " + event);
+		}
+
+		draw(model);
 	};
 
 	/**
@@ -242,17 +228,17 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 		// put some buttons on the playing field
 		var buttons = [
-			{y: 0, x: 1, move: "U", symbol: "\u27F3", title: "Up to rotate"},
-			{y: 1, x: 0, move: "L", symbol: "\u2190", title: "Left"},
-			{y: 1, x: 1, move: "D", symbol: "\u2193", title: "Down"},
-			{y: 1, x: 2, move: "R", symbol: "\u2192", title: "Right"}
+			{y: 0, x: 1, event: "clickU", symbol: "\u27F3", title: "Up to rotate"},
+			{y: 1, x: 0, event: "clickL", symbol: "\u2190", title: "Left"},
+			{y: 1, x: 1, event: "clickD", symbol: "\u2193", title: "Down"},
+			{y: 1, x: 2, event: "clickR", symbol: "\u2192", title: "Right"}
 		];
 		buttons.forEach(function(button) {
 			var td = tbody.rows[button.y].cells[button.x];
 			td.appendChild(document.createTextNode(button.symbol));
 			td.title = button.title;
 			td.addEventListener("click", function() {
-				inputHandler(button.move);
+				handleEvent(button.event);
 			});
 			td.classList.add("manual");
 		});
@@ -263,6 +249,24 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			handleEvent("startReplay");
 		});
 
-		document.onkeydown = inputKey;
+		document.onkeydown = function(event) {
+			event = event || window.event; // add for IE
+
+			if(event.keyCode === 37) {
+				handleEvent("L");
+			} else if(event.keyCode === 39) {
+				handleEvent("R");
+			} else if(event.keyCode === 40) {
+				handleEvent("D");
+			} else if(event.keyCode === 38) {
+				handleEvent("U");
+			} else if(event.keyCode === 90 && event.ctrlKey === true) {
+				handleEvent("Z");
+			} else if(event.keyCode === 89 && event.ctrlKey === true) {
+				handleEvent("Y");
+			}
+		};
+
+		draw(model);
 	})();
 };

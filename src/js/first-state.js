@@ -1,15 +1,17 @@
 "use strict";
 
-module.exports = function(wellDepth) {
-	var state = {};
-
-	state.well = [];
+module.exports = function(wellDepth, worstPiece) {
+	var well = [];
 	for(var row = 0; row < wellDepth; row++) {
-		state.well.push(0);
+		well.push(0);
 	}
-	state.score = 0;
-	state.highestBlue = wellDepth;
-	state.piece = null;
 
-	return state;
+	var highestBlue = wellDepth;
+
+	return {
+		well: well,
+		score: 0,
+		highestBlue: wellDepth,
+		piece: worstPiece(well, highestBlue)
+	};
 };

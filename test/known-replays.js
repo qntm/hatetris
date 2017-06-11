@@ -103,7 +103,7 @@ describe("check known replays", function() {
 
 	var getReplay = function(string) {
 		var moves = replay.decode(string);
-		var state = firstState(wellDepth);
+		var state = firstState(wellDepth, worstPiece);
 		moves.forEach(function(move) {
 			if(state.piece === null) {
 				state.piece = worstPiece(state.well, state.highestBlue);
