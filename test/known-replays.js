@@ -1,6 +1,6 @@
 "use strict";
 
-var firstState = require("./../src/js/first-state.js");
+var firstStateFactory = require("./../src/js/first-state-factory.js");
 var nextStateFactory = require("./../src/js/next-state-factory.js");
 var oriGen = require("./../src/js/ori-gen.js");
 var replay = require("./../src/js/replay.js");
@@ -100,10 +100,11 @@ describe("check known replays", function() {
 	var wellWidth = 10; // min = 4
 	var worstPiece = worstPieceFactory(orientations, bar, wellDepth, wellWidth);
 	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
+	var firstState = firstStateFactory(wellDepth, worstPiece);
 
 	var getReplay = function(string) {
 		var moves = replay.decode(string);
-		var state = firstState(wellDepth, worstPiece);
+		var state = firstState;
 		moves.forEach(function(move) {
 			if(state.piece === null) {
 				state.piece = worstPiece(state.well, state.highestBlue);

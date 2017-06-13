@@ -4,7 +4,7 @@
 
 "use strict";
 
-var firstState = require("./first-state.js");
+var firstStateFactory = require("./first-state-factory.js");
 var nextStateFactory = require("./next-state-factory.js");
 var replay = require("./replay.js");
 
@@ -21,11 +21,12 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 		throw Error("Can't have well with width " + String(wellWidth) + " less than " + String(minWidth));
 	}
 
+	var firstState = firstStateFactory(wellDepth, worstPiece);
 	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
 
 	var draw = function(model) {
-		if(model.wellStates.length > 0) {
-			var wellState = model.wellStates[model.wellStates.length - 1];
+		if(model.wellStateId !== undefined) {
+			var wellState = model.wellStates[model.wellStateId];
 			var well = wellState.well;
 			var piece = wellState.piece;
 
@@ -77,11 +78,9 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	// returns false if the game is over afterwards,
 	// returns true otherwise
 	var handleMove = function(model, move) {
-		var lastWellState = model.wellStates[model.wellStates.length - 1];
+		var lastWellStateId = model.wellStateId;
+		var lastWellState = model.wellStates[lastWellStateId];
 		var wellState = nextState(lastWellState, move);
-
-		// update replayOut
-		var replayOut = model.replayOut.concat([move]);
 
 		// is the game over?
 		// it is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1)
@@ -97,9 +96,22 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			mode = "GAME_OVER";
 		}
 
+		// Remember, there's always one fewer replay step than
+		// there are well states
+		var wellStates, replayOut;
+		if(move === model.replayOut[lastWellStateId]) {
+			// Follow the replay forward
+			wellStates = model.wellStates;
+			replayOut = model.replayOut;
+		} else {
+			wellStates = model.wellStates.slice(0, lastWellStateId + 1).concat([wellState]);
+			replayOut = model.replayOut.slice(0, lastWellStateId).concat([move]);
+		}
+
 		return {
 			mode: mode,
-			wellStates: model.wellStates.concat([wellState]),
+			wellStateId: model.wellStateId + 1,
+			wellStates: wellStates,
 			replayOut: replayOut,
 			replayIn: model.replayIn,
 			replayTimeoutId: undefined
@@ -108,6 +120,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 	var model = {
 		mode: "GAME_OVER",
+		wellStateId: undefined,
 		wellStates: [],
 		replayOut: undefined,
 		replayIn: undefined,
@@ -148,7 +161,8 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			// clear the field and get ready for a new game
 			model = {
 				mode: "PLAYING",
-				wellStates: [firstState(wellDepth, worstPiece)],
+				wellStateId: 0,
+				wellStates: [firstState],
 				replayOut: [],
 				replayIn: undefined,
 				replayTimeoutId: undefined
@@ -170,7 +184,8 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			// GO
 			model = {
 				mode: "REPLAYING",
-				wellStates: [firstState(wellDepth, worstPiece)],
+				wellStateId: 0,
+				wellStates: [firstState],
 				replayOut: [],
 				replayIn: replayIn,
 
@@ -210,13 +225,29 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			if(model.wellStates.length > 1) {
 				model = {
 					mode: "PLAYING",
-					wellStates: model.wellStates.slice(0, -1),
-					replayOut: model.replayOut.slice(0, -1),
+					wellStateId: model.wellStateId - 1,
+					wellStates: model.wellStates, // Don't slice it off!
+					replayOut: model.replayOut, // Don't slice it off!
 					replayIn: undefined,
 					replayTimeoutId: undefined
 				};
 			} else {
 				console.warn("Ignoring event", event, "because start of history has been reached");
+			}
+		}
+
+		// Redo
+		// TODO: merge this functionality with `inputReplayStep`,
+		// merge `model.replayOut` and `model.replayIn`
+		else if(event === "Y" || event === "clickY") {
+			if(model.mode === "PLAYING") {
+				if(model.wellStateId < model.wellStates.length - 1) {
+					model = handleMove(model, model.replayOut[model.wellStateId]);
+				} else {
+					console.warn("Ignoring event", event, "because end of history has been reached");
+				}
+			} else {
+				console.warn("Ignoring event", event, "because mode is", model.mode);
 			}
 		}
 
@@ -248,11 +279,12 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 		// put some buttons on the playing field
 		var buttons = [
-			{y: 0, x: 0, event: "clickZ", symbol: "\u21B6", title: "Ctrl+Z to undo"},
-			{y: 0, x: 1, event: "clickU", symbol: "\u27F3", title: "Up to rotate"},
-			{y: 1, x: 0, event: "clickL", symbol: "\u2190", title: "Left"},
-			{y: 1, x: 1, event: "clickD", symbol: "\u2193", title: "Down"},
-			{y: 1, x: 2, event: "clickR", symbol: "\u2192", title: "Right"}
+			{y: 0, x: 0, event: "clickZ", symbol: "\u21B6", title: "Press Ctrl+Z to undo"},
+			{y: 0, x: 1, event: "clickU", symbol: "\u27F3", title: "Press Up to rotate"},
+			{y: 0, x: 2, event: "clickY", symbol: "\u21B7", title: "Press Ctrl+Y to redo"},
+			{y: 1, x: 0, event: "clickL", symbol: "\u2190", title: "Press Left to move left"},
+			{y: 1, x: 1, event: "clickD", symbol: "\u2193", title: "Press Down to move down"},
+			{y: 1, x: 2, event: "clickR", symbol: "\u2192", title: "Press Right to move right"}
 		];
 		buttons.forEach(function(button) {
 			var td = tbody.rows[button.y].cells[button.x];
