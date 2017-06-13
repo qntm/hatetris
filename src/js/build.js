@@ -25,7 +25,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
 
 	var draw = function(model) {
-		if(model.wellStateId !== undefined) {
+		if(model.wellStateId !== -1) {
 			var wellState = model.wellStates[model.wellStateId];
 			var well = wellState.well;
 			var piece = wellState.piece;
@@ -120,7 +120,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 
 	var model = {
 		mode: "GAME_OVER",
-		wellStateId: undefined,
+		wellStateId: -1,
 		wellStates: [],
 		replayOut: undefined,
 		replayIn: undefined,
@@ -222,7 +222,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 				model.replayTimeoutId = undefined;
 			}
 
-			if(model.wellStates.length > 1) {
+			if(model.wellStateId > 0) {
 				model = {
 					mode: "PLAYING",
 					wellStateId: model.wellStateId - 1,
