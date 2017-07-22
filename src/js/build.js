@@ -4,13 +4,13 @@
 
 "use strict";
 
-var firstStateFactory = require("./first-state-factory.js");
-var nextStateFactory = require("./next-state-factory.js");
+var getFirstState = require("./get-first-state.js");
+var getGetNextState = require("./get-get-next-state.js");
 var replay = require("./replay.js");
 
 var minWidth = 4;
 
-module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, replayTimeout) {
+module.exports = function(orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTimeout) {
 	if(orientations.length < 1) {
 		throw Error("Have to have at least one piece!");
 	}
@@ -21,8 +21,8 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 		throw Error("Can't have well with width " + String(wellWidth) + " less than " + String(minWidth));
 	}
 
-	var firstState = firstStateFactory(wellDepth, worstPiece);
-	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
+	var firstState = getFirstState(wellDepth, getWorstPiece);
+	var getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth);
 
 	var draw = function(model) {
 		if(model.wellStateId !== -1) {
@@ -80,7 +80,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 	var handleMove = function(model, move) {
 		var lastWellStateId = model.wellStateId;
 		var lastWellState = model.wellStates[lastWellStateId];
-		var wellState = nextState(lastWellState, move);
+		var wellState = getNextState(lastWellState, move);
 
 		// is the game over?
 		// it is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1)
@@ -90,7 +90,7 @@ module.exports = function(orientations, bar, wellDepth, wellWidth, worstPiece, r
 			// no live piece? make a new one
 			// suited to the new world, of course
 			if(wellState.piece === null) {
-				wellState.piece = worstPiece(wellState.well, wellState.highestBlue);
+				wellState.piece = getWorstPiece(wellState.well, wellState.highestBlue);
 			}
 		} else {
 			mode = "GAME_OVER";

@@ -1,10 +1,10 @@
 "use strict";
 
-var firstStateFactory = require("./../src/js/first-state-factory.js");
-var nextStateFactory = require("./../src/js/next-state-factory.js");
+var getFirstState = require("./../src/js/get-first-state.js");
+var getGetNextState = require("./../src/js/get-get-next-state.js");
 var oriGen = require("./../src/js/ori-gen.js");
 var replay = require("./../src/js/replay.js");
-var worstPieceFactory = require("./../src/js/worst-piece-factory.js");
+var getGetWorstPiece = require("./../src/js/get-get-worst-piece.js");
 
 describe("check known replays", function() {
 	var knowns = [
@@ -98,18 +98,18 @@ describe("check known replays", function() {
 	var bar = 4;
 	var wellDepth = 20; // min = bar
 	var wellWidth = 10; // min = 4
-	var worstPiece = worstPieceFactory(orientations, bar, wellDepth, wellWidth);
-	var nextState = nextStateFactory(orientations, bar, wellDepth, wellWidth);
-	var firstState = firstStateFactory(wellDepth, worstPiece);
+	var getWorstPiece = getGetWorstPiece(orientations, bar, wellDepth, wellWidth);
+	var getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth);
+	var firstState = getFirstState(wellDepth, getWorstPiece);
 
 	var getReplay = function(string) {
 		var moves = replay.decode(string);
 		var state = firstState;
 		moves.forEach(function(move) {
 			if(state.piece === null) {
-				state.piece = worstPiece(state.well, state.highestBlue);
+				state.piece = getWorstPiece(state.well, state.highestBlue);
 			}
-			state = nextState(state, move);
+			state = getNextState(state, move);
 		});
 		return state;
 	};

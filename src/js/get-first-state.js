@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(wellDepth, worstPiece) {
+module.exports = function(wellDepth, getWorstPiece) {
 	var well = [];
 	for(var row = 0; row < wellDepth; row++) {
 		well.push(0);
@@ -12,6 +12,6 @@ module.exports = function(wellDepth, worstPiece) {
 		well: well,
 		score: 0,
 		highestBlue: wellDepth,
-		piece: worstPiece(well, highestBlue)
+		piece: getWorstPiece(well, highestBlue)
 	};
 };
