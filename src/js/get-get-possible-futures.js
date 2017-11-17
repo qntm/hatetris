@@ -99,4 +99,3 @@ module.exports = function(orientations, bar, wellDepth, wellWidth) {
 		return possibleFutures;
 	};
 };
-

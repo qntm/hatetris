@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/qntm/hatetris#readme",
   "devDependencies": {
+    "base2048": "0.0.2052",
     "base65536": "^1.0.3",
     "browserify": "^13.3.0",
     "del": "^2.2.2",

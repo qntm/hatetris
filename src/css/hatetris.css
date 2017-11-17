@@ -33,3 +33,6 @@ td.landed {
 td.live {
 	background-color: red;
 }
+#replayOut {
+	word-break: break-all;
+}

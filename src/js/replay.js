@@ -6,6 +6,7 @@
 
 var replayHex = require("./replay-hex.js");
 var replayBase65536 = require("./replay-base65536.js");
+var replayBase2048 = require("./replay-base2048.js");
 
 module.exports = {
 	/**
@@ -13,7 +14,8 @@ module.exports = {
 	*/
 	encode: function(moves) {
 		//return replayHex.encode(moves);
-		return replayBase65536.encode(moves);
+		//return replayBase65536.encode(moves);
+		return replayBase2048.encode(moves);
 	},
 
 	/**
@@ -23,6 +25,10 @@ module.exports = {
 		if(/^[0123456789ABCDEF# ]*$/.test(string)) {
 			return replayHex.decode(string);
 		}
-		return replayBase65536.decode(string);
+		try {
+			return replayBase65536.decode(string);
+		} catch(e) {
+		}
+		return replayBase2048.decode(string);
 	}
 };
