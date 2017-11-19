@@ -1,12 +1,12 @@
-"use strict";
+'use strict'
 
-var browserify = require("browserify");
-var del = require("del");
-var gulp = require("gulp");
-var gulpConcatCss = require("gulp-concat-css");
-var gulpJasmine = require("gulp-jasmine");
-var runSequence = require("run-sequence");
-var vinylSourceStream = require("vinyl-source-stream");
+var browserify = require('browserify')
+var del = require('del')
+var gulp = require('gulp')
+var gulpConcatCss = require('gulp-concat-css')
+var gulpJasmine = require('gulp-jasmine')
+var runSequence = require('run-sequence')
+var vinylSourceStream = require('vinyl-source-stream')
 
 gulp.task('jasmine', function () {
   return gulp
@@ -17,50 +17,49 @@ gulp.task('jasmine', function () {
     }))
 })
 
-gulp.task("delete", function() {
-	del.sync("./dist");
-});
+gulp.task('delete', function () {
+  del.sync('./dist')
+})
 
-gulp.task("css", function() {
-	return gulp.src([
-		"./src/css/reset.css",
-		"./src/css/hatetris.css"
-	])
-		.pipe(gulpConcatCss("bundle.css"))
-		.pipe(gulp.dest("./dist/css"));
-});
+gulp.task('css', function () {
+  return gulp.src([
+    './src/css/reset.css',
+    './src/css/hatetris.css'
+  ])
+    .pipe(gulpConcatCss('bundle.css'))
+    .pipe(gulp.dest('./dist/css'))
+})
 
-gulp.task("img", function() {
-	return gulp.src([
-		"./src/img/favicon.ico"
-	])
-		.pipe(gulp.dest("./dist/img"));
-});
+gulp.task('img', function () {
+  return gulp.src([
+    './src/img/favicon.ico'
+  ])
+    .pipe(gulp.dest('./dist/img'))
+})
 
-gulp.task("js", function() {
-	return browserify([
-		"./src/js/hatetris.js",
-		"./src/js/statcounter.js"
-	]).bundle()
-		.pipe(vinylSourceStream("bundle.js"))
-		.pipe(gulp.dest("./dist/js"));
-});
+gulp.task('js', function () {
+  return browserify([
+    './src/js/hatetris.js',
+    './src/js/statcounter.js'
+  ]).bundle()
+    .pipe(vinylSourceStream('bundle.js'))
+    .pipe(gulp.dest('./dist/js'))
+})
 
-gulp.task("html", function() {
-	return gulp.src([
-		"./src/hatetris.html"
-	])
-		.pipe(gulp.dest("./dist"));
-});
+gulp.task('html', function () {
+  return gulp.src([
+    './src/hatetris.html'
+  ])
+    .pipe(gulp.dest('./dist'))
+})
 
-gulp.task("build", function(cb) {
-	runSequence("jasmine", "delete", "css", "img", "js", "html", cb);
-});
+gulp.task('build', function (cb) {
+  runSequence('jasmine', 'delete', 'css', 'img', 'js', 'html', cb)
+})
 
-gulp.task("default", ["build"], function() {
-	gulp.watch([
-		"./src/**/*.*",
-		"./test/**/*.*"
-	], ["build"]);
-});
-
+gulp.task('default', ['build'], function () {
+  gulp.watch([
+    './src/**/*.*',
+    './test/**/*.*'
+  ], ['build'])
+})

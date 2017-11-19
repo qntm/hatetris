@@ -1,3 +1,3 @@
-"use strict";
+'use strict'
 
-module.exports = ["L", "R", "D", "U"];
+module.exports = ['L', 'R', 'D', 'U']
