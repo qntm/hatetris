@@ -28,7 +28,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "base2048": "0.0.2052",
-    "base65536": "^2.0.1",
+    "base65536": "^2.0.2",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",

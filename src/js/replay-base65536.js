@@ -4,7 +4,7 @@
 
 'use strict'
 
-import * as base65536 from 'base65536'
+import base65536 from 'base65536'
 import runLength from './run-length'
 
 /**
