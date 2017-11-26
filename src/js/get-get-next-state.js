@@ -1,15 +1,15 @@
 'use strict'
 
-module.exports = function (orientations, bar, wellDepth, wellWidth) {
+export default (orientations, bar, wellDepth, wellWidth) =>
   /**
     Input {well, score, highestBlue, piece} and a move, return
     the new {well, score, highestBlue, piece}.
   */
-  return function (state, move) {
-    var nextWell = state.well
-    var nextScore = state.score
-    var nextHighestBlue = state.highestBlue
-    var nextPiece = {
+  (state, move) => {
+    let nextWell = state.well
+    let nextScore = state.score
+    let nextHighestBlue = state.highestBlue
+    let nextPiece = {
       id: state.piece.id,
       x: state.piece.x,
       y: state.piece.y,
@@ -39,9 +39,9 @@ module.exports = function (orientations, bar, wellDepth, wellWidth) {
       xActual + orientation.xDim > wellWidth || // off right side
       yActual < 0 ||                            // off top (??)
       yActual + orientation.yDim > wellDepth || // off bottom
-      orientation.rows.some(function (row, y) {
-        return state.well[yActual + y] & (row << xActual)
-      }) // obstruction
+      orientation.rows.some((row, y) =>
+        state.well[yActual + y] & (row << xActual)
+      ) // obstruction
     ) {
       if (move === 'D') {
         // Lock piece
@@ -58,18 +58,18 @@ module.exports = function (orientations, bar, wellDepth, wellWidth) {
 
         // row by row bitwise line alteration
         // because we do this from the top down, we can remove lines as we go
-        for (var row = 0; row < orientation.yDim; row++) {
+        for (let row = 0; row < orientation.yDim; row++) {
           // can't negative bit-shift, but alas X can be negative
           nextWell[yActual + row] |= (orientation.rows[row] << xActual)
 
           // check for a complete line now
           // NOTE: completed lines don't count if you've lost
           if (
-               yActual >= bar &&
+            yActual >= bar &&
             nextWell[yActual + row] === (1 << wellWidth) - 1
           ) {
             // move all lines above this point down
-            for (var k = yActual + row; k > 1; k--) {
+            for (let k = yActual + row; k > 1; k--) {
               nextWell[k] = nextWell[k - 1]
             }
 
@@ -95,4 +95,3 @@ module.exports = function (orientations, bar, wellDepth, wellWidth) {
       piece: nextPiece
     }
   }
-}

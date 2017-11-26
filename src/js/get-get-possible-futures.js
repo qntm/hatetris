@@ -1,10 +1,10 @@
 'use strict'
 
-var getGetNextState = require('./get-get-next-state.js')
-var moves = require('./moves.js')
+import getGetNextState from './get-get-next-state'
+import moves from './moves'
 
-module.exports = function (orientations, bar, wellDepth, wellWidth) {
-  var getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth)
+export default (orientations, bar, wellDepth, wellWidth) => {
+  const getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth)
 
   /**
     Given a well and a piece, find all possible places where it could land
@@ -12,18 +12,17 @@ module.exports = function (orientations, bar, wellDepth, wellWidth) {
     will have `null` `piece` because the piece is landed; some will have
     a different `highestBlue`; some will have an increase `score`.
   */
-  return function (well, highestBlue, pieceId) {
+  return (well, highestBlue, pieceId) => {
     /**
       Generate a unique integer to describe the position and orientation of this piece.
       `x` varies between -3 and (`wellWidth` - 1) inclusive, so range = `wellWidth` + 3
       `y` varies between 0 and (`wellDepth` + 2) inclusive, so range = `wellDepth` + 3
       `o` varies between 0 and 3 inclusive, so range = 4
     */
-    function hashCode (x, y, o) {
-      return (x * (wellDepth + 3) + y) * 4 + o
-    }
+    const hashCode = (x, y, o) =>
+      (x * (wellDepth + 3) + y) * 4 + o
 
-    var piece = {
+    let piece = {
       id: pieceId,
       x: 0,
       y: 0,
@@ -46,28 +45,28 @@ module.exports = function (orientations, bar, wellDepth, wellWidth) {
     }
 
     // push first position
-    var piecePositions = [piece]
+    const piecePositions = [piece]
 
-    var seen = []
+    const seen = []
     seen[hashCode(piece.x, piece.y, piece.o)] = 1
 
-    var possibleFutures = []
+    const possibleFutures = []
 
     // a simple for loop won't work here because
     // we are increasing the list as we go
-    var i = 0
+    let i = 0
     while (i < piecePositions.length) {
       piece = piecePositions[i]
 
       // apply all possible moves
-      moves.forEach(function (move) {
-        var nextState = getNextState({
+      moves.forEach(move => {
+        const nextState = getNextState({
           well: well,
           score: 0,
           highestBlue: highestBlue,
           piece: piece
         }, move)
-        var newPiece = nextState.piece
+        const newPiece = nextState.piece
 
         // transformation failed?
         if (newPiece === null) {
@@ -80,7 +79,7 @@ module.exports = function (orientations, bar, wellDepth, wellWidth) {
           // transform succeeded?
           // new location? append to list
           // check locations, they are significant
-          var newHashCode = hashCode(newPiece.x, newPiece.y, newPiece.o)
+          const newHashCode = hashCode(newPiece.x, newPiece.y, newPiece.o)
 
           if (seen[newHashCode] === undefined) {
             piecePositions.push(newPiece)

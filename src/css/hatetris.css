@@ -1,18 +1,18 @@
-body {
+.hatetris {
 	font-family: arial;
 	margin: 50px 0 0 50px;
 }
-.left {
+.hatetris__left {
 	float: left;
 	margin: 0 50px 50px 0;
 }
-.right {
+.hatetris__right {
 	margin: 0 50px 50px 0;
 }
-p {
+.hatetris__paragraph {
 	margin: 10px;
 }
-td.cell {
+.hatetris__cell {
 	width: 25px;
 	height: 25px;
 	color: white;
@@ -21,18 +21,18 @@ td.cell {
 	text-align: center;
 	vertical-align: middle;
 }
-td.bar {
+.hatetris__cell--bar {
 	border-top: 1px solid red;
 }
-td.manual {
+.hatetris__cell--manual {
 	cursor: pointer;
 }
-td.landed {
+.hatetris__cell--landed {
 	background-color: blue;
 }
-td.live {
+.hatetris__cell--live {
 	background-color: red;
 }
-#replayOut {
+.hatetris__replay-out {
 	word-break: break-all;
 }

@@ -2,11 +2,11 @@
 
 /* eslint-env jasmine */
 
-var oriGen = require('./../src/js/ori-gen.js')
+import { _doPiece } from './../src/js/ori-gen'
 
 describe('ori-gen', function () {
   it('works', function () {
-    expect(oriGen._doPiece([
+    expect(_doPiece([
       '....',
       '..##',
       '.##.',

@@ -4,13 +4,13 @@
 
 'use strict'
 
-var getFirstState = require('./get-first-state.js')
-var getGetNextState = require('./get-get-next-state.js')
-var replay = require('./replay.js')
+import getFirstState from './get-first-state'
+import getGetNextState from './get-get-next-state'
+import replay from './replay'
 
-var minWidth = 4
+const minWidth = 4
 
-module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTimeout) {
+export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTimeout) => {
   if (orientations.length < 1) {
     throw Error('Have to have at least one piece!')
   }
@@ -21,50 +21,50 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
     throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
   }
 
-  var firstState = getFirstState(wellDepth, getWorstPiece)
-  var getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth)
+  const firstState = getFirstState(wellDepth, getWorstPiece)
+  const getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth)
 
-  var draw = function (model) {
+  const draw = model => {
     if (model.wellStateId !== -1) {
-      var wellState = model.wellStates[model.wellStateId]
-      var well = wellState.well
-      var piece = wellState.piece
+      const wellState = model.wellStates[model.wellStateId]
+      const well = wellState.well
+      const piece = wellState.piece
 
       // Draw the well, and the current live piece in the well if any
-      for (var y = 0; y < wellDepth; y++) {
-        for (var x = 0; x < wellWidth; x++) {
-          var td = document.getElementById('welltbody').rows[y].cells[x]
+      for (let y = 0; y < wellDepth; y++) {
+        for (let x = 0; x < wellWidth; x++) {
+          const td = document.querySelector('.hatetris__welltbody').rows[y].cells[x]
           if (well[y] & (1 << x)) {
-            td.classList.add('landed')
+            td.classList.add('hatetris__cell--landed')
           } else {
-            td.classList.remove('landed')
+            td.classList.remove('hatetris__cell--landed')
           }
 
           if (piece === null) {
-            td.classList.remove('live')
+            td.classList.remove('hatetris__cell--live')
           } else {
-            var orientation = piece === null ? null : orientations[piece.id][piece.o]
-            var y2 = y - piece.y - orientation.yMin
-            var x2 = x - piece.x - orientation.xMin
+            const orientation = piece === null ? null : orientations[piece.id][piece.o]
+            const y2 = y - piece.y - orientation.yMin
+            const x2 = x - piece.x - orientation.xMin
             if (
               y2 >= 0 && y2 < orientation.yDim &&
               x2 >= 0 && x2 < orientation.xDim &&
               (orientation.rows[y2] & (1 << x2))
             ) {
-              td.classList.add('live')
+              td.classList.add('hatetris__cell--live')
             } else {
-              td.classList.remove('live')
+              td.classList.remove('hatetris__cell--live')
             }
           }
         }
       }
 
       // Set the score
-      document.getElementById('score').innerHTML = String(wellState.score)
+      document.querySelector('.hatetris__score').innerHTML = String(wellState.score)
     }
 
     // Spit out a replay, if there is one
-    var elem = document.getElementById('replayOut')
+    const elem = document.querySelector('.hatetris__replay-out')
     while (elem.hasChildNodes()) {
       elem.removeChild(elem.firstChild)
     }
@@ -77,15 +77,15 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
   // transform to the live piece in the live well.
   // returns false if the game is over afterwards,
   // returns true otherwise
-  var handleMove = function (model, move) {
-    var lastWellStateId = model.wellStateId
-    var lastWellState = model.wellStates[lastWellStateId]
-    var wellState = getNextState(lastWellState, move)
+  const handleMove = (model, move) => {
+    const lastWellStateId = model.wellStateId
+    const lastWellState = model.wellStates[lastWellStateId]
+    const wellState = getNextState(lastWellState, move)
 
     // is the game over?
     // it is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1)
     // so there is only one line which we need to check
-    var mode = model.mode
+    let mode = model.mode
     if (wellState.well[bar - 1] === 0) {
       // no live piece? make a new one
       // suited to the new world, of course
@@ -98,7 +98,8 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
 
     // Remember, there's always one fewer replay step than
     // there are well states
-    var wellStates, replayOut
+    let wellStates
+    let replayOut
     if (move === model.replayOut[lastWellStateId]) {
       // Follow the replay forward
       wellStates = model.wellStates
@@ -118,7 +119,7 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
     }
   }
 
-  var model = {
+  let model = {
     mode: 'GAME_OVER',
     wellStateId: -1,
     wellStates: [],
@@ -127,7 +128,7 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
     replayTimeoutId: undefined
   }
 
-  var handleEvent = function (event) {
+  const handleEvent = event => {
     if (event === 'inputReplayStep') {
       model.replayTimeoutId = undefined
       if (model.mode === 'REPLAYING') {
@@ -136,10 +137,10 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
         if (model.replayIn.length === 0) {
           model.mode = 'PLAYING'
         } else {
-          var move = model.replayIn.shift()
+          const move = model.replayIn.shift()
           model = handleMove(model, move)
 
-          model.replayTimeoutId = setTimeout(function () {
+          model.replayTimeoutId = setTimeout(() => {
             handleEvent('inputReplayStep')
           }, replayTimeout)
         }
@@ -174,8 +175,8 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
       }
 
       // user inputs replay string
-      var string = window.prompt() || '' // change for IE
-      var replayIn = replay.decode(string)
+      const string = window.prompt() || '' // change for IE
+      const replayIn = replay.decode(string)
 
       // GO
       model = {
@@ -186,7 +187,7 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
         replayIn: replayIn,
 
         // line up first step (will trigger own later steps)
-        replayTimeoutId: setTimeout(function () {
+        replayTimeoutId: setTimeout(() => {
           handleEvent('inputReplayStep')
         }, 0)
       }
@@ -258,24 +259,24 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
   /**
     This function performs initial draw.
   */
-  (function () {
+  (() => {
     // create playing field
-    var tbody = document.getElementById('welltbody')
-    for (var y = 0; y < wellDepth; y++) {
-      var tr = document.createElement('tr')
+    const tbody = document.querySelector('.hatetris__welltbody')
+    for (let y = 0; y < wellDepth; y++) {
+      const tr = document.createElement('tr')
       tbody.appendChild(tr)
-      for (var x = 0; x < wellWidth; x++) {
-        var td = document.createElement('td')
-        td.classList.add('cell')
+      for (let x = 0; x < wellWidth; x++) {
+        const td = document.createElement('td')
+        td.classList.add('hatetris__cell')
         if (y === bar) {
-          td.classList.add('bar')
+          td.classList.add('hatetris__cell--bar')
         }
         tr.appendChild(td)
       }
     }
 
     // put some buttons on the playing field
-    var buttons = [
+    const buttons = [
       {y: 0, x: 0, event: 'clickZ', symbol: '\u21B6', title: 'Press Ctrl+Z to undo'},
       {y: 0, x: 1, event: 'clickU', symbol: '\u27F3', title: 'Press Up to rotate'},
       {y: 0, x: 2, event: 'clickY', symbol: '\u21B7', title: 'Press Ctrl+Y to redo'},
@@ -283,23 +284,23 @@ module.exports = function (orientations, bar, wellDepth, wellWidth, getWorstPiec
       {y: 1, x: 1, event: 'clickD', symbol: '\u2193', title: 'Press Down to move down'},
       {y: 1, x: 2, event: 'clickR', symbol: '\u2192', title: 'Press Right to move right'}
     ]
-    buttons.forEach(function (button) {
-      var td = tbody.rows[button.y].cells[button.x]
+    buttons.forEach(button => {
+      const td = tbody.rows[button.y].cells[button.x]
       td.appendChild(document.createTextNode(button.symbol))
       td.title = button.title
-      td.addEventListener('click', function () {
+      td.addEventListener('click', () => {
         handleEvent(button.event)
       })
-      td.classList.add('manual')
+      td.classList.add('hatetris__cell--manual')
     })
-    document.getElementById('start').addEventListener('click', function () {
+    document.querySelector('.hatetris__start').addEventListener('click', () => {
       handleEvent('startGame')
     })
-    document.getElementById('replay').addEventListener('click', function () {
+    document.querySelector('.hatetris__replay').addEventListener('click', () => {
       handleEvent('startReplay')
     })
 
-    document.onkeydown = function (event) {
+    document.onkeydown = event => {
       event = event || window.event // add for IE
 
       if (event.keyCode === 37) {

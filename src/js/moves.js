@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports = ['L', 'R', 'D', 'U']
+export default ['L', 'R', 'D', 'U']

@@ -1,12 +1,12 @@
 'use strict'
 
-module.exports = function (wellDepth, getWorstPiece) {
-  var well = []
-  for (var row = 0; row < wellDepth; row++) {
+export default (wellDepth, getWorstPiece) => {
+  const well = []
+  for (let row = 0; row < wellDepth; row++) {
     well.push(0)
   }
 
-  var highestBlue = wellDepth
+  const highestBlue = wellDepth
 
   return {
     well: well,

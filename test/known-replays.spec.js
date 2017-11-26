@@ -2,14 +2,14 @@
 
 /* eslint-env jasmine */
 
-var getFirstState = require('./../src/js/get-first-state.js')
-var getGetNextState = require('./../src/js/get-get-next-state.js')
-var oriGen = require('./../src/js/ori-gen.js')
-var replay = require('./../src/js/replay.js')
-var getGetWorstPiece = require('./../src/js/get-get-worst-piece.js')
+import getFirstState from './../src/js/get-first-state'
+import getGetNextState from './../src/js/get-get-next-state'
+import oriGen from './../src/js/ori-gen'
+import replay from './../src/js/replay'
+import getGetWorstPiece from './../src/js/get-get-worst-piece'
 
-describe('check known replays', function () {
-  var knowns = [
+describe('check known replays', () => {
+  const knowns = [
     {
       name: 'qntm-base65536',
       string: '𤆻𤆻𤆻𤆻𤆻𡚻',
@@ -92,7 +92,7 @@ describe('check known replays', function () {
     }
   ]
 
-  var pieces = [
+  const pieces = [
     [
       '....',
       '..##',
@@ -136,18 +136,18 @@ describe('check known replays', function () {
       '....'
     ]
   ]
-  var orientations = oriGen(pieces)
-  var bar = 4
-  var wellDepth = 20 // min = bar
-  var wellWidth = 10 // min = 4
-  var getWorstPiece = getGetWorstPiece(orientations, bar, wellDepth, wellWidth)
-  var getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth)
-  var firstState = getFirstState(wellDepth, getWorstPiece)
+  const orientations = oriGen(pieces)
+  const bar = 4
+  const wellDepth = 20 // min = bar
+  const wellWidth = 10 // min = 4
+  const getWorstPiece = getGetWorstPiece(orientations, bar, wellDepth, wellWidth)
+  const getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth)
+  const firstState = getFirstState(wellDepth, getWorstPiece)
 
-  var getReplay = function (string) {
-    var moves = replay.decode(string)
-    var state = firstState
-    moves.forEach(function (move) {
+  const getReplay = string => {
+    const moves = replay.decode(string)
+    let state = firstState
+    moves.forEach(move => {
       if (state.piece === null) {
         state.piece = getWorstPiece(state.well, state.highestBlue)
       }
@@ -156,8 +156,8 @@ describe('check known replays', function () {
     return state
   }
 
-  knowns.forEach(function (known) {
-    it(known.name, function () {
+  knowns.forEach(known => {
+    it(known.name, () => {
       expect(getReplay(known.string).score).toBe(known.score)
     })
   })
