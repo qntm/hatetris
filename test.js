@@ -8,7 +8,7 @@ jasmine.loadConfig({
   spec_files: [
     '**/*.spec.js'
   ],
-  'stopSpecOnExpectationFailure': false/*,
-  'random': true*/
+  'stopSpecOnExpectationFailure': false,
+  'random': true
 })
 jasmine.execute()

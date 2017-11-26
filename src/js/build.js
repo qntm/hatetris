@@ -4,6 +4,7 @@
 
 'use strict'
 
+import ReactDOM from 'react-dom'
 import getFirstState from './get-first-state'
 import getGetNextState from './get-get-next-state'
 import replay from './replay'
@@ -254,26 +255,47 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
     }
 
     draw(model)
-  };
+  }
 
-  /**
-    This function performs initial draw.
-  */
-  (() => {
+  const initialDraw = () => {
+    const well = []
+    for (let y = 0; y < wellDepth; y++) {
+      const row = []
+      for (let x = 0; x < wellWidth; x++) {
+        row.push(undefined)
+      }
+      well.push(row)
+    }
+
+    ReactDOM.render(
+      <table>
+        <tbody className='hatetris__welltbody'>{
+          well.map((row, y) =>
+            <tr
+              key={y}
+            >{
+              row.map((cell, x) => {
+                const classNames = ['hatetris__cell']
+                if (y === bar) {
+                  classNames.push('hatetris__cell--bar')
+                }
+
+                const className = classNames.join(' ')
+
+                <td
+                  key={x}
+                  className={className}
+                />
+              })
+            }</tr>
+          )
+        }</tbody>
+      </table>,
+      document.querySelector('.hatetris__left')
+    )
+
     // create playing field
     const tbody = document.querySelector('.hatetris__welltbody')
-    for (let y = 0; y < wellDepth; y++) {
-      const tr = document.createElement('tr')
-      tbody.appendChild(tr)
-      for (let x = 0; x < wellWidth; x++) {
-        const td = document.createElement('td')
-        td.classList.add('hatetris__cell')
-        if (y === bar) {
-          td.classList.add('hatetris__cell--bar')
-        }
-        tr.appendChild(td)
-      }
-    }
 
     // put some buttons on the playing field
     const buttons = [
@@ -319,5 +341,7 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
     }
 
     draw(model)
-  })()
+  }
+
+  initialDraw()
 }
