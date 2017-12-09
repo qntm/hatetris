@@ -13,15 +13,17 @@ import '../html/hatetris.html'
 
 import './statcounter'
 import build from './build'
-import getGetWorstPiece from './get-get-worst-piece'
-import orientations from './orientations'
+import getEnemyAi from './enemy-ais/get-hatetris'
+import getGameIsOver from './game-over-conditions/get-hatetris'
+import rotationSystem from './rotation-systems/hatetris'
 
 // Fixed attributes of all of Tetris
 const bar = 4
 const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
 
-const getWorstPiece = getGetWorstPiece(orientations, bar, wellDepth, wellWidth)
+const enemyAi = getEnemyAi(rotationSystem, bar, wellDepth, wellWidth)
+const gameIsOver = getGameIsOver(bar)
 const replayTimeout = 50 // milliseconds per frame
 
-build(orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTimeout)
+build(rotationSystem, bar, wellDepth, wellWidth, enemyAi, replayTimeout, gameIsOver)

@@ -11,8 +11,8 @@ import replay from './replay'
 
 const minWidth = 4
 
-export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTimeout) => {
-  if (orientations.length < 1) {
+export default (rotationSystem, bar, wellDepth, wellWidth, enemyAi, replayTimeout, gameIsOver) => {
+  if (rotationSystem.length < 1) {
     throw Error('Have to have at least one piece!')
   }
   if (wellDepth < bar) {
@@ -22,8 +22,8 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
     throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
   }
 
-  const firstState = getFirstState(wellDepth, getWorstPiece)
-  const getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth)
+  const firstState = getFirstState(wellDepth, enemyAi)
+  const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
 
   const draw = model => {
     if (model.wellStateId !== -1) {
@@ -44,7 +44,7 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
           if (piece === null) {
             td.classList.remove('hatetris__cell--live')
           } else {
-            const orientation = piece === null ? null : orientations[piece.id][piece.o]
+            const orientation = piece === null ? null : rotationSystem[piece.id][piece.o]
             const y2 = y - piece.y - orientation.yMin
             const x2 = x - piece.x - orientation.xMin
             if (
@@ -69,53 +69,50 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
     while (elem.hasChildNodes()) {
       elem.removeChild(elem.firstChild)
     }
-    if (model.mode === 'GAME_OVER' && model.replayOut) {
-      elem.appendChild(document.createTextNode('replay of last game: ' + replay.encode(model.replayOut)))
+    if (model.mode === 'GAME_OVER') {
+      elem.appendChild(document.createTextNode('replay of last game: ' + replay.encode(model.replay)))
     }
   }
 
-  // accepts the input of a move and attempts to apply that
+  // Accepts the input of a move and attempts to apply that
   // transform to the live piece in the live well.
-  // returns false if the game is over afterwards,
-  // returns true otherwise
+  // Returns the new model.
   const handleMove = (model, move) => {
     const lastWellStateId = model.wellStateId
-    const lastWellState = model.wellStates[lastWellStateId]
-    const wellState = getNextState(lastWellState, move)
 
-    // is the game over?
-    // it is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1)
-    // so there is only one line which we need to check
-    let mode = model.mode
-    if (wellState.well[bar - 1] === 0) {
-      // no live piece? make a new one
-      // suited to the new world, of course
-      if (wellState.piece === null) {
-        wellState.piece = getWorstPiece(wellState.well, wellState.highestBlue)
-      }
-    } else {
-      mode = 'GAME_OVER'
+    const nextWellStateId = lastWellStateId + 1
+
+    let nextReplay = model.replay
+    let nextWellStates = model.wellStates
+
+    if (!(lastWellStateId in model.replay) || move !== model.replay[lastWellStateId]) {
+      // Push the new move
+      nextReplay = nextReplay.slice().concat([move])
+
+      // And truncate the future
+      nextWellStates = nextWellStates.slice(0, nextWellStateId)
     }
 
-    // Remember, there's always one fewer replay step than
-    // there are well states
-    let wellStates
-    let replayOut
-    if (move === model.replayOut[lastWellStateId]) {
-      // Follow the replay forward
-      wellStates = model.wellStates
-      replayOut = model.replayOut
-    } else {
-      wellStates = model.wellStates.slice(0, lastWellStateId + 1).concat([wellState])
-      replayOut = model.replayOut.slice(0, lastWellStateId).concat([move])
+    if (!(nextWellStateId in model.wellStates)) {
+      const nextWellState = getNextState(model.wellStates[lastWellStateId], move)
+      nextWellStates = nextWellStates.slice().concat([nextWellState])
     }
 
+    const nextWellState = nextWellStates[nextWellStateId]
+
+    const nextMode = gameIsOver(nextWellState) ? 'GAME_OVER' : model.mode
+
+    // no live piece? make a new one
+    // suited to the new world, of course
+    if (nextWellState.piece === null && nextMode !== 'GAME_OVER') {
+      nextWellState.piece = enemyAi(nextWellState.well)
+    }
+      
     return {
-      mode: mode,
-      wellStateId: model.wellStateId + 1,
-      wellStates: wellStates,
-      replayOut: replayOut,
-      replayIn: model.replayIn,
+      mode: nextMode,
+      wellStateId: nextWellStateId,
+      wellStates: nextWellStates,
+      replay: nextReplay,
       replayTimeoutId: undefined
     }
   }
@@ -124,26 +121,26 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
     mode: 'GAME_OVER',
     wellStateId: -1,
     wellStates: [],
-    replayOut: undefined,
-    replayIn: undefined,
+    replay: [],
     replayTimeoutId: undefined
   }
 
   const handleEvent = event => {
     if (event === 'inputReplayStep') {
-      model.replayTimeoutId = undefined
       if (model.mode === 'REPLAYING') {
         // if there is still replay left, time in another step from the replay
         // otherwise, allow the user to continue the game
-        if (model.replayIn.length === 0) {
-          model.mode = 'PLAYING'
-        } else {
-          const move = model.replayIn.shift()
-          model = handleMove(model, move)
+        if (model.wellStateId in model.replay) {
+          model = handleMove(model, model.replay[model.wellStateId])
 
-          model.replayTimeoutId = setTimeout(() => {
-            handleEvent('inputReplayStep')
-          }, replayTimeout)
+          if (model.mode !== 'GAME_OVER') {
+            model.replayTimeoutId = setTimeout(() => {
+              model.replayTimeoutId = undefined
+              handleEvent('inputReplayStep')
+            }, replayTimeout)
+          }
+        } else {
+          model.mode = 'PLAYING'
         }
       } else {
         // Ignore the call to inputReplayStep in "GAME_OVER"
@@ -163,8 +160,7 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
         mode: 'PLAYING',
         wellStateId: 0,
         wellStates: [firstState],
-        replayOut: [],
-        replayIn: undefined,
+        replay: [],
         replayTimeoutId: undefined
       }
     } else if (event === 'startReplay') {
@@ -177,18 +173,17 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
 
       // user inputs replay string
       const string = window.prompt() || '' // change for IE
-      const replayIn = replay.decode(string)
 
       // GO
       model = {
         mode: 'REPLAYING',
         wellStateId: 0,
         wellStates: [firstState],
-        replayOut: [],
-        replayIn: replayIn,
+        replay: replay.decode(string),
 
         // line up first step (will trigger own later steps)
         replayTimeoutId: setTimeout(() => {
+          model.replayTimeoutId = undefined
           handleEvent('inputReplayStep')
         }, 0)
       }
@@ -222,13 +217,13 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
         model.replayTimeoutId = undefined
       }
 
-      if (model.wellStateId > 0) {
+      const wellStateId = model.wellStateId - 1
+      if (wellStateId in model.wellStates) {
         model = {
           mode: 'PLAYING',
-          wellStateId: model.wellStateId - 1,
+          wellStateId: wellStateId,
           wellStates: model.wellStates, // Don't slice it off!
-          replayOut: model.replayOut, // Don't slice it off!
-          replayIn: undefined,
+          replay: model.replay, // Don't slice it off!
           replayTimeoutId: undefined
         }
       } else {
@@ -237,13 +232,12 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
     } else if (
       // Redo
       // TODO: merge this functionality with `inputReplayStep`,
-      // merge `model.replayOut` and `model.replayIn`
       event === 'Y' ||
       event === 'clickY'
     ) {
       if (model.mode === 'PLAYING') {
-        if (model.wellStateId < model.wellStates.length - 1) {
-          model = handleMove(model, model.replayOut[model.wellStateId])
+        if (model.wellStateId in model.replay) {
+          model = handleMove(model, model.replay[model.wellStateId])
         } else {
           console.warn('Ignoring event', event, 'because end of history has been reached')
         }
@@ -282,10 +276,7 @@ export default (orientations, bar, wellDepth, wellWidth, getWorstPiece, replayTi
 
                 const className = classNames.join(' ')
 
-                <td
-                  key={x}
-                  className={className}
-                />
+                return <td key={x} className={className}/>
               })
             }</tr>
           )

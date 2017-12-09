@@ -1,6 +1,6 @@
 {
   "name": "hatetris",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Tetris which always gives you the worst piece",
   "main": "index.js",
   "scripts": {

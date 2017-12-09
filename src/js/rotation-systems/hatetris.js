@@ -1,5 +1,5 @@
 /**
-  Generate orientations
+  The HATETRIS rotation system
 */
 
 'use strict'
@@ -98,4 +98,43 @@ export function _doPiece (piece) {
   })
 }
 
-export default pieces => pieces.map(_doPiece)
+// Note that the order here is significant,
+// the least convenient piece is placed first.
+const pieces = [[
+  '....',
+  '..##',
+  '.##.',
+  '....'
+], [
+  '....',
+  '.##.',
+  '..##',
+  '....'
+], [
+  '....',
+  '.##.',
+  '.##.',
+  '....'
+], [
+  '....',
+  '####',
+  '....',
+  '....'
+], [
+  '....',
+  '.###',
+  '.#..',
+  '....'
+], [
+  '....',
+  '.##.',
+  '.#..',
+  '.#..'
+], [
+  '....',
+  '.###',
+  '..#.',
+  '....'
+]]
+
+export default pieces.map(_doPiece)

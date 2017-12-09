@@ -1,11 +1,11 @@
 /**
-  New Base65536 replays.
+  New new Base2048 replays!
 */
 
 'use strict'
 
-import base65536 from 'base65536'
-import runLength from './run-length'
+import base2048 from 'base2048'
+import runLength from './../run-length'
 
 /**
   Convert an array of key strokes into a replay
@@ -27,6 +27,7 @@ const encode = keys => {
     }[run.entry],
     rl: run.length - 1
   }))
+
   rle = rle.map(run => (run.key << 2) + run.rl)
 
   const octets = []
@@ -36,14 +37,14 @@ const encode = keys => {
 
   const uint8Array = new Uint8Array(octets)
 
-  return base65536.encode(uint8Array.buffer)
+  return base2048.encode(uint8Array.buffer)
 }
 
 /**
-  Convert a Base65536 string back into a list of keystrokes
+  Convert a Base2048 string back into a list of keystrokes
 */
 const decode = string => {
-  const uint8Array = new Uint8Array(base65536.decode(string))
+  const uint8Array = new Uint8Array(base2048.decode(string))
 
   const octets = []
   for (let i = 0; i < uint8Array.length; i++) {

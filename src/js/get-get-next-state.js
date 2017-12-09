@@ -1,14 +1,13 @@
 'use strict'
 
-export default (orientations, bar, wellDepth, wellWidth) =>
+export default (rotationSystem, bar, wellDepth, wellWidth) =>
   /**
-    Input {well, score, highestBlue, piece} and a move, return
-    the new {well, score, highestBlue, piece}.
+    Input {well, score, piece} and a move, return
+    the new {well, score, piece}.
   */
   (state, move) => {
     let nextWell = state.well
     let nextScore = state.score
-    let nextHighestBlue = state.highestBlue
     let nextPiece = {
       id: state.piece.id,
       x: state.piece.x,
@@ -30,7 +29,7 @@ export default (orientations, bar, wellDepth, wellWidth) =>
       nextPiece.o = (nextPiece.o + 1) % 4
     }
 
-    const orientation = orientations[nextPiece.id][nextPiece.o]
+    const orientation = rotationSystem[nextPiece.id][nextPiece.o]
     const xActual = nextPiece.x + orientation.xMin
     const yActual = nextPiece.y + orientation.yMin
 
@@ -47,14 +46,11 @@ export default (orientations, bar, wellDepth, wellWidth) =>
         // Lock piece
         nextWell = state.well.slice()
 
-        const orientation = orientations[state.piece.id][state.piece.o]
+        const orientation = rotationSystem[state.piece.id][state.piece.o]
 
         // this is the top left point in the bounding box of this orientation of this piece
         const xActual = state.piece.x + orientation.xMin
         const yActual = state.piece.y + orientation.yMin
-
-        // update the "highestBlue" value to account for newly-placed piece
-        nextHighestBlue = Math.min(nextHighestBlue, yActual)
 
         // row by row bitwise line alteration
         // because we do this from the top down, we can remove lines as we go
@@ -78,7 +74,6 @@ export default (orientations, bar, wellDepth, wellWidth) =>
             nextWell[0] = 0
 
             nextScore++
-            nextHighestBlue++
           }
         }
         nextPiece = null
@@ -91,7 +86,6 @@ export default (orientations, bar, wellDepth, wellWidth) =>
     return {
       well: nextWell,
       score: nextScore,
-      highestBlue: nextHighestBlue,
       piece: nextPiece
     }
   }

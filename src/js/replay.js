@@ -4,29 +4,29 @@
 
 'use strict'
 
-import replayHex from './replay-hex'
-import replayBase65536 from './replay-base65536'
-import replayBase2048 from './replay-base2048'
+import hex from './replay-codecs/hex'
+import base65536 from './replay-codecs/base65536'
+import base2048 from './replay-codecs/base2048'
 
 /**
   Convert an array of moves into a replay
 */
-// const encode = moves => replayHex.encode(moves)
-// const encode = moves => replayBase65536.encode(moves)
-const encode = moves => replayBase2048.encode(moves)
+// const encode = moves => hex.encode(moves)
+// const encode = moves => base65536.encode(moves)
+const encode = moves => base2048.encode(moves)
 
 /**
   Convert a string back into an array of moves
 */
 const decode = string => {
   if (/^[0123456789ABCDEF# ]*$/.test(string)) {
-    return replayHex.decode(string)
+    return hex.decode(string)
   }
   try {
-    return replayBase65536.decode(string)
+    return base65536.decode(string)
   } catch (e) {
   }
-  return replayBase2048.decode(string)
+  return base2048.decode(string)
 }
 
 export default {encode, decode}

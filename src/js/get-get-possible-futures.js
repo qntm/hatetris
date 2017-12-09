@@ -3,16 +3,16 @@
 import getGetNextState from './get-get-next-state'
 import moves from './moves'
 
-export default (orientations, bar, wellDepth, wellWidth) => {
-  const getNextState = getGetNextState(orientations, bar, wellDepth, wellWidth)
+export default (rotationSystem, bar, wellDepth, wellWidth) => {
+  const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
 
   /**
     Given a well and a piece, find all possible places where it could land
     and return the array of "possible future" states. All of these states
     will have `null` `piece` because the piece is landed; some will have
-    a different `highestBlue`; some will have an increase `score`.
+    an increased `score`.
   */
-  return (well, highestBlue, pieceId) => {
+  return (well, pieceId) => {
     /**
       Generate a unique integer to describe the position and orientation of this piece.
       `x` varies between -3 and (`wellWidth` - 1) inclusive, so range = `wellWidth` + 3
@@ -39,7 +39,6 @@ export default (orientations, bar, wellDepth, wellWidth) => {
       piece = getNextState({
         well: well,
         score: 0,
-        highestBlue: 0,
         piece: piece
       }, 'D').piece
     }
@@ -63,7 +62,6 @@ export default (orientations, bar, wellDepth, wellWidth) => {
         const nextState = getNextState({
           well: well,
           score: 0,
-          highestBlue: highestBlue,
           piece: piece
         }, move)
         const newPiece = nextState.piece

@@ -2,9 +2,9 @@
 
 /* eslint-env jasmine */
 
-import { _doPiece } from './../src/js/ori-gen'
+import { _doPiece } from './../src/js/rotation-systems/hatetris'
 
-describe('ori-gen', function () {
+describe('_doPiece', function () {
   it('works', function () {
     expect(_doPiece([
       '....',
