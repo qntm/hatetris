@@ -4,8 +4,8 @@ import getGetPossibleFutures from './../get-get-possible-futures'
 
 const searchDepth = 0 // min = 0, suggested max = 1
 
-export default (rotationSystem, bar, wellDepth, wellWidth) => {
-  const getPossibleFutures = getGetPossibleFutures(rotationSystem, bar, wellDepth, wellWidth)
+export default (rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth) => {
+  const getPossibleFutures = getGetPossibleFutures(rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth)
 
   const getHighestBlue = well => {
     let row
@@ -36,7 +36,7 @@ export default (rotationSystem, bar, wellDepth, wellWidth) => {
     Object
       .keys(rotationSystem)
       .map(pieceId => ({
-        id: pieceId,
+        pieceId,
         rating: getBestWellRating(well, pieceId, depthRemaining)
       }))
       .sort((a, b) => a.rating - b.rating)[0]
@@ -49,12 +49,8 @@ export default (rotationSystem, bar, wellDepth, wellWidth) => {
 
   // pick the worst piece that could be put into this well
   // return the piece but not its rating
-  const getWorstPiece = well => ({
-    id: getWorstPieceDetails(well, searchDepth).id,
-    x: Math.floor((wellWidth - 4) / 2),
-    y: 0,
-    o: 0
-  })
+  const getWorstPiece = well =>
+    getWorstPieceDetails(well, searchDepth).pieceId
 
   return getWorstPiece
 }

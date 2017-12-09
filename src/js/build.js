@@ -11,7 +11,7 @@ import replay from './replay'
 
 const minWidth = 4
 
-export default (rotationSystem, bar, wellDepth, wellWidth, enemyAi, replayTimeout, gameIsOver) => {
+export default (rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth, enemyAi, replayTimeout, gameIsOver) => {
   if (rotationSystem.length < 1) {
     throw Error('Have to have at least one piece!')
   }
@@ -22,7 +22,7 @@ export default (rotationSystem, bar, wellDepth, wellWidth, enemyAi, replayTimeou
     throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
   }
 
-  const firstState = getFirstState(wellDepth, enemyAi)
+  const firstState = getFirstState(wellDepth, placeFirstPiece, enemyAi)
   const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
 
   const draw = model => {
@@ -105,7 +105,7 @@ export default (rotationSystem, bar, wellDepth, wellWidth, enemyAi, replayTimeou
     // no live piece? make a new one
     // suited to the new world, of course
     if (nextWellState.piece === null && nextMode !== 'GAME_OVER') {
-      nextWellState.piece = enemyAi(nextWellState.well)
+      nextWellState.piece = placeFirstPiece(enemyAi(nextWellState.well))
     }
       
     return {

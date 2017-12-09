@@ -53,13 +53,14 @@ export default (rotationSystem, bar, wellDepth, wellWidth) =>
         const yActual = state.piece.y + orientation.yMin
 
         // row by row bitwise line alteration
-        // because we do this from the top down, we can remove lines as we go
         for (let row = 0; row < orientation.yDim; row++) {
           // can't negative bit-shift, but alas X can be negative
           nextWell[yActual + row] |= (orientation.rows[row] << xActual)
+        }
 
-          // check for a complete line now
-          // NOTE: completed lines don't count if you've lost
+        // check for complete lines now
+        // NOTE: completed lines don't count if you've lost
+        for (let row = 0; row < orientation.yDim; row++) {
           if (
             yActual >= bar &&
             nextWell[yActual + row] === (1 << wellWidth) - 1

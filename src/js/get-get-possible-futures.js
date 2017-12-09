@@ -3,11 +3,11 @@
 import getGetNextState from './get-get-next-state'
 import moves from './moves'
 
-export default (rotationSystem, bar, wellDepth, wellWidth) => {
+export default (rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth) => {
   const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
 
   /**
-    Given a well and a piece, find all possible places where it could land
+    Given a well and a piece ID, find all possible places where it could land
     and return the array of "possible future" states. All of these states
     will have `null` `piece` because the piece is landed; some will have
     an increased `score`.
@@ -22,12 +22,7 @@ export default (rotationSystem, bar, wellDepth, wellWidth) => {
     const hashCode = (x, y, o) =>
       (x * (wellDepth + 3) + y) * 4 + o
 
-    let piece = {
-      id: pieceId,
-      x: 0,
-      y: 0,
-      o: 0
-    }
+    let piece = placeFirstPiece(pieceId)
 
     // move the piece down to a lower position before we have to
     // start pathfinding for it

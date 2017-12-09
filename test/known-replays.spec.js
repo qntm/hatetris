@@ -4,6 +4,7 @@
 
 import getFirstState from './../src/js/get-first-state'
 import getGetNextState from './../src/js/get-get-next-state'
+import getPlaceFirstPiece from './../src/js/piece-placement/get-hatetris'
 import rotationSystem from './../src/js/rotation-systems/hatetris'
 import replay from './../src/js/replay'
 import getEnemyAi from './../src/js/enemy-ais/get-hatetris'
@@ -78,16 +79,17 @@ describe('check known replays', () => {
   const bar = 4
   const wellDepth = 20 // min = bar
   const wellWidth = 10 // min = 4
-  const enemyAi = getEnemyAi(rotationSystem, bar, wellDepth, wellWidth)
+  const placeFirstPiece = getPlaceFirstPiece(wellWidth)
+  const enemyAi = getEnemyAi(rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth)
+  const firstState = getFirstState(wellDepth, placeFirstPiece, enemyAi)
   const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
-  const firstState = getFirstState(wellDepth, enemyAi)
 
   const getReplay = string => {
     const moves = replay.decode(string)
     let state = firstState
     moves.forEach(move => {
       if (state.piece === null) {
-        state.piece = enemyAi(state.well, state.highestBlue)
+        state.piece = placeFirstPiece(enemyAi(state.well, state.highestBlue))
       }
       state = getNextState(state, move)
     })
