@@ -1,13 +1,16 @@
 .hatetris {
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
 	font-family: arial;
-	margin: 50px 0 0 50px;
+	padding: 50px;
+	display: flex;
 }
 .hatetris__left {
-	float: left;
-	margin: 0 50px 50px 0;
+	flex: 0 0 auto;
 }
 .hatetris__right {
-	margin: 0 50px 50px 0;
+	flex: 1 1 auto;
 }
 .hatetris__paragraph {
 	margin: 10px;

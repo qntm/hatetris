@@ -1,5 +1,9 @@
 'use strict'
 
+// TODO: this AI is needs to be made agnostic to the order of pieces
+// given in the rotation system. At present it just returns whatever
+// the first one is!
+
 import getGetPossibleFutures from './../get-get-possible-futures'
 
 const searchDepth = 0 // min = 0, suggested max = 1
@@ -9,7 +13,7 @@ export default (rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth) => {
 
   const getHighestBlue = well => {
     let row
-    for(row = 0; row < well.length; row++) {
+    for (row = 0; row < well.length; row++) {
       if (well[row] !== 0) {
         break
       }
