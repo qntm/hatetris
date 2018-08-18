@@ -61,7 +61,7 @@ export default props => {
   ]
 
   buttons.forEach(button => {
-    cellses[button.y][button.x].event = button.event
+    cellses[button.y][button.x].onClick = button.onClick
     cellses[button.y][button.x].symbol = button.symbol
     cellses[button.y][button.x].title = button.title
   })

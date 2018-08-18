@@ -14,7 +14,7 @@ import '../img/favicon.ico'
 import '../html/hatetris.html'
 
 import './statcounter'
-import Game from './game'
+import Game from './game.jsx'
 import getEnemyAi from './enemy-ais/get-hatetris'
 import getGameIsOver from './game-over-conditions/get-hatetris'
 import getPlaceFirstPiece from './piece-placement/get-hatetris'

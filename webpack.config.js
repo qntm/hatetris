@@ -15,7 +15,7 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.js$/,
+      test: /\.jsx?$/,
       use: [{
         loader: 'babel-loader',
         options: {
@@ -40,7 +40,7 @@ module.exports = {
     webpackCleanupPlugin
   ],
   externals: {
-    react: 'React', 
+    react: 'React',
     'react-dom': 'ReactDOM'
   }
 }

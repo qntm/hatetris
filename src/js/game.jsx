@@ -9,7 +9,7 @@ import React from 'react'
 import getFirstState from './get-first-state'
 import getGetNextState from './get-get-next-state'
 import replayCodec from './replay'
-import Well from './well'
+import Well from './well.jsx'
 
 const minWidth = 4
 
@@ -51,6 +51,13 @@ class Game extends React.Component {
 
     this.startGame = this.startGame.bind(this)
     this.startReplay = this.startReplay.bind(this)
+    this.inputReplayStep = this.inputReplayStep.bind(this)
+    this.left = this.left.bind(this)
+    this.right = this.right.bind(this)
+    this.rotate = this.rotate.bind(this)
+    this.down = this.down.bind(this)
+    this.undo = this.undo.bind(this)
+    this.redo = this.redo.bind(this)
   }
 
   startGame () {
@@ -76,6 +83,10 @@ class Game extends React.Component {
 
   startReplay () {
     const {
+      replayTimeout
+    } = this.props
+
+    const {
       replayTimeoutId
     } = this.state
 
@@ -83,28 +94,24 @@ class Game extends React.Component {
     // must be killed
     if (replayTimeoutId) {
       clearTimeout(replayTimeoutId)
-      this.setState({
-        replayTimeoutId: undefined
-      })
     }
 
     // user inputs replay string
     const string = window.prompt() || '' // change for IE
 
+    const replay = replayCodec.decode(string)
+
+    const wellStateId = 0
+    const nextReplayTimeoutId = wellStateId in replay ? setTimeout(this.inputReplayStep, replayTimeout)
+      : undefined
+
     // GO
     this.setState({
       mode: 'REPLAYING',
-      wellStateId: 0,
+      wellStateId: wellStateId,
       wellStates: [this.firstState],
-      replay: replayCodec.decode(string),
-
-      // line up first step (will trigger own later steps)
-      replayTimeoutId: setTimeout(() => {
-        this.setState({
-          replayTimeoutId: undefined
-        })
-        this.inputReplayStep()
-      }, 0)
+      replay: replay,
+      replayTimeoutId: nextReplayTimeoutId
     })
   }
 
@@ -119,32 +126,21 @@ class Game extends React.Component {
       wellStateId
     } = this.state
 
-    if (mode === 'REPLAYING') {
-      // if there is still replay left, time in another step from the replay
-      // otherwise, allow the user to continue the game
-      if (wellStateId in replay) {
-        this.handleMove(replay[wellStateId])
+    let nextReplayTimeoutId
 
-        if (mode !== 'GAME_OVER') {
-          this.setState({
-            replayTimeoutId: setTimeout(() => {
-              this.setState({
-                replayTimeoutId: undefined
-              })
-              this.inputReplayStep()
-            }, replayTimeout)
-          })
-        }
-      } else {
-        this.setState({
-          mode: 'PLAYING'
-        })
+    if (mode === 'REPLAYING') {
+      this.redo()
+
+      if (wellStateId + 1 in replay) {
+        nextReplayTimeoutId = setTimeout(this.inputReplayStep, replayTimeout)
       }
     } else {
-      // Ignore the call to inputReplayStep in "GAME_OVER"
-      // or "PLAYING" modes.
       console.warn('Ignoring input replay step because mode is', mode)
     }
+
+    this.setState({
+      replayTimeoutId: nextReplayTimeoutId
+    })
   }
 
   // Accepts the input of a move and attempts to apply that
@@ -187,7 +183,9 @@ class Game extends React.Component {
 
     const nextWellState = nextWellStates[nextWellStateId]
 
-    const nextMode = gameIsOver(nextWellState) ? 'GAME_OVER' : mode
+    const nextMode = gameIsOver(nextWellState) ? 'GAME_OVER'
+      : (mode === 'REPLAYING' && !(nextWellStateId in replay)) ? 'PLAYING'
+      : mode
 
     // no live piece? make a new one
     // suited to the new world, of course
@@ -203,7 +201,7 @@ class Game extends React.Component {
     })
   }
 
-  onLeft () {
+  left () {
     const {mode} = this.state
     if (mode === 'PLAYING') {
       this.handleMove('L')
@@ -212,7 +210,7 @@ class Game extends React.Component {
     }
   }
 
-  onRight () {
+  right () {
     const {mode} = this.state
     if (mode === 'PLAYING') {
       this.handleMove('R')
@@ -221,7 +219,7 @@ class Game extends React.Component {
     }
   }
 
-  onDown () {
+  down () {
     const {mode} = this.state
     if (mode === 'PLAYING') {
       this.handleMove('D')
@@ -230,7 +228,7 @@ class Game extends React.Component {
     }
   }
 
-  onRotate () {
+  rotate () {
     const {mode} = this.state
     if (mode === 'PLAYING') {
       this.handleMove('U')
@@ -239,7 +237,7 @@ class Game extends React.Component {
     }
   }
 
-  onUndo () {
+  undo () {
     const {
       replayTimeoutId,
       wellStateId,
@@ -267,15 +265,14 @@ class Game extends React.Component {
     }
   }
 
-  // TODO: merge this functionality with `inputReplayStep`,
-  onRedo () {
+  redo () {
     const {
       mode,
       replay,
       wellStateId
     } = this.state
 
-    if (mode === 'PLAYING') {
+    if (mode === 'PLAYING' || mode === 'REPLAYING') {
       if (wellStateId in replay) {
         this.handleMove(replay[wellStateId])
       } else {
@@ -290,17 +287,17 @@ class Game extends React.Component {
     event = event || window.event // add for IE
 
     if (event.keyCode === 37) {
-      this.onLeft()
+      this.left()
     } else if (event.keyCode === 39) {
-      this.onRight()
+      this.right()
     } else if (event.keyCode === 40) {
-      this.onDown()
+      this.down()
     } else if (event.keyCode === 38) {
-      this.onRotate()
+      this.rotate()
     } else if (event.keyCode === 90 && event.ctrlKey === true) {
-      this.onUndo()
+      this.undo()
     } else if (event.keyCode === 89 && event.ctrlKey === true) {
-      this.onRedo()
+      this.redo()
     }
   }
 
@@ -332,12 +329,12 @@ class Game extends React.Component {
           wellDepth={wellDepth}
           wellWidth={wellWidth}
           wellState={wellState}
-          onClickL={this.onLeft}
-          onClickR={this.onRight}
-          onClickU={this.onRotate}
-          onClickD={this.onDown}
-          onClickZ={this.onUndo}
-          onClickY={this.onRedo}
+          onClickL={this.left}
+          onClickR={this.right}
+          onClickU={this.rotate}
+          onClickD={this.down}
+          onClickZ={this.undo}
+          onClickY={this.redo}
         />
       </div>
       <div className='hatetris__right'>
