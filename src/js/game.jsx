@@ -319,7 +319,7 @@ class Game extends React.Component {
     const wellState = wellStateId === -1 ? null : wellStates[wellStateId]
 
     const score = wellState && wellState.score
-    const replayOut = mode === 'GAME_OVER' ? 'replay of last game: ' + replayCodec.encode(replay) : null
+    const replayOut = mode === 'GAME_OVER' && replay.length > 0 ? 'replay of last game: ' + replayCodec.encode(replay) : null
 
     return <div className='hatetris'>
       <div className='hatetris__left'>
@@ -366,6 +366,16 @@ class Game extends React.Component {
           <span className='hatetris__replay-out'>
             {replayOut}
           </span>
+        </p>
+
+        <div className='hatetris__spacer' />
+
+        <p className='hatetris__paragraph'>
+          <a href="https://github.com/qntm/hatetris">source code</a>
+        </p>
+
+        <p className='hatetris__paragraph'>
+          replays encoded using <a href="https://github.com/qntm/base2048">Base2048</a><br />
         </p>
       </div>
     </div>

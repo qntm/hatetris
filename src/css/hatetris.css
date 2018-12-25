@@ -11,9 +11,20 @@
 }
 .hatetris__right {
 	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
 }
 .hatetris__paragraph {
-	margin: 10px;
+	/* in a flex column, vertical margins do not collapse! */
+	margin-bottom: 10px;
+	flex: 0 0 auto;
+}
+.hatetris__paragraph:last-child {
+	margin-bottom: 0;
+}
+.hatetris__spacer {
+	flex: 1 1 auto;
 }
 .hatetris__cell {
 	width: 25px;
