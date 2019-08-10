@@ -7,7 +7,7 @@
     "babel-node": "babel-node",
     "build": "npm run webpack",
     "standard": "standard",
-    "test": "npm run babel-node -- --presets env test.js",
+    "test": "npm run babel-node -- test.js",
     "webpack": "webpack"
   },
   "repository": {
@@ -24,21 +24,20 @@
   },
   "homepage": "https://github.com/qntm/hatetris#readme",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
     "base2048": "0.0.2052",
     "base65536": "^2.0.2",
     "classnames": "^2.2.6",
-    "css-loader": "^0.28.11",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^1.1.11",
-    "jasmine": "^2.99.0",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "standard": "^10.0.3",
-    "webpack": "^3.12.0",
-    "webpack-cleanup-plugin": "^0.5.1"
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "jasmine": "^3.4.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "standard": "^13.1.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
   }
 }

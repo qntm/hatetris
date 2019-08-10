@@ -20,7 +20,7 @@ export function _doPiece (piece) {
 
     for (let x = 0; x < string.length; x++) {
       if (string.charAt(x) === '#') {
-        bits.push({x: x, y: y})
+        bits.push({ x: x, y: y })
       } else if (string.charAt(x) !== '.') {
         throw Error('Misconfigured pieces')
       }

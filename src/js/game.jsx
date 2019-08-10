@@ -185,7 +185,7 @@ class Game extends React.Component {
 
     const nextMode = gameIsOver(nextWellState) ? 'GAME_OVER'
       : (mode === 'REPLAYING' && !(nextWellStateId in replay)) ? 'PLAYING'
-      : mode
+        : mode
 
     // no live piece? make a new one
     // suited to the new world, of course
@@ -202,7 +202,7 @@ class Game extends React.Component {
   }
 
   left () {
-    const {mode} = this.state
+    const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('L')
     } else {
@@ -211,7 +211,7 @@ class Game extends React.Component {
   }
 
   right () {
-    const {mode} = this.state
+    const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('R')
     } else {
@@ -220,7 +220,7 @@ class Game extends React.Component {
   }
 
   down () {
-    const {mode} = this.state
+    const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('D')
     } else {
@@ -229,7 +229,7 @@ class Game extends React.Component {
   }
 
   rotate () {
-    const {mode} = this.state
+    const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('U')
     } else {
@@ -371,11 +371,11 @@ class Game extends React.Component {
         <div className='hatetris__spacer' />
 
         <p className='hatetris__paragraph'>
-          <a href="https://github.com/qntm/hatetris">source code</a>
+          <a href='https://github.com/qntm/hatetris'>source code</a>
         </p>
 
         <p className='hatetris__paragraph'>
-          replays encoded using <a href="https://github.com/qntm/base2048">Base2048</a><br />
+          replays encoded using <a href='https://github.com/qntm/base2048'>Base2048</a><br />
         </p>
       </div>
     </div>

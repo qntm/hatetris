@@ -29,4 +29,4 @@ const decode = string => {
   return base2048.decode(string)
 }
 
-export default {encode, decode}
+export default { encode, decode }

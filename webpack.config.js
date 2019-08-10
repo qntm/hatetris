@@ -1,44 +1,39 @@
-'use strict'
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
-const path = require('path')
-const WebpackCleanupPlugin = require('webpack-cleanup-plugin')
-
-const extractTextWebpackPlugin = new ExtractTextWebpackPlugin('bundle.css')
-const webpackCleanupPlugin = new WebpackCleanupPlugin()
+const miniCssExtractPlugin = new MiniCssExtractPlugin({
+  filename: 'bundle.css'
+})
 
 module.exports = {
-  entry: './src/js/hatetris.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
-  },
+  mode: 'development',
+  plugins: [
+    miniCssExtractPlugin
+  ],
   module: {
     rules: [{
-      test: /\.jsx?$/,
-      use: [{
-        loader: 'babel-loader',
-        options: {
-          presets: ['babel-preset-react', 'babel-preset-env']
-        }
-      }]
-    }, {
-      test: /\.css$/,
-      use: extractTextWebpackPlugin.extract(['css-loader'])
+      test: /\.(js|jsx)$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader'
+      }
     }, {
       test: /\.(ico|html)$/,
-      use: [{
+      use: {
         loader: 'file-loader',
         options: {
           name: '[name].[ext]'
         }
-      }]
+      }
+    }, {
+      test: /\.css$/,
+      use: [{
+        loader: MiniCssExtractPlugin.loader
+      }, 'css-loader']
     }]
   },
-  plugins: [
-    extractTextWebpackPlugin,
-    webpackCleanupPlugin
-  ],
+  output: {
+    filename: 'bundle.js'
+  },
   externals: {
     react: 'React',
     'react-dom': 'ReactDOM'

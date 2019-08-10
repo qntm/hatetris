@@ -73,4 +73,4 @@ const decode = string => {
   return moves
 }
 
-export default {encode, decode}
+export default { encode, decode }

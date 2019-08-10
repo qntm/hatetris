@@ -34,9 +34,9 @@ export default (rotationSystem, bar, wellDepth, wellWidth) =>
     const yActual = nextPiece.y + orientation.yMin
 
     if (
-      xActual < 0 ||                            // off left side
+      xActual < 0 || // off left side
       xActual + orientation.xDim > wellWidth || // off right side
-      yActual < 0 ||                            // off top (??)
+      yActual < 0 || // off top (??)
       yActual + orientation.yDim > wellDepth || // off bottom
       orientation.rows.some((row, y) =>
         state.well[yActual + y] & (row << xActual)

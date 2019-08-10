@@ -15,7 +15,7 @@ const encode = keys => {
 
   // Can't have an odd number of runs. This would break in mid-byte!
   if (rle.length % 2 === 1) {
-    rle.push({entry: 'L', length: 1})
+    rle.push({ entry: 'L', length: 1 })
   }
 
   rle = rle.map(run => ({
@@ -75,4 +75,4 @@ const decode = string => {
   return runLength.decode(rle)
 }
 
-export default {encode, decode}
+export default { encode, decode }

@@ -30,4 +30,4 @@ const decode = runs => {
   return entries
 }
 
-export default {encode, decode}
+export default { encode, decode }

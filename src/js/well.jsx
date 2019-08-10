@@ -52,12 +52,12 @@ export default props => {
 
   // put some buttons on the playing field
   const buttons = [
-    {y: 0, x: 0, onClick: onClickZ, symbol: '\u21B6', title: 'Press Ctrl+Z to undo'},
-    {y: 0, x: 1, onClick: onClickU, symbol: '\u27F3', title: 'Press Up to rotate'},
-    {y: 0, x: 2, onClick: onClickY, symbol: '\u21B7', title: 'Press Ctrl+Y to redo'},
-    {y: 1, x: 0, onClick: onClickL, symbol: '\u2190', title: 'Press Left to move left'},
-    {y: 1, x: 1, onClick: onClickD, symbol: '\u2193', title: 'Press Down to move down'},
-    {y: 1, x: 2, onClick: onClickR, symbol: '\u2192', title: 'Press Right to move right'}
+    { y: 0, x: 0, onClick: onClickZ, symbol: '\u21B6', title: 'Press Ctrl+Z to undo' },
+    { y: 0, x: 1, onClick: onClickU, symbol: '\u27F3', title: 'Press Up to rotate' },
+    { y: 0, x: 2, onClick: onClickY, symbol: '\u21B7', title: 'Press Ctrl+Y to redo' },
+    { y: 1, x: 0, onClick: onClickL, symbol: '\u2190', title: 'Press Left to move left' },
+    { y: 1, x: 1, onClick: onClickD, symbol: '\u2193', title: 'Press Down to move down' },
+    { y: 1, x: 2, onClick: onClickR, symbol: '\u2192', title: 'Press Right to move right' }
   ]
 
   buttons.forEach(button => {
