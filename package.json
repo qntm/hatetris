@@ -2,6 +2,11 @@
   "name": "hatetris",
   "version": "1.0.3",
   "description": "Tetris which always gives you the worst piece",
+  "homepage": "https://github.com/qntm/hatetris",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/qntm/hatetris.git"
+  },
   "main": "index.js",
   "scripts": {
     "babel-node": "babel-node",
@@ -9,10 +14,6 @@
     "standard": "standard",
     "test": "npm run babel-node -- test.js",
     "webpack": "webpack"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/qntm/hatetris.git"
   },
   "keywords": [
     "tetris"
@@ -22,7 +23,6 @@
   "bugs": {
     "url": "https://github.com/qntm/hatetris/issues"
   },
-  "homepage": "https://github.com/qntm/hatetris#readme",
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
