@@ -24,7 +24,7 @@
     "url": "https://github.com/qntm/hatetris/issues"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "^7.11.1",
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
