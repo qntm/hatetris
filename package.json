@@ -34,7 +34,7 @@
     "classnames": "^2.2.6",
     "css-loader": "^3.2.0",
     "file-loader": "^4.2.0",
-    "jasmine": "^3.4.0",
+    "jasmine": "^3.6.1",
     "mini-css-extract-plugin": "^0.8.0",
     "standard": "^13.1.0",
     "webpack": "^4.39.1",
