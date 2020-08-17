@@ -29,7 +29,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "base2048": "1.0.3",
-    "base65536": "^2.0.2",
+    "base65536": "^3.0.3",
     "classnames": "^2.2.6",
     "css-loader": "^4.2.1",
     "cypress": "^4.12.1",
