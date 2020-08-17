@@ -49,18 +49,18 @@ class Game extends React.Component {
       replayTimeoutId: undefined
     }
 
-    this.startGame = this.startGame.bind(this)
-    this.startReplay = this.startReplay.bind(this)
+    this.handleClickStart = this.handleClickStart.bind(this)
+    this.handleClickReplay = this.handleClickReplay.bind(this)
     this.inputReplayStep = this.inputReplayStep.bind(this)
-    this.left = this.left.bind(this)
-    this.right = this.right.bind(this)
-    this.rotate = this.rotate.bind(this)
-    this.down = this.down.bind(this)
-    this.undo = this.undo.bind(this)
-    this.redo = this.redo.bind(this)
+    this.handleLeft = this.handleLeft.bind(this)
+    this.handleRight = this.handleRight.bind(this)
+    this.handleUp = this.handleUp.bind(this)
+    this.handleDown = this.handleDown.bind(this)
+    this.handleCtrlZ = this.handleCtrlZ.bind(this)
+    this.handleCtrlY = this.handleCtrlY.bind(this)
   }
 
-  startGame () {
+  handleClickStart () {
     const {
       replayTimeoutId
     } = this.state
@@ -81,7 +81,7 @@ class Game extends React.Component {
     })
   }
 
-  startReplay () {
+  handleClickReplay () {
     const {
       replayTimeout
     } = this.props
@@ -129,7 +129,7 @@ class Game extends React.Component {
     let nextReplayTimeoutId
 
     if (mode === 'REPLAYING') {
-      this.redo()
+      this.handleCtrlY()
 
       if (wellStateId + 1 in replay) {
         nextReplayTimeoutId = setTimeout(this.inputReplayStep, replayTimeout)
@@ -201,7 +201,7 @@ class Game extends React.Component {
     })
   }
 
-  left () {
+  handleLeft () {
     const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('L')
@@ -210,7 +210,7 @@ class Game extends React.Component {
     }
   }
 
-  right () {
+  handleRight () {
     const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('R')
@@ -219,7 +219,7 @@ class Game extends React.Component {
     }
   }
 
-  down () {
+  handleDown () {
     const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('D')
@@ -228,7 +228,7 @@ class Game extends React.Component {
     }
   }
 
-  rotate () {
+  handleUp () {
     const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('U')
@@ -237,7 +237,7 @@ class Game extends React.Component {
     }
   }
 
-  undo () {
+  handleCtrlZ () {
     const {
       replayTimeoutId,
       wellStateId,
@@ -265,7 +265,7 @@ class Game extends React.Component {
     }
   }
 
-  redo () {
+  handleCtrlY () {
     const {
       mode,
       replay,
@@ -287,17 +287,17 @@ class Game extends React.Component {
     event = event || window.event // add for IE
 
     if (event.keyCode === 37) {
-      this.left()
+      this.handleLeft()
     } else if (event.keyCode === 39) {
-      this.right()
+      this.handleRight()
     } else if (event.keyCode === 40) {
-      this.down()
+      this.handleDown()
     } else if (event.keyCode === 38) {
-      this.rotate()
+      this.handleUp()
     } else if (event.keyCode === 90 && event.ctrlKey === true) {
-      this.undo()
+      this.handleCtrlZ()
     } else if (event.keyCode === 89 && event.ctrlKey === true) {
-      this.redo()
+      this.handleCtrlY()
     }
   }
 
@@ -321,64 +321,66 @@ class Game extends React.Component {
     const score = wellState && wellState.score
     const replayOut = mode === 'GAME_OVER' && replay.length > 0 ? 'replay of last game: ' + replayCodec.encode(replay) : null
 
-    return <div className='hatetris'>
-      <div className='hatetris__left'>
-        <Well
-          bar={bar}
-          rotationSystem={rotationSystem}
-          wellDepth={wellDepth}
-          wellWidth={wellWidth}
-          wellState={wellState}
-          onClickL={this.left}
-          onClickR={this.right}
-          onClickU={this.rotate}
-          onClickD={this.down}
-          onClickZ={this.undo}
-          onClickY={this.redo}
-        />
+    return (
+      <div className='hatetris'>
+        <div className='hatetris__left'>
+          <Well
+            bar={bar}
+            rotationSystem={rotationSystem}
+            wellDepth={wellDepth}
+            wellWidth={wellWidth}
+            wellState={wellState}
+            onClickL={this.handleLeft}
+            onClickR={this.handleRight}
+            onClickU={this.handleUp}
+            onClickD={this.handleDown}
+            onClickZ={this.handleCtrlZ}
+            onClickY={this.handleCtrlY}
+          />
+        </div>
+        <div className='hatetris__right'>
+          <p className='hatetris__paragraph'>
+            <a href='http://qntm.org/hatetris'>
+              You're playing HATETRIS by qntm
+            </a>
+          </p>
+
+          <p className='hatetris__paragraph'>
+            <button type='button' onClick={this.handleClickStart}>
+              start new game
+            </button>
+          </p>
+
+          <p className='hatetris__paragraph'>
+            <button type='button' onClick={this.handleClickReplay}>
+              show a replay
+            </button>
+          </p>
+
+          <p className='hatetris__paragraph'>
+            <span className='hatetris__score'>
+              {score}
+            </span>
+          </p>
+
+          <p className='hatetris__paragraph'>
+            <span className='hatetris__replay-out'>
+              {replayOut}
+            </span>
+          </p>
+
+          <div className='hatetris__spacer' />
+
+          <p className='hatetris__paragraph'>
+            <a href='https://github.com/qntm/hatetris'>source code</a>
+          </p>
+
+          <p className='hatetris__paragraph'>
+            replays encoded using <a href='https://github.com/qntm/base2048'>Base2048</a><br />
+          </p>
+        </div>
       </div>
-      <div className='hatetris__right'>
-        <p className='hatetris__paragraph'>
-          <a href='http://qntm.org/hatetris'>
-            You're playing HATETRIS by qntm
-          </a>
-        </p>
-
-        <p className='hatetris__paragraph'>
-          <button type='button' onClick={this.startGame}>
-            start new game
-          </button>
-        </p>
-
-        <p className='hatetris__paragraph'>
-          <button type='button' onClick={this.startReplay}>
-            show a replay
-          </button>
-        </p>
-
-        <p className='hatetris__paragraph'>
-          <span className='hatetris__score'>
-            {score}
-          </span>
-        </p>
-
-        <p className='hatetris__paragraph'>
-          <span className='hatetris__replay-out'>
-            {replayOut}
-          </span>
-        </p>
-
-        <div className='hatetris__spacer' />
-
-        <p className='hatetris__paragraph'>
-          <a href='https://github.com/qntm/hatetris'>source code</a>
-        </p>
-
-        <p className='hatetris__paragraph'>
-          replays encoded using <a href='https://github.com/qntm/base2048'>Base2048</a><br />
-        </p>
-      </div>
-    </div>
+    )
   }
 
   componentWillMount () {
