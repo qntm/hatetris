@@ -30,13 +30,18 @@ const gameIsOver = getGameIsOver(bar)
 const enemyAi = getEnemyAi(rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth)
 const replayTimeout = 50 // milliseconds per frame
 
-ReactDOM.render(<Game
-  bar={bar}
-  enemyAi={enemyAi}
-  gameIsOver={gameIsOver}
-  placeFirstPiece={placeFirstPiece}
-  replayTimeout={replayTimeout}
-  rotationSystem={rotationSystem}
-  wellDepth={wellDepth}
-  wellWidth={wellWidth}
-/>, document.body)
+ReactDOM.render(
+  (
+    <Game
+      bar={bar}
+      enemyAi={enemyAi}
+      gameIsOver={gameIsOver}
+      placeFirstPiece={placeFirstPiece}
+      replayTimeout={replayTimeout}
+      rotationSystem={rotationSystem}
+      wellDepth={wellDepth}
+      wellWidth={wellWidth}
+    />
+  ),
+  document.body
+)
