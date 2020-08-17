@@ -4,7 +4,7 @@
 
 'use strict'
 
-import base2048 from 'base2048'
+import * as base2048 from 'base2048'
 import runLength from './../run-length'
 
 /**
