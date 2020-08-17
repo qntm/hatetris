@@ -31,7 +31,7 @@
     "base2048": "0.0.2052",
     "base65536": "^2.0.2",
     "classnames": "^2.2.6",
-    "css-loader": "^3.2.0",
+    "css-loader": "^4.2.1",
     "cypress": "^4.12.1",
     "express": "^4.17.1",
     "file-loader": "^6.0.0",
