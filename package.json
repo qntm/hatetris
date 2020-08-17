@@ -36,7 +36,7 @@
     "file-loader": "^6.0.0",
     "jasmine": "^3.6.1",
     "mini-css-extract-plugin": "^0.10.0",
-    "standard": "^13.1.0",
+    "standard": "^14.3.4",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.12"
   }
