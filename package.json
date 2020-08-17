@@ -28,7 +28,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
-    "base2048": "0.0.2052",
+    "base2048": "1.0.3",
     "base65536": "^2.0.2",
     "classnames": "^2.2.6",
     "css-loader": "^4.2.1",
