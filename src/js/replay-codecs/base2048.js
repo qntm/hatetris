@@ -37,14 +37,14 @@ const encode = keys => {
 
   const uint8Array = new Uint8Array(octets)
 
-  return base2048.encode(uint8Array.buffer)
+  return base2048.encode(uint8Array)
 }
 
 /**
   Convert a Base2048 string back into a list of keystrokes
 */
 const decode = string => {
-  const uint8Array = new Uint8Array(base2048.decode(string))
+  const uint8Array = base2048.decode(string)
 
   const octets = []
   for (let i = 0; i < uint8Array.length; i++) {
