@@ -9,11 +9,10 @@
   },
   "main": "index.js",
   "scripts": {
-    "babel-node": "babel-node",
-    "build": "npm run webpack",
+    "build": "webpack",
     "standard": "standard",
-    "test": "npm run babel-node -- test.js",
-    "webpack": "webpack"
+    "test": "standard && babel-node -- test.js",
+    "test-built": "start-server-and-test \"node test/server.js\" http://localhost:3000/dist/hatetris.html \"cypress run --spec test/test-built.js\""
   },
   "keywords": [
     "tetris"
@@ -33,10 +32,13 @@
     "base65536": "^2.0.2",
     "classnames": "^2.2.6",
     "css-loader": "^3.2.0",
+    "cypress": "^4.12.1",
+    "express": "^4.17.1",
     "file-loader": "^6.0.0",
     "jasmine": "^3.6.1",
     "mini-css-extract-plugin": "^0.10.0",
     "standard": "^14.3.4",
+    "start-server-and-test": "^1.11.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.12"
   }

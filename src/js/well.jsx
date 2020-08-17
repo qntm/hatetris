@@ -66,24 +66,30 @@ export default props => {
     cellses[button.y][button.x].title = button.title
   })
 
-  return <table>
-    <tbody className='hatetris__welltbody'>
-      {cellses.map((cells, y) => <tr key={y}>
-        {cells.map((cell, x) => <td
-          key={x}
-          className={classnames({
-            hatetris__cell: true,
-            'hatetris__cell--bar': y === bar,
-            'hatetris__cell--manual': 'event' in cell,
-            'hatetris__cell--landed': cell.landed,
-            'hatetris__cell--live': cell.live
-          })}
-          onClick={cell.onClick || null}
-          title={cell.title}
-        >
-          {cell.symbol}
-        </td>)}
-      </tr>)}
-    </tbody>
-  </table>
+  return (
+    <table>
+      <tbody className='hatetris__welltbody'>
+        {cellses.map((cells, y) => (
+          <tr key={y}>
+            {cells.map((cell, x) => (
+              <td
+                key={x}
+                className={classnames({
+                  hatetris__cell: true,
+                  'hatetris__cell--bar': y === bar,
+                  'hatetris__cell--manual': 'event' in cell,
+                  'hatetris__cell--landed': cell.landed,
+                  'hatetris__cell--live': cell.live
+                })}
+                onClick={cell.onClick || null}
+                title={cell.title}
+              >
+                {cell.symbol}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
 }
