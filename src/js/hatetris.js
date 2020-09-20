@@ -4,6 +4,7 @@
 
 'use strict'
 
+import React from 'react'
 import ReactDOM from 'react-dom'
 
 import '../css/reset.css'
@@ -43,5 +44,5 @@ ReactDOM.render(
       wellWidth={wellWidth}
     />
   ),
-  document.body
+  document.querySelector('.index__root')
 )

@@ -1,8 +1,8 @@
+/* eslint-env jest */
+
 'use strict'
 
-/* eslint-env jasmine */
-
-import { _doPiece } from './../src/js/rotation-systems/hatetris'
+import { _doPiece } from './hatetris'
 
 describe('_doPiece', function () {
   it('works', function () {
