@@ -33,5 +33,9 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js'
+  },
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM'
   }
 }
