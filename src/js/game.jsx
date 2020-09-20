@@ -97,7 +97,7 @@ class Game extends React.Component {
     }
 
     // user inputs replay string
-    const string = window.prompt() || '' // change for IE
+    const string = window.prompt()
 
     const replay = replayCodec.decode(string)
 
@@ -190,6 +190,9 @@ class Game extends React.Component {
     // no live piece? make a new one
     // suited to the new world, of course
     if (nextWellState.piece === null && nextMode !== 'GAME_OVER') {
+      // TODO: `nextWellState.well` should be more complex and contain colour
+      // information, whereas the well passed to `enemyAi` should be a simple
+      // array of integers
       nextWellState.piece = placeFirstPiece(enemyAi(nextWellState.well))
     }
 
@@ -372,6 +375,11 @@ class Game extends React.Component {
           <div className='hatetris__spacer' />
 
           <p className='hatetris__paragraph'>
+            Undo: Ctrl+Z<br />
+            Redo: Ctrl+Y<br />
+          </p>
+
+          <p className='hatetris__paragraph'>
             <a href='https://github.com/qntm/hatetris'>source code</a>
           </p>
 
@@ -383,7 +391,7 @@ class Game extends React.Component {
     )
   }
 
-  componentWillMount () {
+  componentDidMount () {
     document.addEventListener('keydown', this.onKeyDown.bind(this))
   }
 }
