@@ -7,14 +7,12 @@ import React from 'react'
 
 import Game from './game'
 import getEnemyAi from './enemy-ais/get-hatetris'
-import getGameIsOver from './game-over-conditions/get-hatetris'
 import rotationSystem from './rotation-systems/hatetris'
 import getGetNextState from './get-get-next-state'
 
 const bar = 4
 const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
-const gameIsOver = getGameIsOver(bar)
 const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
 const enemyAi = getEnemyAi(rotationSystem, getNextState, bar, wellDepth, wellWidth)
 const replayTimeout = 0
@@ -25,7 +23,6 @@ describe('<Game>', () => {
   const getGame = props => shallow(
     <Game
       bar={bar}
-      gameIsOver={gameIsOver}
       enemyAi={enemyAi}
       replayTimeout={replayTimeout}
       rotationSystem={rotationSystem}

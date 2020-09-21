@@ -147,8 +147,8 @@ class Game extends React.Component {
   // Returns the new state.
   handleMove (move) {
     const {
+      bar,
       enemyAi,
-      gameIsOver,
       rotationSystem,
       wellWidth
     } = this.props
@@ -183,7 +183,12 @@ class Game extends React.Component {
 
     const nextWellState = nextWellStates[nextWellStateId]
 
-    const nextMode = gameIsOver(nextWellState) ? 'GAME_OVER'
+    // Is the game over?
+    // It is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1),
+    // so there is only one line which we need to check.
+    const gameIsOver = nextWellState.well[bar - 1] !== 0
+
+    const nextMode = gameIsOver ? 'GAME_OVER'
       : (mode === 'REPLAYING' && !(nextWellStateId in replay)) ? 'PLAYING'
         : mode
 
