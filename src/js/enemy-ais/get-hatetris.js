@@ -4,14 +4,11 @@
 // given in the rotation system. At present it just returns whatever
 // the first one is!
 
-import getGetNextState from './../get-get-next-state'
 import moves from './../moves'
 
 const searchDepth = 0 // min = 0, suggested max = 1
 
-export default (rotationSystem, bar, wellDepth, wellWidth) => {
-  const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
-
+export default (rotationSystem, getNextState, bar, wellDepth, wellWidth) => {
   /**
     Given a well and a piece ID, find all possible places where it could land
     and return the array of "possible future" states. All of these states

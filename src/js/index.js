@@ -16,6 +16,7 @@ import '../html/hatetris.html'
 
 import './statcounter'
 import Game from './game.jsx'
+import getGetNextState from './get-get-next-state'
 import getEnemyAi from './enemy-ais/get-hatetris'
 import getGameIsOver from './game-over-conditions/get-hatetris'
 import rotationSystem from './rotation-systems/hatetris'
@@ -26,7 +27,8 @@ const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
 
 const gameIsOver = getGameIsOver(bar)
-const enemyAi = getEnemyAi(rotationSystem, bar, wellDepth, wellWidth)
+const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
+const enemyAi = getEnemyAi(rotationSystem, getNextState, bar, wellDepth, wellWidth)
 const replayTimeout = 50 // milliseconds per frame
 
 ReactDOM.render(
