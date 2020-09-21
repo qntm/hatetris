@@ -36,7 +36,7 @@ export default props => {
       if (piece === null) {
         cell.live = false
       } else {
-        const orientation = rotationSystem[piece.id][piece.o]
+        const orientation = rotationSystem.rotations[piece.id][piece.o]
         const y2 = y - piece.y - orientation.yMin
         const x2 = x - piece.x - orientation.xMin
         cell.live = (

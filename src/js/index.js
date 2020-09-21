@@ -26,7 +26,7 @@ const bar = 4
 const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
 
-const placeFirstPiece = getPlaceFirstPiece(wellWidth)
+const placeFirstPiece = getPlaceFirstPiece
 const gameIsOver = getGameIsOver(bar)
 const enemyAi = getEnemyAi(rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth)
 const replayTimeout = 50 // milliseconds per frame

@@ -8,14 +8,13 @@ import React from 'react'
 import Game from './game'
 import getEnemyAi from './enemy-ais/get-hatetris'
 import getGameIsOver from './game-over-conditions/get-hatetris'
-import getPlaceFirstPiece from './piece-placement/get-hatetris'
+import placeFirstPiece from './piece-placement/get-hatetris'
 import rotationSystem from './rotation-systems/hatetris'
 
 const bar = 4
 const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
 const gameIsOver = getGameIsOver(bar)
-const placeFirstPiece = getPlaceFirstPiece(wellWidth)
 const enemyAi = getEnemyAi(rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth)
 const replayTimeout = 0
 

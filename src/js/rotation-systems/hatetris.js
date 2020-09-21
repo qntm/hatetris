@@ -137,4 +137,6 @@ const pieces = [[
   '....'
 ]]
 
-export default pieces.map(_doPiece)
+export default {
+  rotations: pieces.map(_doPiece)
+}

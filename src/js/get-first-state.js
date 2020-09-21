@@ -1,6 +1,6 @@
 'use strict'
 
-export default (wellDepth, placeFirstPiece, enemyAi) => {
+export default (wellWidth, wellDepth, placeFirstPiece, enemyAi) => {
   const well = []
   for (let row = 0; row < wellDepth; row++) {
     well.push(0)
@@ -9,6 +9,6 @@ export default (wellDepth, placeFirstPiece, enemyAi) => {
   return {
     well: well,
     score: 0,
-    piece: placeFirstPiece(enemyAi(well))
+    piece: placeFirstPiece(wellWidth, enemyAi(well))
   }
 }

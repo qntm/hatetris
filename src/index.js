@@ -1,1 +1,1 @@
-import './js/hatetris'
+import './js'

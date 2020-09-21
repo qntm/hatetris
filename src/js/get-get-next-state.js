@@ -29,7 +29,7 @@ export default (rotationSystem, bar, wellDepth, wellWidth) =>
       nextPiece.o = (nextPiece.o + 1) % 4
     }
 
-    const orientation = rotationSystem[nextPiece.id][nextPiece.o]
+    const orientation = rotationSystem.rotations[nextPiece.id][nextPiece.o]
     const xActual = nextPiece.x + orientation.xMin
     const yActual = nextPiece.y + orientation.yMin
 
@@ -46,7 +46,7 @@ export default (rotationSystem, bar, wellDepth, wellWidth) =>
         // Lock piece
         nextWell = state.well.slice()
 
-        const orientation = rotationSystem[state.piece.id][state.piece.o]
+        const orientation = rotationSystem.rotations[state.piece.id][state.piece.o]
 
         // this is the top left point in the bounding box of this orientation of this piece
         const xActual = state.piece.x + orientation.xMin
