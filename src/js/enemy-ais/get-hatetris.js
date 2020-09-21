@@ -9,7 +9,7 @@ import moves from './../moves'
 
 const searchDepth = 0 // min = 0, suggested max = 1
 
-export default (rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth) => {
+export default (rotationSystem, bar, wellDepth, wellWidth) => {
   const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
 
   /**
