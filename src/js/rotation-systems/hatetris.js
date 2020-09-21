@@ -137,6 +137,14 @@ const pieces = [[
   '....'
 ]]
 
+const placePiece = (wellWidth, pieceId) => ({
+  id: pieceId,
+  x: Math.floor((wellWidth - 4) / 2),
+  y: 0,
+  o: 0
+})
+
 export default {
+  placePiece,
   rotations: pieces.map(_doPiece)
 }

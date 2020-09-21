@@ -19,7 +19,6 @@ class Game extends React.Component {
 
     const {
       rotationSystem,
-      placeFirstPiece,
       bar,
       wellDepth,
       wellWidth,
@@ -38,7 +37,7 @@ class Game extends React.Component {
       throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
     }
 
-    this.firstState = getFirstState(wellWidth, wellDepth, placeFirstPiece, enemyAi)
+    this.firstState = getFirstState(wellWidth, wellDepth, rotationSystem, enemyAi)
     this.getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
 
     this.state = {
@@ -150,7 +149,7 @@ class Game extends React.Component {
     const {
       enemyAi,
       gameIsOver,
-      placeFirstPiece,
+      rotationSystem,
       wellWidth
     } = this.props
 
@@ -194,7 +193,7 @@ class Game extends React.Component {
       // TODO: `nextWellState.well` should be more complex and contain colour
       // information, whereas the well passed to `enemyAi` should be a simple
       // array of integers
-      nextWellState.piece = placeFirstPiece(wellWidth, enemyAi(nextWellState.well))
+      nextWellState.piece = rotationSystem.placePiece(wellWidth, enemyAi(nextWellState.well))
     }
 
     this.setState({

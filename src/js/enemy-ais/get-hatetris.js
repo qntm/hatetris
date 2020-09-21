@@ -28,7 +28,7 @@ export default (rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth) => {
     const hashCode = (x, y, o) =>
       (x * (wellDepth + 3) + y) * 4 + o
 
-    let piece = placeFirstPiece(wellWidth, pieceId)
+    let piece = rotationSystem.placePiece(wellWidth, pieceId)
 
     // move the piece down to a lower position before we have to
     // start pathfinding for it
