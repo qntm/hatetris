@@ -16,8 +16,8 @@ import '../html/hatetris.html'
 
 import './statcounter'
 import Game from './game.jsx'
-import getEnemyAi from './enemy-ais/get-hatetris'
-import rotationSystem from './rotation-systems/hatetris'
+import HatetrisAi from './hatetris-ai'
+import hatetrisRotationSystem from './hatetris-rotation-system'
 
 // Fixed attributes of all of Tetris
 const bar = 4
@@ -29,9 +29,9 @@ ReactDOM.render(
   (
     <Game
       bar={bar}
-      getEnemyAi={getEnemyAi}
+      EnemyAi={HatetrisAi}
       replayTimeout={replayTimeout}
-      rotationSystem={rotationSystem}
+      rotationSystem={hatetrisRotationSystem}
       wellDepth={wellDepth}
       wellWidth={wellWidth}
     />

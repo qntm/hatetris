@@ -6,8 +6,8 @@ import { shallow } from 'enzyme'
 import React from 'react'
 
 import Game from './game'
-import getEnemyAi from './enemy-ais/get-hatetris'
-import rotationSystem from './rotation-systems/hatetris'
+import HatetrisAi from './hatetris-ai'
+import hatetrisRotationSystem from './hatetris-rotation-system'
 
 const bar = 4
 const wellDepth = 20 // min = bar
@@ -20,9 +20,9 @@ describe('<Game>', () => {
   const getGame = props => shallow(
     <Game
       bar={bar}
-      getEnemyAi={getEnemyAi}
+      EnemyAi={HatetrisAi}
       replayTimeout={replayTimeout}
-      rotationSystem={rotationSystem}
+      rotationSystem={hatetrisRotationSystem}
       wellDepth={wellDepth}
       wellWidth={wellWidth}
       {...props}

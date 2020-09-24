@@ -4,11 +4,25 @@
 // given in the rotation system. At present it just returns whatever
 // the first one is!
 
-import moves from './../moves'
-
+const moves = ['L', 'R', 'D', 'U']
 const searchDepth = 0 // min = 0, suggested max = 1
 
-export default (rotationSystem, getNextState, bar, wellDepth, wellWidth) => {
+export default game => {
+  const {
+    rotationSystem,
+    wellDepth,
+    wellWidth
+  } = game.props
+
+  /**
+    Generate a unique integer to describe the position and orientation of this piece.
+    `x` varies between -3 and (`wellWidth` - 1) inclusive, so range = `wellWidth` + 3
+    `y` varies between 0 and (`wellDepth` + 2) inclusive, so range = `wellDepth` + 3
+    `o` varies between 0 and 3 inclusive, so range = 4
+  */
+  const hashCode = (x, y, o) =>
+    (x * (wellDepth + 3) + y) * 4 + o
+
   /**
     Given a well and a piece ID, find all possible places where it could land
     and return the array of "possible future" states. All of these states
@@ -16,15 +30,6 @@ export default (rotationSystem, getNextState, bar, wellDepth, wellWidth) => {
     an increased `score`.
   */
   const getPossibleFutures = (well, pieceId) => {
-    /**
-      Generate a unique integer to describe the position and orientation of this piece.
-      `x` varies between -3 and (`wellWidth` - 1) inclusive, so range = `wellWidth` + 3
-      `y` varies between 0 and (`wellDepth` + 2) inclusive, so range = `wellDepth` + 3
-      `o` varies between 0 and 3 inclusive, so range = 4
-    */
-    const hashCode = (x, y, o) =>
-      (x * (wellDepth + 3) + y) * 4 + o
-
     let piece = rotationSystem.placeNewPiece(wellWidth, pieceId)
 
     // move the piece down to a lower position before we have to
@@ -34,7 +39,7 @@ export default (rotationSystem, getNextState, bar, wellDepth, wellWidth) => {
       piece.y + 4 < wellDepth && // piece is above the bottom
       well[piece.y + 4] === 0 // nothing immediately below it
     ) {
-      piece = getNextState({
+      piece = game.getNextState({
         well: well,
         score: 0,
         piece: piece
@@ -57,7 +62,7 @@ export default (rotationSystem, getNextState, bar, wellDepth, wellWidth) => {
 
       // apply all possible moves
       moves.forEach(move => {
-        const nextState = getNextState({
+        const nextState = game.getNextState({
           well: well,
           score: 0,
           piece: piece
@@ -103,7 +108,7 @@ export default (rotationSystem, getNextState, bar, wellDepth, wellWidth) => {
   // this is so the game will never give you a line if it can avoid it
   // NOTE: make sure rating doesn't return a range of more than 100 values...
   const getWellRating = (well, depthRemaining) =>
-    getHighestBlue(well) + (depthRemaining === 0 ? 0 : getWorstPieceRating(well, depthRemaining - 1) / 100)
+    getHighestBlue(well) + (depthRemaining === 0 ? 0 : getWorstPieceDetails(well, depthRemaining - 1).rating / 100)
 
   /**
     Given a well and a piece, find the best possible location to put it.
@@ -114,6 +119,7 @@ export default (rotationSystem, getNextState, bar, wellDepth, wellWidth) => {
       getWellRating(possibleFuture.well, depthRemaining)
     ))
 
+  // pick the worst piece that could be put into this well
   const getWorstPieceDetails = (well, depthRemaining) =>
     Object
       .keys(rotationSystem.rotations)
@@ -123,16 +129,5 @@ export default (rotationSystem, getNextState, bar, wellDepth, wellWidth) => {
       }))
       .sort((a, b) => a.rating - b.rating)[0]
 
-  // pick the worst piece that could be put into this well
-  // return the rating of this piece
-  // but NOT the piece itself...
-  const getWorstPieceRating = (well, depthRemaining) =>
-    getWorstPieceDetails(well, depthRemaining).rating
-
-  // pick the worst piece that could be put into this well
-  // return the piece but not its rating
-  const getWorstPiece = well =>
-    getWorstPieceDetails(well, searchDepth).pieceId
-
-  return getWorstPiece
+  return well => getWorstPieceDetails(well, searchDepth).pieceId
 }

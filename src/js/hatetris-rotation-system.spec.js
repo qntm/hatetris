@@ -2,7 +2,7 @@
 
 'use strict'
 
-import { _doPiece } from './hatetris'
+import { _doPiece } from './hatetris-rotation-system'
 
 describe('_doPiece', function () {
   it('works', function () {
