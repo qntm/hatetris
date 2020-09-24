@@ -16,27 +16,20 @@ import '../html/hatetris.html'
 
 import './statcounter'
 import Game from './game.jsx'
-import getGetNextState from './get-get-next-state'
 import getEnemyAi from './enemy-ais/get-hatetris'
-import getGameIsOver from './game-over-conditions/get-hatetris'
 import rotationSystem from './rotation-systems/hatetris'
 
 // Fixed attributes of all of Tetris
 const bar = 4
 const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
-
-const gameIsOver = getGameIsOver(bar)
-const getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
-const enemyAi = getEnemyAi(rotationSystem, getNextState, bar, wellDepth, wellWidth)
 const replayTimeout = 50 // milliseconds per frame
 
 ReactDOM.render(
   (
     <Game
       bar={bar}
-      enemyAi={enemyAi}
-      gameIsOver={gameIsOver}
+      getEnemyAi={getEnemyAi}
       replayTimeout={replayTimeout}
       rotationSystem={rotationSystem}
       wellDepth={wellDepth}

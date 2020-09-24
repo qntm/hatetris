@@ -22,7 +22,7 @@ class Game extends React.Component {
       bar,
       wellDepth,
       wellWidth,
-      enemyAi
+      getEnemyAi
     } = this.props
 
     if (rotationSystem.rotations.length < 1) {
@@ -37,8 +37,9 @@ class Game extends React.Component {
       throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
     }
 
-    this.firstState = getFirstState(wellWidth, wellDepth, rotationSystem, enemyAi)
     this.getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
+    this.enemyAi = getEnemyAi(rotationSystem, this.getNextState, bar, wellDepth, wellWidth)
+    this.firstState = getFirstState(wellWidth, wellDepth, rotationSystem, this.enemyAi)
 
     this.state = {
       mode: 'GAME_OVER',
@@ -148,7 +149,6 @@ class Game extends React.Component {
   handleMove (move) {
     const {
       bar,
-      enemyAi,
       rotationSystem,
       wellWidth
     } = this.props
@@ -198,7 +198,7 @@ class Game extends React.Component {
       // TODO: `nextWellState.well` should be more complex and contain colour
       // information, whereas the well passed to `enemyAi` should be a simple
       // array of integers
-      nextWellState.piece = rotationSystem.placePiece(wellWidth, enemyAi(nextWellState.well))
+      nextWellState.piece = rotationSystem.placePiece(wellWidth, this.enemyAi(nextWellState.well))
     }
 
     this.setState({
