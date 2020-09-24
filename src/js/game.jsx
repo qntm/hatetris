@@ -62,6 +62,7 @@ class Game extends React.Component {
     this.handleDown = this.handleDown.bind(this)
     this.handleCtrlZ = this.handleCtrlZ.bind(this)
     this.handleCtrlY = this.handleCtrlY.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
   }
 
   /**
@@ -393,8 +394,6 @@ class Game extends React.Component {
   }
 
   onKeyDown (event) {
-    event = event || window.event // add for IE
-
     if (event.keyCode === 37) {
       this.handleLeft()
     } else if (event.keyCode === 39) {
@@ -455,7 +454,7 @@ class Game extends React.Component {
           </p>
 
           <p className='hatetris__paragraph'>
-            <button type='button' onClick={this.handleClickStart}>
+            <button className='hatetris__start-button' type='button' onClick={this.handleClickStart}>
               start new game
             </button>
           </p>
@@ -498,7 +497,11 @@ class Game extends React.Component {
   }
 
   componentDidMount () {
-    document.addEventListener('keydown', this.onKeyDown.bind(this))
+    document.addEventListener('keydown', this.onKeyDown)
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.onKeyDown)
   }
 }
 
