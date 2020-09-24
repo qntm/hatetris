@@ -137,7 +137,7 @@ const pieces = [[
   '....'
 ]]
 
-const placePiece = (wellWidth, pieceId) => ({
+const placeNewPiece = (wellWidth, pieceId) => ({
   id: pieceId,
   x: Math.floor((wellWidth - 4) / 2),
   y: 0,
@@ -145,6 +145,6 @@ const placePiece = (wellWidth, pieceId) => ({
 })
 
 export default {
-  placePiece,
+  placeNewPiece,
   rotations: pieces.map(_doPiece)
 }

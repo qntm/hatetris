@@ -6,7 +6,6 @@
 
 import React from 'react'
 
-import getFirstState from './get-first-state'
 import getGetNextState from './get-get-next-state'
 import replayCodec from './replay'
 import Well from './well.jsx'
@@ -39,7 +38,14 @@ class Game extends React.Component {
 
     this.getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
     this.enemyAi = getEnemyAi(rotationSystem, this.getNextState, bar, wellDepth, wellWidth)
-    this.firstState = getFirstState(wellWidth, wellDepth, rotationSystem, this.enemyAi)
+
+    const firstWell = Array(wellDepth).fill(0)
+
+    this.firstState = {
+      well: firstWell,
+      score: 0,
+      piece: rotationSystem.placeNewPiece(wellWidth, this.enemyAi(firstWell))
+    }
 
     this.state = {
       mode: 'GAME_OVER',
@@ -198,7 +204,7 @@ class Game extends React.Component {
       // TODO: `nextWellState.well` should be more complex and contain colour
       // information, whereas the well passed to `enemyAi` should be a simple
       // array of integers
-      nextWellState.piece = rotationSystem.placePiece(wellWidth, this.enemyAi(nextWellState.well))
+      nextWellState.piece = rotationSystem.placeNewPiece(wellWidth, this.enemyAi(nextWellState.well))
     }
 
     this.setState({
