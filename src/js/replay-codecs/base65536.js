@@ -11,27 +11,25 @@ import runLength from './../run-length'
   Convert an array of key strokes into a replay
 */
 const encode = keys => {
-  let rle = runLength.encode(keys, 4)
+  const rle = runLength.encode(keys, 0b100)
 
-  // Can't have an odd number of runs. This would break in mid-byte!
-  if (rle.length % 2 === 1) {
-    rle.push({ entry: 'L', length: 1 })
+  const nybbles = rle.map(run => (
+    { L: 0b0000, R: 0b0100, D: 0b1000, U: 0b1100 }[run.entry] +
+    (0b0011 & (run.length - 1))
+  ))
+
+  // Can't have an odd number of nybbles. This would break in mid-byte!
+  // This is an extra 'L' on the end
+  if (nybbles.length % 2 === 1) {
+    nybbles.push(0b0000)
   }
 
-  rle = rle.map(run => ({
-    key: {
-      L: 0,
-      R: 1,
-      D: 2,
-      U: 3
-    }[run.entry],
-    rl: run.length - 1
-  }))
-  rle = rle.map(run => (run.key << 2) + run.rl)
-
   const octets = []
-  for (let i = 0; i < rle.length; i += 2) {
-    octets.push((rle[i] << 4) + rle[i + 1])
+  for (let i = 0; i < nybbles.length; i += 2) {
+    octets.push(
+      (nybbles[i] << 4) +
+      (nybbles[i + 1] << 0)
+    )
   }
 
   const uint8Array = new Uint8Array(octets)
@@ -50,25 +48,21 @@ const decode = string => {
     octets.push(uint8Array[i])
   }
 
-  let rle = []
+  // Extract two 4-bit numbers
+  const nybbles = []
   octets.forEach(octet => {
-    rle.push(octet >> 4)
-    rle.push(octet & ((1 << 4) - 1))
+    nybbles.push((octet & 0b11110000) >> 4)
+    nybbles.push((octet & 0b00001111) >> 0)
   })
 
-  rle = rle.map(run => ({
-    key: run >> 2,
-    rl: run & ((1 << 2) - 1)
-  }))
-
-  rle = rle.map(run => ({
+  const rle = nybbles.map(nybble => ({
     entry: {
-      0: 'L',
-      1: 'R',
-      2: 'D',
-      3: 'U'
-    }[run.key],
-    length: run.rl + 1
+      0b0000: 'L',
+      0b0100: 'R',
+      0b1000: 'D',
+      0b1100: 'U'
+    }[nybble & 0b1100],
+    length: (nybble & 0b0011) + 1
   }))
 
   return runLength.decode(rle)
