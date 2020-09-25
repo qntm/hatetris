@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Well> game over well state 1`] = `ShallowWrapper {}`;
+
+exports[`<Well> initial well state 1`] = `ShallowWrapper {}`;
+
+exports[`<Well> null well state 1`] = `ShallowWrapper {}`;
