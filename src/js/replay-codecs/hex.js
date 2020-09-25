@@ -40,7 +40,8 @@ const encode = moves => moves
 */
 const decode = string => string
   .replace(/./g, chr => ({
-    [chr]: '', // Ignore others including spaces
+    ' ': '',
+    '#': '', // uncertain why this is permitted
     0: 'LL',
     1: 'LR',
     2: 'LD',

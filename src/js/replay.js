@@ -22,10 +22,13 @@ const decode = string => {
   if (/^[0123456789ABCDEF# ]*$/.test(string)) {
     return hex.decode(string)
   }
+
   try {
     return base65536.decode(string)
   } catch (e) {
+    // not Base65536
   }
+
   return base2048.decode(string)
 }
 
