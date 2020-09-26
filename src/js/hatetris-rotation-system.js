@@ -4,67 +4,209 @@
 
 'use strict'
 
-const dim = 4
-const directions = 4
+// Note that the order here is significant,
+// the least convenient piece is placed first.
+const rotations = [
+  // S
+  [
+    [
+      '....',
+      '..##',
+      '.##.',
+      '....'
+    ], [
+      '....',
+      '.#..',
+      '.##.',
+      '..#.'
+    ], [
+      '....',
+      '.##.',
+      '##..',
+      '....'
+    ], [
+      '.#..',
+      '.##.',
+      '..#.',
+      '....'
+    ]
+  ],
 
-export function _doPiece (piece) {
-  let bits = []
-  piece.forEach((string, y) => {
-    for (let x = 0; x < string.length; x++) {
-      if (string.charAt(x) === '#') {
-        bits.push({ x, y })
-      }
-    }
-  })
+  // Z
+  [
+    [
+      '....',
+      '.##.',
+      '..##',
+      '....'
+    ], [
+      '....',
+      '..#.',
+      '.##.',
+      '.#..'
+    ], [
+      '....',
+      '##..',
+      '.##.',
+      '....'
+    ], [
+      '..#.',
+      '.##.',
+      '.#..',
+      '....'
+    ], 
+  ],
 
-  const layouts = []
-  for (let o = 0; o < directions; o++) {
-    const layout = []
-    for (let y = 0; y < dim; y++) {
-      const row = []
-      for (let x = 0; x < dim; x++) {
-        row.push(false)
-      }
-      layout.push(row)
-    }
+  // O
+  [
+    [
+      '....',
+      '.##.',
+      '.##.',
+      '....'
+    ], [
+      '....',
+      '.##.',
+      '.##.',
+      '....'
+    ], [
+      '....',
+      '.##.',
+      '.##.',
+      '....'
+    ], [
+      '....',
+      '.##.',
+      '.##.',
+      '....'
+    ]
+  ],
 
-    bits.forEach(bit => {
-      layout[bit.y][bit.x] = true
-    })
+  // I
+  [
+    [
+      '....',
+      '####',
+      '....',
+      '....'
+    ], [
+      '..#.',
+      '..#.',
+      '..#.',
+      '..#.'
+    ], [
+      '....',
+      '....',
+      '####',
+      '....'
+    ], [
+      '.#..',
+      '.#..',
+      '.#..',
+      '.#..'
+    ] 
+  ],
 
-    layouts.push(layout)
+  // L
+  [
+    [
+      '....',
+      '.###',
+      '.#..',
+      '....'
+    ], [
+      '....',
+      '.##.',
+      '..#.',
+      '..#.'
+    ], [
+      '....',
+      '..#.',
+      '###.',
+      '....'
+    ], [
+      '.#..',
+      '.#..',
+      '.##.',
+      '....'
+    ], 
+  ],
 
-    // Rotate bits around the middle of the 4x4 grid
-    bits = bits.map(bit => ({
-      x: dim - 1 - bit.y,
-      y: bit.x
-    }))
-  }
+  // J
+  [
+    [
+      '....',
+      '.##.',
+      '.#..',
+      '.#..'
+    ], [
+      '....',
+      '###.',
+      '..#.',
+      '....'
+    ], [
+      '..#.',
+      '..#.',
+      '.##.',
+      '....'
+    ], [
+      '....',
+      '.#..',
+      '.###',
+      '....'
+    ]
+  ],
 
-  return layouts.map(layout => {
-    let xMin = Infinity // minimum X coordinate of bits in this orientation (0, 1, 2 or 3)
-    let yMin = Infinity // minimum Y coordinate of bits in this orientation (0, 1, 2 or 3)
-    let xMax = -Infinity // width
-    let yMax = -Infinity // height
-    let rows = [] // binary representation of the bits on each row
-    for (let y = 0; y < dim; y++) {
+  // T
+  [
+    [
+      '....',
+      '.###',
+      '..#.',
+      '....'
+    ], [
+      '....',
+      '..#.',
+      '.##.',
+      '..#.'
+    ], [
+      '....',
+      '.#..',
+      '###.',
+      '....'
+    ], [
+      '.#..',
+      '.##.',
+      '.#..',
+      '....'
+    ]
+  ]
+].map(visuals => visuals
+  .map(visual => {
+    let xMin = Infinity // leftmost extent (0, 1, 2 or 3)
+    let xMax = -Infinity // rightmost extent (1, 2, 3 or 4)
+    let yMin = Infinity // topmost extent (0, 1, 2 or 3)
+    let yMax = -Infinity // bottommost extent (1, 2, 3 or 4)
+
+    // binary representation of the bits on each row
+    const allRows = visual.map((visualRow, y) => {
       let row = 0
-      for (let x = 0; x < dim; x++) {
-        if (layout[y][x]) {
+      visualRow.split('').forEach((chr, x) => {
+        if (chr === '#') {
           row += 1 << x
           xMin = Math.min(xMin, x)
           xMax = Math.max(xMax, x + 1)
           yMin = Math.min(yMin, y)
           yMax = Math.max(yMax, y + 1)
         }
-      }
-      rows[y] = row
-    }
+      })
+      return row
+    })
 
     // truncate top rows
     // truncate bottom rows
     // shift right as many times as necessary
-    rows = rows.slice(yMin, yMax).map(row => row >> xMin)
+    const rows = allRows.slice(yMin, yMax).map(row => row >> xMin)
 
     return {
       xMin,
@@ -74,46 +216,7 @@ export function _doPiece (piece) {
       rows
     }
   })
-}
-
-// Note that the order here is significant,
-// the least convenient piece is placed first.
-const rotations = [[
-  '....',
-  '..##',
-  '.##.',
-  '....'
-], [
-  '....',
-  '.##.',
-  '..##',
-  '....'
-], [
-  '....',
-  '.##.',
-  '.##.',
-  '....'
-], [
-  '....',
-  '####',
-  '....',
-  '....'
-], [
-  '....',
-  '.###',
-  '.#..',
-  '....'
-], [
-  '....',
-  '.##.',
-  '.#..',
-  '.#..'
-], [
-  '....',
-  '.###',
-  '..#.',
-  '....'
-]].map(_doPiece)
+)
 
 const placeNewPiece = (wellWidth, pieceId) => ({
   id: pieceId,
