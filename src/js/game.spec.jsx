@@ -6,25 +6,20 @@ import { shallow } from 'enzyme'
 import React from 'react'
 
 import Game from './game'
-import HatetrisAi from './hatetris-ai'
+import { Hatetris0 } from './hatetris-ai'
 import hatetrisRotationSystem from './hatetris-rotation-system'
-
-const bar = 4
-const wellDepth = 20 // min = bar
-const wellWidth = 10 // min = 4
-const replayTimeout = 0
 
 jest.useFakeTimers()
 
 describe('<Game>', () => {
   const getGame = props => shallow(
     <Game
-      bar={bar}
-      EnemyAi={HatetrisAi}
-      replayTimeout={replayTimeout}
+      bar={4}
+      EnemyAi={Hatetris0}
+      replayTimeout={0}
       rotationSystem={hatetrisRotationSystem}
-      wellDepth={wellDepth}
-      wellWidth={wellWidth}
+      wellDepth={20}
+      wellWidth={10}
       {...props}
     />
   )

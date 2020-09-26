@@ -16,24 +16,18 @@ import '../html/hatetris.html'
 
 import './statcounter'
 import Game from './game.jsx'
-import HatetrisAi from './hatetris-ai'
+import { Hatetris0 } from './hatetris-ai'
 import hatetrisRotationSystem from './hatetris-rotation-system'
-
-// Fixed attributes of all of Tetris
-const bar = 4
-const wellDepth = 20 // min = bar
-const wellWidth = 10 // min = 4
-const replayTimeout = 50 // milliseconds per frame
 
 ReactDOM.render(
   (
     <Game
-      bar={bar}
-      EnemyAi={HatetrisAi}
-      replayTimeout={replayTimeout}
+      bar={4}
+      EnemyAi={Hatetris0}
+      replayTimeout={50}
       rotationSystem={hatetrisRotationSystem}
-      wellDepth={wellDepth}
-      wellWidth={wellWidth}
+      wellDepth={20}
+      wellWidth={10}
     />
   ),
   document.querySelector('.index__root')

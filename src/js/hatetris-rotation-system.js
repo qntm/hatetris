@@ -7,7 +7,7 @@
 // Note that the order here is significant,
 // the least convenient piece is placed first.
 const rotations = [
-  // S
+  // S = 0
   [
     [
       '....',
@@ -32,7 +32,7 @@ const rotations = [
     ]
   ],
 
-  // Z
+  // Z = 1
   [
     [
       '....',
@@ -57,7 +57,7 @@ const rotations = [
     ], 
   ],
 
-  // O
+  // O = 2
   [
     [
       '....',
@@ -82,7 +82,7 @@ const rotations = [
     ]
   ],
 
-  // I
+  // I = 3
   [
     [
       '....',
@@ -107,7 +107,7 @@ const rotations = [
     ] 
   ],
 
-  // L
+  // L = 4
   [
     [
       '....',
@@ -132,7 +132,7 @@ const rotations = [
     ], 
   ],
 
-  // J
+  // J = 5
   [
     [
       '....',
@@ -157,7 +157,7 @@ const rotations = [
     ]
   ],
 
-  // T
+  // T = 6
   [
     [
       '....',

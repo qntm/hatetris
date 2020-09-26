@@ -5,9 +5,8 @@
 // the first one is!
 
 const moves = ['L', 'R', 'D', 'U']
-const searchDepth = 0 // min = 0, suggested max = 1
 
-export default game => {
+const HatetrisAi = options => game => {
   const {
     rotationSystem,
     wellDepth,
@@ -129,5 +128,8 @@ export default game => {
       }))
       .sort((a, b) => a.rating - b.rating)[0]
 
-  return well => getWorstPieceDetails(well, searchDepth).pieceId
+  return well => getWorstPieceDetails(well, options.searchDepth).pieceId
 }
+
+export const Hatetris0 = HatetrisAi({ searchDepth: 0 })
+export const Hatetris1 = HatetrisAi({ searchDepth: 1 })
