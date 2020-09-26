@@ -9,6 +9,10 @@ import Game from './game'
 import { Hatetris0, Hatetris1 } from './hatetris-ai'
 import hatetrisRotationSystem from './hatetris-rotation-system'
 
+// Note: well bits are flipped compared to what you would see on the screen.
+// Least significant bit is rendered on the *left* on web, but appears to the
+// *right* of each binary numeric literal
+
 describe('HatetrisAi', () => {
   describe('Hatetris0', () => {
     const game = shallow(

@@ -19,14 +19,7 @@ const encode = (arr, maxRunLength) => {
   return runs
 }
 
-const decode = runs => {
-  const entries = []
-  runs.forEach(run => {
-    for (let i = 0; i < run.length; i++) {
-      entries.push(run.entry)
-    }
-  })
-  return entries
-}
+const decode = runs =>
+  runs.flatMap(run => Array(run.length).fill(run.entry))
 
 export default { encode, decode }

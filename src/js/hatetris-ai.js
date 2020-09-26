@@ -48,8 +48,8 @@ const HatetrisAi = options => game => {
     // push first position
     const piecePositions = [piece]
 
-    const seen = []
-    seen[hashCode(piece.x, piece.y, piece.o)] = 1
+    const seen = new Set()
+    seen.add(hashCode(piece.x, piece.y, piece.o))
 
     const possibleFutures = []
 
@@ -68,22 +68,19 @@ const HatetrisAi = options => game => {
         }, move)
         const newPiece = nextState.piece
 
-        // transformation failed?
         if (newPiece === null) {
           // piece locked? better add that to the list
           // do NOT check locations, they aren't significant here
-          if (move === 'D') {
-            possibleFutures.push(nextState)
-          }
+          possibleFutures.push(nextState)
         } else {
           // transform succeeded?
           // new location? append to list
           // check locations, they are significant
           const newHashCode = hashCode(newPiece.x, newPiece.y, newPiece.o)
 
-          if (seen[newHashCode] === undefined) {
+          if (!seen.has(newHashCode)) {
             piecePositions.push(newPiece)
-            seen[newHashCode] = 1
+            seen.add(newHashCode)
           }
         }
       })
