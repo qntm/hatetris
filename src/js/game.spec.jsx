@@ -6,35 +6,209 @@ import { shallow } from 'enzyme'
 import React from 'react'
 
 import Game from './game'
-import getEnemyAi from './enemy-ais/get-hatetris'
-import getGameIsOver from './game-over-conditions/get-hatetris'
-import getPlaceFirstPiece from './piece-placement/get-hatetris'
-import rotationSystem from './rotation-systems/hatetris'
-
-const bar = 4
-const wellDepth = 20 // min = bar
-const wellWidth = 10 // min = 4
-const gameIsOver = getGameIsOver(bar)
-const placeFirstPiece = getPlaceFirstPiece(wellWidth)
-const enemyAi = getEnemyAi(rotationSystem, placeFirstPiece, bar, wellDepth, wellWidth)
-const replayTimeout = 0
+import { Hatetris0 } from './hatetris-ai'
+import hatetrisRotationSystem from './hatetris-rotation-system'
 
 jest.useFakeTimers()
 
 describe('<Game>', () => {
   const getGame = props => shallow(
     <Game
-      bar={bar}
-      gameIsOver={gameIsOver}
-      enemyAi={enemyAi}
-      placeFirstPiece={placeFirstPiece}
-      replayTimeout={replayTimeout}
-      rotationSystem={rotationSystem}
-      wellDepth={wellDepth}
-      wellWidth={wellWidth}
+      bar={4}
+      EnemyAi={Hatetris0}
+      replayTimeout={0}
+      rotationSystem={hatetrisRotationSystem}
+      wellDepth={20}
+      wellWidth={10}
       {...props}
     />
   )
+
+  it('rejects a rotation system with no pieces', () => {
+    expect(() => getGame({ rotationSystem: { rotations: [] } })).toThrowError()
+  })
+
+  it('rejects a well depth below the bar', () => {
+    expect(() => getGame({ bar: 4, wellDepth: 3 })).toThrowError()
+  })
+
+  it('rejects a well width less than 4', () => {
+    expect(() => getGame({ wellWidth: 3 })).toThrowError()
+  })
+
+  it('lets you play a few moves', () => {
+    const game = getGame()
+    expect(game.state()).toEqual({
+      mode: 'GAME_OVER',
+      wellStateId: -1,
+      wellStates: [],
+      replay: [],
+      replayTimeoutId: undefined
+    })
+
+    game.find('.hatetris__start-button').props().onClick()
+    expect(game.state()).toEqual({
+      mode: 'PLAYING',
+      wellStateId: 0,
+      wellStates: [{
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }],
+      replay: [],
+      replayTimeoutId: undefined
+    })
+
+    game.instance().onKeyDown({ keyCode: 37 }) // left
+    expect(game.state()).toEqual({
+      mode: 'PLAYING',
+      wellStateId: 1,
+      wellStates: [{
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 2, y: 0 }
+      }],
+      replay: ['L'],
+      replayTimeoutId: undefined
+    })
+
+    game.instance().onKeyDown({ keyCode: 39 }) // right
+    expect(game.state()).toEqual({
+      mode: 'PLAYING',
+      wellStateId: 2,
+      wellStates: [{
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 2, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }],
+      replay: ['L', 'R'],
+      replayTimeoutId: undefined
+    })
+
+    game.instance().onKeyDown({ keyCode: 40 }) // down
+    expect(game.state()).toEqual({
+      mode: 'PLAYING',
+      wellStateId: 3,
+      wellStates: [{
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 2, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 1 }
+      }],
+      replay: ['L', 'R', 'D'],
+      replayTimeoutId: undefined
+    })
+
+    game.instance().onKeyDown({ keyCode: 38 }) // up
+    expect(game.state()).toEqual({
+      mode: 'PLAYING',
+      wellStateId: 4,
+      wellStates: [{
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 2, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 1 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 1, x: 3, y: 1 }
+      }],
+      replay: ['L', 'R', 'D', 'U'],
+      replayTimeoutId: undefined
+    })
+
+    game.instance().onKeyDown({ keyCode: 90, ctrlKey: true }) // Ctrl+Z
+    expect(game.state()).toEqual({
+      mode: 'PLAYING',
+      wellStateId: 3,
+      wellStates: [{
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 2, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 1 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 1, x: 3, y: 1 }
+      }],
+      replay: ['L', 'R', 'D', 'U'],
+      replayTimeoutId: undefined
+    })
+
+    game.instance().onKeyDown({ keyCode: 89, ctrlKey: true }) // Ctrl+Y
+    expect(game.state()).toEqual({
+      mode: 'PLAYING',
+      wellStateId: 4,
+      wellStates: [{
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 2, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 0 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 0, x: 3, y: 1 }
+      }, {
+        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        score: 0,
+        piece: { id: '0', o: 1, x: 3, y: 1 }
+      }],
+      replay: ['L', 'R', 'D', 'U'],
+      replayTimeoutId: undefined
+    })
+  })
 
   describe('check known replays', () => {
     const replays = [{

@@ -6,8 +6,6 @@
 
 import React from 'react'
 
-import getFirstState from './get-first-state'
-import getGetNextState from './get-get-next-state'
 import replayCodec from './replay'
 import Well from './well.jsx'
 
@@ -19,14 +17,13 @@ class Game extends React.Component {
 
     const {
       rotationSystem,
-      placeFirstPiece,
       bar,
       wellDepth,
       wellWidth,
-      enemyAi
+      EnemyAi
     } = this.props
 
-    if (rotationSystem.length < 1) {
+    if (rotationSystem.rotations.length < 1) {
       throw Error('Have to have at least one piece!')
     }
 
@@ -38,8 +35,15 @@ class Game extends React.Component {
       throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
     }
 
-    this.firstState = getFirstState(wellDepth, placeFirstPiece, enemyAi)
-    this.getNextState = getGetNextState(rotationSystem, bar, wellDepth, wellWidth)
+    this.enemyAi = EnemyAi(this)
+
+    const firstWell = Array(wellDepth).fill(0)
+
+    this.firstWellState = {
+      well: firstWell,
+      score: 0,
+      piece: rotationSystem.placeNewPiece(wellWidth, this.enemyAi(firstWell))
+    }
 
     this.state = {
       mode: 'GAME_OVER',
@@ -58,6 +62,104 @@ class Game extends React.Component {
     this.handleDown = this.handleDown.bind(this)
     this.handleCtrlZ = this.handleCtrlZ.bind(this)
     this.handleCtrlY = this.handleCtrlY.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
+  }
+
+  /**
+    Input {wellState, piece} and a move, return
+    the new {wellState, piece}.
+  */
+  getNextState (wellState, move) {
+    const {
+      rotationSystem,
+      bar,
+      wellDepth,
+      wellWidth
+    } = this.props
+
+    let nextWell = wellState.well
+    let nextScore = wellState.score
+    let nextPiece = {
+      id: wellState.piece.id,
+      x: wellState.piece.x,
+      y: wellState.piece.y,
+      o: wellState.piece.o
+    }
+
+    // apply transform (very fast now)
+    if (move === 'L') {
+      nextPiece.x--
+    }
+    if (move === 'R') {
+      nextPiece.x++
+    }
+    if (move === 'D') {
+      nextPiece.y++
+    }
+    if (move === 'U') {
+      nextPiece.o = (nextPiece.o + 1) % 4
+    }
+
+    const orientation = rotationSystem.rotations[nextPiece.id][nextPiece.o]
+    const xActual = nextPiece.x + orientation.xMin
+    const yActual = nextPiece.y + orientation.yMin
+
+    if (
+      xActual < 0 || // off left side
+      xActual + orientation.xDim > wellWidth || // off right side
+      yActual < 0 || // off top (??)
+      yActual + orientation.yDim > wellDepth || // off bottom
+      orientation.rows.some((row, y) =>
+        wellState.well[yActual + y] & (row << xActual)
+      ) // obstruction
+    ) {
+      if (move === 'D') {
+        // Lock piece
+        nextWell = wellState.well.slice()
+
+        const orientation = rotationSystem.rotations[wellState.piece.id][wellState.piece.o]
+
+        // this is the top left point in the bounding box of this orientation of this piece
+        const xActual = wellState.piece.x + orientation.xMin
+        const yActual = wellState.piece.y + orientation.yMin
+
+        // row by row bitwise line alteration
+        for (let row = 0; row < orientation.yDim; row++) {
+          // can't negative bit-shift, but alas X can be negative
+          nextWell[yActual + row] |= (orientation.rows[row] << xActual)
+        }
+
+        // check for complete lines now
+        // NOTE: completed lines don't count if you've lost
+        for (let row = 0; row < orientation.yDim; row++) {
+          if (
+            yActual >= bar &&
+            nextWell[yActual + row] === (1 << wellWidth) - 1
+          ) {
+            // move all lines above this point down
+            for (let k = yActual + row; k > 1; k--) {
+              nextWell[k] = nextWell[k - 1]
+            }
+
+            // insert a new blank line at the top
+            // though of course the top line will always be blank anyway
+            nextWell[0] = 0
+
+            nextScore++
+          }
+        }
+        nextPiece = null
+      } else {
+        // No move
+        nextPiece = wellState.piece
+      }
+    }
+
+    return {
+      well: nextWell,
+      score: nextScore,
+      piece: nextPiece
+    }
   }
 
   handleClickStart () {
@@ -75,7 +177,7 @@ class Game extends React.Component {
     this.setState({
       mode: 'PLAYING',
       wellStateId: 0,
-      wellStates: [this.firstState],
+      wellStates: [this.firstWellState],
       replay: [],
       replayTimeoutId: undefined
     })
@@ -109,7 +211,7 @@ class Game extends React.Component {
     this.setState({
       mode: 'REPLAYING',
       wellStateId: wellStateId,
-      wellStates: [this.firstState],
+      wellStates: [this.firstWellState],
       replay: replay,
       replayTimeoutId: nextReplayTimeoutId
     })
@@ -148,9 +250,9 @@ class Game extends React.Component {
   // Returns the new state.
   handleMove (move) {
     const {
-      enemyAi,
-      gameIsOver,
-      placeFirstPiece
+      bar,
+      rotationSystem,
+      wellWidth
     } = this.props
 
     const {
@@ -183,7 +285,12 @@ class Game extends React.Component {
 
     const nextWellState = nextWellStates[nextWellStateId]
 
-    const nextMode = gameIsOver(nextWellState) ? 'GAME_OVER'
+    // Is the game over?
+    // It is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1),
+    // so there is only one line which we need to check.
+    const gameIsOver = nextWellState.well[bar - 1] !== 0
+
+    const nextMode = gameIsOver ? 'GAME_OVER'
       : (mode === 'REPLAYING' && !(nextWellStateId in replay)) ? 'PLAYING'
         : mode
 
@@ -193,7 +300,7 @@ class Game extends React.Component {
       // TODO: `nextWellState.well` should be more complex and contain colour
       // information, whereas the well passed to `enemyAi` should be a simple
       // array of integers
-      nextWellState.piece = placeFirstPiece(enemyAi(nextWellState.well))
+      nextWellState.piece = rotationSystem.placeNewPiece(wellWidth, this.enemyAi(nextWellState.well))
     }
 
     this.setState({
@@ -287,8 +394,6 @@ class Game extends React.Component {
   }
 
   onKeyDown (event) {
-    event = event || window.event // add for IE
-
     if (event.keyCode === 37) {
       this.handleLeft()
     } else if (event.keyCode === 39) {
@@ -349,7 +454,7 @@ class Game extends React.Component {
           </p>
 
           <p className='hatetris__paragraph'>
-            <button type='button' onClick={this.handleClickStart}>
+            <button className='hatetris__start-button' type='button' onClick={this.handleClickStart}>
               start new game
             </button>
           </p>
@@ -392,7 +497,11 @@ class Game extends React.Component {
   }
 
   componentDidMount () {
-    document.addEventListener('keydown', this.onKeyDown.bind(this))
+    document.addEventListener('keydown', this.onKeyDown)
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.onKeyDown)
   }
 }
 
