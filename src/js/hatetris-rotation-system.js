@@ -8,21 +8,11 @@ const dim = 4
 const directions = 4
 
 export function _doPiece (piece) {
-  if (piece.length !== dim) {
-    throw Error('Pieces must be ' + String(dim) + ' by ' + String(dim))
-  }
-
   let bits = []
   piece.forEach((string, y) => {
-    if (string.length !== dim) {
-      throw Error('Pieces must be ' + String(dim) + ' by ' + String(dim))
-    }
-
     for (let x = 0; x < string.length; x++) {
       if (string.charAt(x) === '#') {
-        bits.push({ x: x, y: y })
-      } else if (string.charAt(x) !== '.') {
-        throw Error('Misconfigured pieces')
+        bits.push({ x, y })
       }
     }
   })
@@ -62,45 +52,33 @@ export function _doPiece (piece) {
       for (let x = 0; x < dim; x++) {
         if (layout[y][x]) {
           row += 1 << x
-          if (x < xMin) {
-            xMin = x
-          }
-          if (x > xMax) {
-            xMax = x
-          }
-          if (y < yMin) {
-            yMin = y
-          }
-          if (y > yMax) {
-            yMax = y
-          }
+          xMin = Math.min(xMin, x)
+          xMax = Math.max(xMax, x + 1)
+          yMin = Math.min(yMin, y)
+          yMax = Math.max(yMax, y + 1)
         }
       }
       rows[y] = row
     }
-    xMax++
-    yMax++
 
     // truncate top rows
     // truncate bottom rows
     // shift right as many times as necessary
     rows = rows.slice(yMin, yMax).map(row => row >> xMin)
-    const xDim = xMax - xMin
-    const yDim = yMax - yMin
 
     return {
-      xMin: xMin,
-      yMin: yMin,
-      xDim: xDim,
-      yDim: yDim,
-      rows: rows
+      xMin,
+      yMin,
+      xDim: xMax - xMin,
+      yDim: yMax - yMin,
+      rows
     }
   })
 }
 
 // Note that the order here is significant,
 // the least convenient piece is placed first.
-const pieces = [[
+const rotations = [[
   '....',
   '..##',
   '.##.',
@@ -135,7 +113,7 @@ const pieces = [[
   '.###',
   '..#.',
   '....'
-]]
+]].map(_doPiece)
 
 const placeNewPiece = (wellWidth, pieceId) => ({
   id: pieceId,
@@ -146,5 +124,5 @@ const placeNewPiece = (wellWidth, pieceId) => ({
 
 export default {
   placeNewPiece,
-  rotations: pieces.map(_doPiece)
+  rotations
 }
