@@ -8,7 +8,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import './index.css'
-import './favicon.png'
 import Game from './components/Game/Game.jsx'
 import { Hatetris0 } from './enemy-ais/hatetris-ai'
 import hatetrisRotationSystem from './rotation-systems/hatetris-rotation-system'

@@ -21,14 +21,6 @@ module.exports = {
         loader: 'babel-loader'
       }
     }, {
-      test: /\.png$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]'
-        }
-      }
-    }, {
       test: /\.html$/,
       loader: 'html-loader'
     }, {
