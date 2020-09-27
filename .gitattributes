@@ -22,4 +22,4 @@
 *.RTF	 diff=astextplain
 
 # Custom
-*.snap binary
+*.snap text eol=lf
