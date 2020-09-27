@@ -250,7 +250,7 @@ describe('<Game>', () => {
 
   it('just lets you play if you enter an empty replay', () => {
     const game = getGame()
-  
+
     jest.spyOn(window, 'prompt').mockReturnValueOnce('')
     game.find('.game__replay-button').props().onClick()
     window.prompt.mockRestore()
