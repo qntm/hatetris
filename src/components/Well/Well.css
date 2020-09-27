@@ -1,0 +1,25 @@
+.well__cell {
+	width: 25px;
+	height: 25px;
+	color: white;
+	background-color: black;
+	padding: 0;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.well__cell--bar {
+	border-top: 1px solid red;
+}
+
+.well__cell--manual {
+	cursor: pointer;
+}
+
+.well__cell--landed {
+	background-color: blue;
+}
+
+.well__cell--live {
+	background-color: red;
+}

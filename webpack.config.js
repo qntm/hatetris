@@ -1,13 +1,17 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
-const miniCssExtractPlugin = new MiniCssExtractPlugin({
-  filename: 'bundle.css'
-})
 
 module.exports = {
   mode: 'development',
   plugins: [
-    miniCssExtractPlugin
+    new MiniCssExtractPlugin({
+      filename: 'bundle.css'
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+      filename: 'hatetris.html',
+      xhtml: true
+    })
   ],
   module: {
     rules: [{
@@ -17,13 +21,8 @@ module.exports = {
         loader: 'babel-loader'
       }
     }, {
-      test: /\.(ico|html)$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]'
-        }
-      }
+      test: /\.html$/,
+      loader: 'html-loader'
     }, {
       test: /\.css$/,
       use: [{

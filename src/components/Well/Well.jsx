@@ -3,6 +3,8 @@
 import classnames from 'classnames'
 import React from 'react'
 
+import './Well.css'
+
 export default props => {
   const {
     bar,
@@ -65,18 +67,18 @@ export default props => {
 
   return (
     <table>
-      <tbody className='hatetris__welltbody'>
+      <tbody>
         {cellses.map((cells, y) => (
           <tr key={y}>
             {cells.map((cell, x) => (
               <td
                 key={x}
                 className={classnames({
-                  hatetris__cell: true,
-                  'hatetris__cell--bar': y === bar,
-                  'hatetris__cell--manual': cell.onClick,
-                  'hatetris__cell--landed': cell.landed,
-                  'hatetris__cell--live': cell.live
+                  well__cell: true,
+                  'well__cell--bar': y === bar,
+                  'well__cell--manual': cell.onClick,
+                  'well__cell--landed': cell.landed,
+                  'well__cell--live': cell.live
                 })}
                 onClick={cell.handleClick}
                 title={cell.title}

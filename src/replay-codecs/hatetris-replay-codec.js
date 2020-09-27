@@ -1,12 +1,12 @@
 /**
-  Replay handling
+  Replay handling. This codec is a combination of three other codecs
 */
 
 'use strict'
 
-import hex from './replay-codecs/hex'
-import base65536 from './replay-codecs/base65536'
-import base2048 from './replay-codecs/base2048'
+import hex from './hex'
+import base65536 from './base65536'
+import base2048 from './base2048'
 
 /**
   Convert an array of moves into a replay
@@ -26,7 +26,7 @@ const decode = string => {
   try {
     return base65536.decode(string)
   } catch (e) {
-    // not Base65536
+    // not Base65536, no problem
   }
 
   return base2048.decode(string)

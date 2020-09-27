@@ -5,8 +5,8 @@
 import { shallow } from 'enzyme'
 import React from 'react'
 
-import Well from './well'
-import hatetrisRotationSystem from './hatetris-rotation-system'
+import Well from './Well'
+import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 const bar = 4
 const wellDepth = 20 // min = bar
