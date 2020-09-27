@@ -215,7 +215,7 @@ describe('<Game>', () => {
       name: 'qntm',
       expectedScore: 0,
       replays: {
-        hex: 'AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2'
+        hex: 'AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2',
         Base65536: '𤆻𤆻𤆻𤆻𤆻𡚻',
         Base2048: '௨ටໃݹ௨ටໃݹठ'
       }
