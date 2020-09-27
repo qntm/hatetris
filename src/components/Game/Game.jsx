@@ -61,8 +61,8 @@ class Game extends React.Component {
     this.handleRight = this.handleRight.bind(this)
     this.handleUp = this.handleUp.bind(this)
     this.handleDown = this.handleDown.bind(this)
-    this.handleCtrlZ = this.handleCtrlZ.bind(this)
-    this.handleCtrlY = this.handleCtrlY.bind(this)
+    this.handleUndo = this.handleUndo.bind(this)
+    this.handleRedo = this.handleRedo.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
   }
 
@@ -189,7 +189,7 @@ class Game extends React.Component {
       replayTimeout
     } = this.props
 
-    const {
+    let {
       replayTimeoutId
     } = this.state
 
@@ -197,24 +197,27 @@ class Game extends React.Component {
     // must be killed
     if (replayTimeoutId) {
       clearTimeout(replayTimeoutId)
+      replayTimeoutId = undefined
     }
 
     // user inputs replay string
     const string = window.prompt()
 
     const replay = hatetrisReplayCodec.decode(string)
+    // TODO: what if the replay is bad?
 
     const wellStateId = 0
-    const nextReplayTimeoutId = wellStateId in replay ? setTimeout(this.inputReplayStep, replayTimeout)
+    replayTimeoutId = wellStateId in replay ? setTimeout(this.inputReplayStep, replayTimeout)
       : undefined
+    const mode = wellStateId in replay ? 'REPLAYING' : 'PLAYING'
 
     // GO
     this.setState({
-      mode: 'REPLAYING',
+      mode: mode,
       wellStateId: wellStateId,
       wellStates: [this.firstWellState],
       replay: replay,
-      replayTimeoutId: nextReplayTimeoutId
+      replayTimeoutId: replayTimeoutId
     })
   }
 
@@ -232,7 +235,7 @@ class Game extends React.Component {
     let nextReplayTimeoutId
 
     if (mode === 'REPLAYING') {
-      this.handleCtrlY()
+      this.handleRedo()
 
       if (wellStateId + 1 in replay) {
         nextReplayTimeoutId = setTimeout(this.inputReplayStep, replayTimeout)
@@ -291,9 +294,7 @@ class Game extends React.Component {
     // so there is only one line which we need to check.
     const gameIsOver = nextWellState.well[bar - 1] !== 0
 
-    const nextMode = gameIsOver ? 'GAME_OVER'
-      : (mode === 'REPLAYING' && !(nextWellStateId in replay)) ? 'PLAYING'
-        : mode
+    const nextMode = gameIsOver ? 'GAME_OVER' : mode
 
     // no live piece? make a new one
     // suited to the new world, of course
@@ -348,7 +349,7 @@ class Game extends React.Component {
     }
   }
 
-  handleCtrlZ () {
+  handleUndo () {
     const {
       replayTimeoutId,
       wellStateId,
@@ -376,7 +377,7 @@ class Game extends React.Component {
     }
   }
 
-  handleCtrlY () {
+  handleRedo () {
     const {
       mode,
       replay,
@@ -397,16 +398,26 @@ class Game extends React.Component {
   onKeyDown (event) {
     if (event.keyCode === 37) {
       this.handleLeft()
-    } else if (event.keyCode === 39) {
+    }
+
+    if (event.keyCode === 39) {
       this.handleRight()
-    } else if (event.keyCode === 40) {
+    }
+
+    if (event.keyCode === 40) {
       this.handleDown()
-    } else if (event.keyCode === 38) {
+    }
+
+    if (event.keyCode === 38) {
       this.handleUp()
-    } else if (event.keyCode === 90 && event.ctrlKey === true) {
-      this.handleCtrlZ()
-    } else if (event.keyCode === 89 && event.ctrlKey === true) {
-      this.handleCtrlY()
+    }
+
+    if (event.keyCode === 90 && event.ctrlKey === true) {
+      this.handleUndo()
+    }
+
+    if (event.keyCode === 89 && event.ctrlKey === true) {
+      this.handleRedo()
     }
   }
 
@@ -443,8 +454,8 @@ class Game extends React.Component {
             onClickR={this.handleRight}
             onClickU={this.handleUp}
             onClickD={this.handleDown}
-            onClickZ={this.handleCtrlZ}
-            onClickY={this.handleCtrlY}
+            onClickZ={this.handleUndo}
+            onClickY={this.handleRedo}
           />
         </div>
         <div className='game__right'>
@@ -461,7 +472,7 @@ class Game extends React.Component {
           </p>
 
           <p className='game__paragraph'>
-            <button type='button' onClick={this.handleClickReplay}>
+            <button type='button' className='game__replay-button' onClick={this.handleClickReplay}>
               show a replay
             </button>
           </p>
@@ -502,6 +513,14 @@ class Game extends React.Component {
   }
 
   componentWillUnmount () {
+    const {
+      replayTimeoutId
+    } = this.state
+
+    if (replayTimeoutId) {
+      clearTimeout(replayTimeoutId)
+    }
+
     document.removeEventListener('keydown', this.onKeyDown)
   }
 }
