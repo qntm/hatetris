@@ -36,6 +36,36 @@ describe('<Game>', () => {
     expect(() => getGame({ wellWidth: 3 })).toThrowError()
   })
 
+  it('ignores all keystrokes before the game has begun', () => {
+    const game = getGame()
+    expect(game.state()).toEqual({
+      mode: 'GAME_OVER',
+      wellStateId: -1,
+      wellStates: [],
+      replay: [],
+      replayTimeoutId: undefined
+    })
+
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    game.instance().onKeyDown({ keyCode: 37 }) // left
+    game.instance().onKeyDown({ keyCode: 39 }) // right
+    game.instance().onKeyDown({ keyCode: 40 }) // down
+    game.instance().onKeyDown({ keyCode: 38 }) // up
+    game.instance().onKeyDown({ keyCode: 90, ctrlKey: true }) // Ctrl+Z
+    game.instance().onKeyDown({ keyCode: 89, ctrlKey: true }) // Ctrl+Y
+    expect(console.warn).toHaveBeenCalledTimes(6)
+    expect(game.state()).toEqual({
+      mode: 'GAME_OVER',
+      wellStateId: -1,
+      wellStates: [],
+      replay: [],
+      replayTimeoutId: undefined
+    })
+
+    console.warn.mockRestore()
+    game.unmount()
+  })
+
   it('lets you play a few moves', () => {
     const game = getGame()
     expect(game.state()).toEqual({
@@ -208,6 +238,109 @@ describe('<Game>', () => {
       replay: ['L', 'R', 'D', 'U'],
       replayTimeoutId: undefined
     })
+
+    // Warn on attempted redo at end of history
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    game.instance().onKeyDown({ keyCode: 89, ctrlKey: true }) // Ctrl+Y
+    expect(console.warn).toHaveBeenCalledTimes(1)
+    console.warn.mockRestore()
+
+    game.unmount()
+  })
+
+  it('just lets you play if you enter an empty replay', () => {
+    const game = getGame()
+  
+    jest.spyOn(window, 'prompt').mockReturnValueOnce('')
+    game.find('.game__replay-button').props().onClick()
+    window.prompt.mockRestore()
+
+    expect(game.state()).toEqual(expect.objectContaining({
+      mode: 'PLAYING',
+      replay: [],
+      replayTimeoutId: undefined,
+      wellStates: [
+        expect.anything()
+      ],
+      wellStateId: 0
+    }))
+
+    game.unmount()
+  })
+
+  describe('when a replay is in progress', () => {
+    let game
+
+    beforeEach(() => {
+      game = getGame()
+
+      jest.spyOn(window, 'prompt').mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2')
+      game.find('.game__replay-button').props().onClick()
+      window.prompt.mockRestore()
+
+      // Play a little of the replay
+      jest.runOnlyPendingTimers()
+      jest.runOnlyPendingTimers()
+      jest.runOnlyPendingTimers()
+
+      expect(game.state()).toEqual(expect.objectContaining({
+        mode: 'REPLAYING',
+        wellStates: [
+          expect.anything(),
+          expect.anything(),
+          expect.anything(),
+          expect.anything()
+        ],
+        wellStateId: 3,
+        replayTimeoutId: expect.any(Number)
+      }))
+    })
+
+    afterEach(() => {
+      game.unmount()
+    })
+
+    it('lets you start a new game', () => {
+      game.find('.game__start-button').props().onClick()
+      expect(game.state()).toEqual(expect.objectContaining({
+        mode: 'PLAYING',
+        wellStates: [
+          expect.anything()
+        ],
+        wellStateId: 0,
+        replayTimeoutId: undefined // trashed
+      }))
+    })
+
+    it('lets you start a new replay', () => {
+      jest.spyOn(window, 'prompt').mockReturnValueOnce('AAAA 1234 BCDE 2345 CDEF 3456')
+      game.find('.game__replay-button').props().onClick()
+      window.prompt.mockRestore()
+
+      expect(game.state()).toEqual(expect.objectContaining({
+        mode: 'REPLAYING',
+        wellStates: [
+          expect.anything()
+        ],
+        wellStateId: 0,
+        replayTimeoutId: expect.any(Number)
+      }))
+    })
+
+    it('lets you undo and stops replaying if you do so', () => {
+      game.instance().onKeyDown({ keyCode: 90, ctrlKey: true }) // Ctrl+Z
+      expect(game.state()).toEqual(expect.objectContaining({
+        mode: 'PLAYING', // no longer replaying
+        wellStates: [
+          expect.anything(),
+          expect.anything(),
+          expect.anything(),
+          expect.anything() // well state ID 3 still exists
+        ],
+        wellStateId: 2, // down from 3
+        replayTimeoutId: undefined
+      }))
+    })
   })
 
   describe('check known replays', () => {
@@ -281,18 +414,19 @@ describe('<Game>', () => {
       describe(run.name, () => {
         Object.entries(run.replays).forEach(([encoding, string]) => {
           it(encoding, () => {
-            jest.spyOn(window, 'prompt').mockReturnValueOnce(string)
             const game = getGame()
-            game.instance().handleClickReplay()
 
-            while (game.state().replayTimeoutId !== undefined) {
-              jest.runAllTimers()
-            }
+            jest.spyOn(window, 'prompt').mockReturnValueOnce(string)
+            game.instance().handleClickReplay()
+            window.prompt.mockRestore()
+
+            jest.runAllTimers()
 
             const state = game.state()
             expect(state.mode).toBe('GAME_OVER')
             expect(state.wellStates[state.wellStateId].score).toBe(run.expectedScore)
-            window.prompt.mockRestore()
+
+            game.unmount()
           })
         })
       })
