@@ -294,9 +294,7 @@ class Game extends React.Component {
     // so there is only one line which we need to check.
     const gameIsOver = nextWellState.well[bar - 1] !== 0
 
-    const nextMode = gameIsOver ? 'GAME_OVER'
-      : (mode === 'REPLAYING' && !(nextWellStateId in replay)) ? 'PLAYING'
-        : mode
+    const nextMode = gameIsOver ? 'GAME_OVER' : mode
 
     // no live piece? make a new one
     // suited to the new world, of course
