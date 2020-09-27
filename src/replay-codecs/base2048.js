@@ -5,7 +5,7 @@
 'use strict'
 
 import * as base2048 from 'base2048'
-import runLength from './../run-length'
+import runLength from './../utils/run-length'
 
 /**
   Convert an array of key strokes into a replay

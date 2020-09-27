@@ -2,14 +2,12 @@
 
 exports[`<Well> game over well state 1`] = `
 <table>
-  <tbody
-    className="hatetris__welltbody"
-  >
+  <tbody>
     <tr
       key="0"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
         onClick={[MockFunction]}
         title="Press Ctrl+Z to undo"
@@ -17,7 +15,7 @@ exports[`<Well> game over well state 1`] = `
         ↶
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
         onClick={[MockFunction]}
         title="Press Up to rotate"
@@ -25,7 +23,7 @@ exports[`<Well> game over well state 1`] = `
         ⟳
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
         onClick={[MockFunction]}
         title="Press Ctrl+Y to redo"
@@ -33,31 +31,31 @@ exports[`<Well> game over well state 1`] = `
         ↷
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -65,7 +63,7 @@ exports[`<Well> game over well state 1`] = `
       key="1"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
         onClick={[MockFunction]}
         title="Press Left to move left"
@@ -73,7 +71,7 @@ exports[`<Well> game over well state 1`] = `
         ←
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
         onClick={[MockFunction]}
         title="Press Down to move down"
@@ -81,7 +79,7 @@ exports[`<Well> game over well state 1`] = `
         ↓
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
         onClick={[MockFunction]}
         title="Press Right to move right"
@@ -89,31 +87,31 @@ exports[`<Well> game over well state 1`] = `
         →
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -121,43 +119,43 @@ exports[`<Well> game over well state 1`] = `
       key="2"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -165,43 +163,43 @@ exports[`<Well> game over well state 1`] = `
       key="3"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -209,43 +207,43 @@ exports[`<Well> game over well state 1`] = `
       key="4"
     >
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar hatetris__cell--landed"
+        className="well__cell well__cell--bar well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar hatetris__cell--landed"
+        className="well__cell well__cell--bar well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="9"
       />
     </tr>
@@ -253,43 +251,43 @@ exports[`<Well> game over well state 1`] = `
       key="5"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -297,43 +295,43 @@ exports[`<Well> game over well state 1`] = `
       key="6"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -341,43 +339,43 @@ exports[`<Well> game over well state 1`] = `
       key="7"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -385,43 +383,43 @@ exports[`<Well> game over well state 1`] = `
       key="8"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -429,43 +427,43 @@ exports[`<Well> game over well state 1`] = `
       key="9"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -473,43 +471,43 @@ exports[`<Well> game over well state 1`] = `
       key="10"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -517,43 +515,43 @@ exports[`<Well> game over well state 1`] = `
       key="11"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -561,43 +559,43 @@ exports[`<Well> game over well state 1`] = `
       key="12"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -605,43 +603,43 @@ exports[`<Well> game over well state 1`] = `
       key="13"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -649,43 +647,43 @@ exports[`<Well> game over well state 1`] = `
       key="14"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -693,43 +691,43 @@ exports[`<Well> game over well state 1`] = `
       key="15"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -737,43 +735,43 @@ exports[`<Well> game over well state 1`] = `
       key="16"
     >
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -781,43 +779,43 @@ exports[`<Well> game over well state 1`] = `
       key="17"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -825,43 +823,43 @@ exports[`<Well> game over well state 1`] = `
       key="18"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="9"
       />
     </tr>
@@ -869,43 +867,43 @@ exports[`<Well> game over well state 1`] = `
       key="19"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--landed"
+        className="well__cell well__cell--landed"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -915,14 +913,12 @@ exports[`<Well> game over well state 1`] = `
 
 exports[`<Well> initial well state 1`] = `
 <table>
-  <tbody
-    className="hatetris__welltbody"
-  >
+  <tbody>
     <tr
       key="0"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
         onClick={[MockFunction]}
         title="Press Ctrl+Z to undo"
@@ -930,7 +926,7 @@ exports[`<Well> initial well state 1`] = `
         ↶
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
         onClick={[MockFunction]}
         title="Press Up to rotate"
@@ -938,7 +934,7 @@ exports[`<Well> initial well state 1`] = `
         ⟳
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
         onClick={[MockFunction]}
         title="Press Ctrl+Y to redo"
@@ -946,31 +942,31 @@ exports[`<Well> initial well state 1`] = `
         ↷
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -978,7 +974,7 @@ exports[`<Well> initial well state 1`] = `
       key="1"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
         onClick={[MockFunction]}
         title="Press Left to move left"
@@ -986,7 +982,7 @@ exports[`<Well> initial well state 1`] = `
         ←
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
         onClick={[MockFunction]}
         title="Press Down to move down"
@@ -994,7 +990,7 @@ exports[`<Well> initial well state 1`] = `
         ↓
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
         onClick={[MockFunction]}
         title="Press Right to move right"
@@ -1002,31 +998,31 @@ exports[`<Well> initial well state 1`] = `
         →
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--live"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--live"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1034,43 +1030,43 @@ exports[`<Well> initial well state 1`] = `
       key="2"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--live"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--live"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1078,43 +1074,43 @@ exports[`<Well> initial well state 1`] = `
       key="3"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1122,43 +1118,43 @@ exports[`<Well> initial well state 1`] = `
       key="4"
     >
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="9"
       />
     </tr>
@@ -1166,43 +1162,43 @@ exports[`<Well> initial well state 1`] = `
       key="5"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1210,43 +1206,43 @@ exports[`<Well> initial well state 1`] = `
       key="6"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1254,43 +1250,43 @@ exports[`<Well> initial well state 1`] = `
       key="7"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1298,43 +1294,43 @@ exports[`<Well> initial well state 1`] = `
       key="8"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1342,43 +1338,43 @@ exports[`<Well> initial well state 1`] = `
       key="9"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1386,43 +1382,43 @@ exports[`<Well> initial well state 1`] = `
       key="10"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1430,43 +1426,43 @@ exports[`<Well> initial well state 1`] = `
       key="11"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1474,43 +1470,43 @@ exports[`<Well> initial well state 1`] = `
       key="12"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1518,43 +1514,43 @@ exports[`<Well> initial well state 1`] = `
       key="13"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1562,43 +1558,43 @@ exports[`<Well> initial well state 1`] = `
       key="14"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1606,43 +1602,43 @@ exports[`<Well> initial well state 1`] = `
       key="15"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1650,43 +1646,43 @@ exports[`<Well> initial well state 1`] = `
       key="16"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1694,43 +1690,43 @@ exports[`<Well> initial well state 1`] = `
       key="17"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1738,43 +1734,43 @@ exports[`<Well> initial well state 1`] = `
       key="18"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1782,43 +1778,43 @@ exports[`<Well> initial well state 1`] = `
       key="19"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1828,14 +1824,12 @@ exports[`<Well> initial well state 1`] = `
 
 exports[`<Well> null well state 1`] = `
 <table>
-  <tbody
-    className="hatetris__welltbody"
-  >
+  <tbody>
     <tr
       key="0"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
         onClick={[MockFunction]}
         title="Press Ctrl+Z to undo"
@@ -1843,7 +1837,7 @@ exports[`<Well> null well state 1`] = `
         ↶
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
         onClick={[MockFunction]}
         title="Press Up to rotate"
@@ -1851,7 +1845,7 @@ exports[`<Well> null well state 1`] = `
         ⟳
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
         onClick={[MockFunction]}
         title="Press Ctrl+Y to redo"
@@ -1859,31 +1853,31 @@ exports[`<Well> null well state 1`] = `
         ↷
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1891,7 +1885,7 @@ exports[`<Well> null well state 1`] = `
       key="1"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
         onClick={[MockFunction]}
         title="Press Left to move left"
@@ -1899,7 +1893,7 @@ exports[`<Well> null well state 1`] = `
         ←
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
         onClick={[MockFunction]}
         title="Press Down to move down"
@@ -1907,7 +1901,7 @@ exports[`<Well> null well state 1`] = `
         ↓
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
         onClick={[MockFunction]}
         title="Press Right to move right"
@@ -1915,31 +1909,31 @@ exports[`<Well> null well state 1`] = `
         →
       </td>
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1947,43 +1941,43 @@ exports[`<Well> null well state 1`] = `
       key="2"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -1991,43 +1985,43 @@ exports[`<Well> null well state 1`] = `
       key="3"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2035,43 +2029,43 @@ exports[`<Well> null well state 1`] = `
       key="4"
     >
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="0"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="1"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="2"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="3"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="4"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="5"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="6"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="7"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="8"
       />
       <td
-        className="hatetris__cell hatetris__cell--bar"
+        className="well__cell well__cell--bar"
         key="9"
       />
     </tr>
@@ -2079,43 +2073,43 @@ exports[`<Well> null well state 1`] = `
       key="5"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2123,43 +2117,43 @@ exports[`<Well> null well state 1`] = `
       key="6"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2167,43 +2161,43 @@ exports[`<Well> null well state 1`] = `
       key="7"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2211,43 +2205,43 @@ exports[`<Well> null well state 1`] = `
       key="8"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2255,43 +2249,43 @@ exports[`<Well> null well state 1`] = `
       key="9"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2299,43 +2293,43 @@ exports[`<Well> null well state 1`] = `
       key="10"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2343,43 +2337,43 @@ exports[`<Well> null well state 1`] = `
       key="11"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2387,43 +2381,43 @@ exports[`<Well> null well state 1`] = `
       key="12"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2431,43 +2425,43 @@ exports[`<Well> null well state 1`] = `
       key="13"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2475,43 +2469,43 @@ exports[`<Well> null well state 1`] = `
       key="14"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2519,43 +2513,43 @@ exports[`<Well> null well state 1`] = `
       key="15"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2563,43 +2557,43 @@ exports[`<Well> null well state 1`] = `
       key="16"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2607,43 +2601,43 @@ exports[`<Well> null well state 1`] = `
       key="17"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2651,43 +2645,43 @@ exports[`<Well> null well state 1`] = `
       key="18"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>
@@ -2695,43 +2689,43 @@ exports[`<Well> null well state 1`] = `
       key="19"
     >
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="0"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="1"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="2"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="3"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="4"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="5"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="6"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="7"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="8"
       />
       <td
-        className="hatetris__cell"
+        className="well__cell"
         key="9"
       />
     </tr>

@@ -5,9 +5,9 @@
 import { shallow } from 'enzyme'
 import React from 'react'
 
-import Game from './game'
-import { Hatetris0 } from './hatetris-ai'
-import hatetrisRotationSystem from './hatetris-rotation-system'
+import Game from './Game'
+import { Hatetris0 } from '../../enemy-ais/hatetris-ai'
+import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 jest.useFakeTimers()
 
@@ -46,7 +46,7 @@ describe('<Game>', () => {
       replayTimeoutId: undefined
     })
 
-    game.find('.hatetris__start-button').props().onClick()
+    game.find('.game__start-button').props().onClick()
     expect(game.state()).toEqual({
       mode: 'PLAYING',
       wellStateId: 0,

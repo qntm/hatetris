@@ -6,14 +6,14 @@ describe('HATETRIS', () => {
     cy.contains('You\'re playing HATETRIS by qntm')
 
     cy.get('button').contains('start new game').click()
-    cy.get('.hatetris__score').contains('0')
+    cy.get('.e2e__score').contains('0')
 
     for (let i = 0; i < 90; i++) {
       cy.get('body').trigger('keydown', { keyCode: 40 })
     }
 
-    cy.get('.hatetris__score').contains('0')
-    cy.get('.hatetris__replay-out').contains('௨ටໃݹ௨ටໃݹठ')
+    cy.get('.e2e__score').contains('0')
+    cy.get('.e2e__replay-out').contains('௨ටໃݹ௨ටໃݹठ')
   })
 
   it('plays a Base2048 replay', () => {
@@ -28,9 +28,9 @@ describe('HATETRIS', () => {
     cy.get('button').contains('show a replay').click()
 
     for (let score = 0; score <= 11; score++) {
-      cy.get('.hatetris__score').contains(String(score), { timeout: 20000 })
+      cy.get('.e2e__score').contains(String(score), { timeout: 20000 })
     }
 
-    cy.get('.hatetris__replay-out').contains(replay)
+    cy.get('.e2e__replay-out').contains(replay)
   })
 })

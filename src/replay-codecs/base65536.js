@@ -5,7 +5,7 @@
 'use strict'
 
 import * as base65536 from 'base65536'
-import runLength from './../run-length'
+import runLength from './../utils/run-length'
 
 /**
   Convert an array of key strokes into a replay

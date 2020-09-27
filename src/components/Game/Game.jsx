@@ -6,8 +6,9 @@
 
 import React from 'react'
 
-import replayCodec from './replay'
-import Well from './well.jsx'
+import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
+import Well from '../Well/Well.jsx'
+import './Game.css'
 
 const minWidth = 4
 
@@ -201,7 +202,7 @@ class Game extends React.Component {
     // user inputs replay string
     const string = window.prompt()
 
-    const replay = replayCodec.decode(string)
+    const replay = hatetrisReplayCodec.decode(string)
 
     const wellStateId = 0
     const nextReplayTimeoutId = wellStateId in replay ? setTimeout(this.inputReplayStep, replayTimeout)
@@ -427,11 +428,11 @@ class Game extends React.Component {
     const wellState = wellStateId === -1 ? null : wellStates[wellStateId]
 
     const score = wellState && wellState.score
-    const replayOut = mode === 'GAME_OVER' && replay.length > 0 ? 'replay of last game: ' + replayCodec.encode(replay) : null
+    const replayOut = mode === 'GAME_OVER' && replay.length > 0 && 'replay of last game: ' + hatetrisReplayCodec.encode(replay)
 
     return (
-      <div className='hatetris'>
-        <div className='hatetris__left'>
+      <div className='game'>
+        <div className='game__left'>
           <Well
             bar={bar}
             rotationSystem={rotationSystem}
@@ -446,49 +447,49 @@ class Game extends React.Component {
             onClickY={this.handleCtrlY}
           />
         </div>
-        <div className='hatetris__right'>
-          <p className='hatetris__paragraph'>
+        <div className='game__right'>
+          <p className='game__paragraph'>
             <a href='http://qntm.org/hatetris'>
               You're playing HATETRIS by qntm
             </a>
           </p>
 
-          <p className='hatetris__paragraph'>
-            <button className='hatetris__start-button' type='button' onClick={this.handleClickStart}>
+          <p className='game__paragraph'>
+            <button className='game__start-button' type='button' onClick={this.handleClickStart}>
               start new game
             </button>
           </p>
 
-          <p className='hatetris__paragraph'>
+          <p className='game__paragraph'>
             <button type='button' onClick={this.handleClickReplay}>
               show a replay
             </button>
           </p>
 
-          <p className='hatetris__paragraph'>
-            <span className='hatetris__score'>
+          <p className='game__paragraph'>
+            <span className='e2e__score'>
               {score}
             </span>
           </p>
 
-          <p className='hatetris__paragraph'>
-            <span className='hatetris__replay-out'>
+          <p className='game__paragraph'>
+            <span className='game__replay-out e2e__replay-out'>
               {replayOut}
             </span>
           </p>
 
-          <div className='hatetris__spacer' />
+          <div className='game__spacer' />
 
-          <p className='hatetris__paragraph'>
+          <p className='game__paragraph'>
             Undo: Ctrl+Z<br />
             Redo: Ctrl+Y<br />
           </p>
 
-          <p className='hatetris__paragraph'>
+          <p className='game__paragraph'>
             <a href='https://github.com/qntm/hatetris'>source code</a>
           </p>
 
-          <p className='hatetris__paragraph'>
+          <p className='game__paragraph'>
             replays encoded using <a href='https://github.com/qntm/base2048'>Base2048</a><br />
           </p>
         </div>
