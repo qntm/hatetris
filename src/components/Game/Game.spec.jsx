@@ -215,6 +215,7 @@ describe('<Game>', () => {
       name: 'qntm',
       expectedScore: 0,
       replays: {
+        hex: 'AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2'
         Base65536: '𤆻𤆻𤆻𤆻𤆻𡚻',
         Base2048: '௨ටໃݹ௨ටໃݹठ'
       }
@@ -270,6 +271,7 @@ describe('<Game>', () => {
       name: 'chromeyhex',
       expectedScore: 31,
       replays: {
+        hex: 'AAAA AAA8 80EA AA82 2A8B AAAA 822A B2AA AAAA AA0E AAAA AAB0 AAAA AAAA AEAA AAAA A56A AAAA 9676 AAA6 5AAA ADAA AAAA A5AA AAAA AA66 DAAA AAA6 AAAA AABA A5AA AAAA AAAA AAAA AAB9 AAAA AA2A AAAA AAAA EAAA AAA0 AAAA AAAA A3AA AAAA 999D AAAA 82AA 2AAA AAA6 9E5A AAAA AA9D AAAA AA88 88AA AAAA 82AB AAAA AAA8 3AAA AAAE 9AAA AAA0 22EA AAAA A082 BAAA AAA5 B6AA AAAA 8BAA AAAA 9EAA AAA2 20AA AAA9 D69A AAAA A2AA AAAA A0A3 AAAA AA0E AAAE A66A AA80 2BAA AA82 AAAA AB95 AAA6 5BAA 6AAA A282 2AAA A9A9 69AA E9AA AAAA BAAA AAA2 AAAA A0A2 AAA8 2C0A AAAA 9AAA AA96 9AAA AAA2 AAAA A80A 996A AE6A AAAA A6AA A0E8 AAA6 AD5A AAAA A8AA AAA2 8EAA A5AA A8A2 82EA AAAA AA28 0AEA AA9A 5AAA A2AE AAA8 0EAA AAAE AAA8 8EAA A579 A95A ADAA 222B 88AA AA76 AAAA AABA AAA0 2A65 ADA9 AAAA AAA3 AAAA EAB3 0A3A AA6D ABAA BC8A ABA8 0ABA 80A3 AB5A 66A9 A9BA AAA6 AA8A B008 AAA8 A99A 9AA8 E69A D602 BA9A AA22 A022 E56A A028 AA9A AAB5 5A6A 9A6A A822 BAA8 FFAA',
         Base65536: '𤂻愈䲻㰋𣻋㼘𤇀𠞻𤇋傜𣾻𤇋𤆦𠪵𤃄遈肼𡮻𤆻絈𤇄𤆴𥆹𤅛𤆻𤺸𤅋𤄋𥆺𠞻𤆻𥆐𠪻𠪄𤇄𣺁𤄋𡪄郈𢪻𤇄㲸㰈𤄋𤊁𤂻𤄜𡪼𣢻𡊀𣺻丘𤇋𤩘𣾻𥄈𠪻𤃋㰈𤀛蹌𤅋𤄋𡚡𤇋𤀜緊𣥋𤆜𤆁𠲼綹𥅘𣹋䰉𣼋蹊𤽋𤅋𤆌𤆰𡚡䲻𤇂𤆤𡪥𣚻𣢻𠮤𤺸𤅋𤂄𡘜羹𤇆㾸㶹𤀌𢙛𡞐𤆌㶺𥄩𡮴㺻𣣋𤃋𣛋𥆀𤺦ꉊ𣛄𠚀𠚜𤆀职𢊻徻蹈𢫄𣾻𤄌𤛋𡛁𡫋羌𡏋㼈𢢌𢢬𥂐𡫅𣪄𡊤肻𣊐㼸𢪠𢪄䂸𡪄趜𥀩𡙋𢢀𡊀𣺆㼩𤂄𡫇𡪴䲹𥄉𨂀',
         Base2048: '௨ഖƌݯߜࠏІWƑsໃa௨೯ܘݷಳජଈیԪؼʥݺԥඞܘݲࠐڄໂঅமةໃݹ௧ړІٽ௨൞ໃZ௨ಘІܥࠐΣІZߜටȜখذජНݹߛeʛݹߤปເѧ௩ԚໂՉࢸටuа௨સȣݷłقෆঅਏeܘԔצقషݸɢڠຜঀಧҸມѧஐට༪൩ԊಅഫܡथsถԡԦԚໃɥஸقࡈɕɠɈไݸצقషݰਵϺФঅஓػݐɓԞуຯɕझࡈ๐ݞझࢶІݞमปദஈƉؿଭݪஸҩЂ൸ԛمϦGƁҨVھԥචЅշࡂ෮लݷƘණ໘ࠅƘಧНקࢻҨฆӘದԋϝପࠑ੧ͳݲடփරݞਵΚϼɢԒԺٳѦԤࠌξGಘسਯܥஶҋϮτथlϼʔ'
       }
