@@ -15,7 +15,7 @@ const encode = keys => {
 
   const nybbles = rle.map(run => (
     { L: 0b0000, R: 0b0100, D: 0b1000, U: 0b1100 }[run.entry] +
-    (0b0011 & (run.length - 1))
+    { 1: 0b0000, 2: 0b0001, 3: 0b0010, 4: 0b0011 }[run.length]
   ))
 
   // Can't have an odd number of nybbles. This would break in mid-byte!
@@ -56,13 +56,8 @@ const decode = string => {
   })
 
   const rle = nybbles.map(nybble => ({
-    entry: {
-      0b0000: 'L',
-      0b0100: 'R',
-      0b1000: 'D',
-      0b1100: 'U'
-    }[nybble & 0b1100],
-    length: (nybble & 0b0011) + 1
+    entry: { 0b0000: 'L', 0b0100: 'R', 0b1000: 'D', 0b1100: 'U' }[nybble & 0b1100],
+    length: { 0b0000: 1, 0b0001: 2, 0b0010: 3, 0b0011: 4 }[nybble & 0b0011]
   }))
 
   return runLength.decode(rle)
