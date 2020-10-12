@@ -46,6 +46,6 @@
     "standard": "^14.3.4",
     "start-server-and-test": "^1.11.3",
     "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^4.0.0"
   }
 }
