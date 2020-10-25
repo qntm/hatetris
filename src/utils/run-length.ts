@@ -1,7 +1,12 @@
 'use strict'
 
-const encode = (arr, maxRunLength) => {
-  const runs = []
+interface Run {
+  length: number,
+  entry: any
+}
+
+const encode = (arr: any[], maxRunLength: number) => {
+  const runs: Run[] = []
   arr.forEach(entry => {
     if (
       runs.length - 1 in runs &&
@@ -19,7 +24,7 @@ const encode = (arr, maxRunLength) => {
   return runs
 }
 
-const decode = runs =>
+const decode = (runs: Run[]): any[] =>
   runs.flatMap(run => Array(run.length).fill(run.entry))
 
 export default { encode, decode }

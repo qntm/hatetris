@@ -4,21 +4,21 @@
 
 'use strict'
 
-import hex from './hex'
-import base65536 from './base65536'
-import base2048 from './base2048'
+import hex from './hex.ts'
+import * as base65536 from './base65536.ts'
+import * as base2048 from './base2048.ts'
 
 /**
   Convert an array of moves into a replay
 */
-// const encode = moves => hex.encode(moves)
-// const encode = moves => base65536.encode(moves)
-const encode = moves => base2048.encode(moves)
+// const encode = (moves: string[]): string => hex.encode(moves)
+// const encode = (moves: string[]): string => base65536.encode(moves)
+const encode = (moves: string[]): string => base2048.encode(moves)
 
 /**
   Convert a string back into an array of moves
 */
-const decode = string => {
+const decode = (string: string): string[] => {
   if (/^[0123456789ABCDEF# ]*$/.test(string)) {
     return hex.decode(string)
   }

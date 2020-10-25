@@ -218,7 +218,7 @@ const rotations = [
   })
 )
 
-const placeNewPiece = (wellWidth, pieceId) => ({
+const placeNewPiece = (wellWidth: number, pieceId: number) => ({
   id: pieceId,
   x: Math.floor((wellWidth - 4) / 2),
   y: 0,
