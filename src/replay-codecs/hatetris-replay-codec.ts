@@ -4,8 +4,6 @@
 
 'use strict'
 
-import type { Move } from './move.ts'
-
 import hex from './hex.ts'
 import * as base65536 from './base65536.ts'
 import * as base2048 from './base2048.ts'
@@ -13,14 +11,14 @@ import * as base2048 from './base2048.ts'
 /**
   Convert an array of moves into a replay
 */
-// const encode = (moves: Move[]): string => hex.encode(moves)
-// const encode = (moves: Move[]): string => base65536.encode(moves)
-const encode = (moves: Move[]): string => base2048.encode(moves)
+// const encode = (moves: string[]): string => hex.encode(moves)
+// const encode = (moves: string[]): string => base65536.encode(moves)
+const encode = (moves: string[]): string => base2048.encode(moves)
 
 /**
   Convert a string back into an array of moves
 */
-const decode = (string: string): Move[] => {
+const decode = (string: string): string[] => {
   if (/^[0123456789ABCDEF# ]*$/.test(string)) {
     return hex.decode(string)
   }

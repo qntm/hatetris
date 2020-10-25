@@ -1,8 +1,7 @@
-import type { Move } from './move.ts'
 import runLength from './../utils/run-length.ts'
 
 const forwardEntryLookup: {
-  [key in Move]: number
+  [key: string]: number
 } = {
   L: 0b0000,
   R: 0b0100,
@@ -20,7 +19,7 @@ const forwardLengthLookup: {
 }
 
 const reverseEntryLookup: {
-  [key: number]: Move
+  [key: number]: string
 } = {
   0b0000: 'L',
   0b0100: 'R',
@@ -40,7 +39,7 @@ const reverseNumberLookup: {
 /**
   Convert an array of key strokes into a Uint8Array using RLE
 */
-export const encode = (keys: Move[]): Uint8Array => {
+export const encode = (keys: string[]): Uint8Array => {
   const rle = runLength.encode(keys, 0b100)
 
   const nybbles = rle.map(run => (
@@ -68,7 +67,7 @@ export const encode = (keys: Move[]): Uint8Array => {
 /**
   Convert an RLE'd Uint8Array back into a list of keystrokes
 */
-export const decode = (uint8Array: Uint8Array): Move[] => {
+export const decode = (uint8Array: Uint8Array): string[] => {
   const octets = []
   for (let i = 0; i < uint8Array.length; i++) {
     octets.push(uint8Array[i])
