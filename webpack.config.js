@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   mode: 'development',
+  entry: './src/index.tsx',
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'bundle.css'
@@ -13,21 +14,27 @@ module.exports = {
       xhtml: true
     })
   ],
+  resolve: {
+    extensions: ['.tsx', '.ts', '.jsx', '.js']
+  },
   module: {
     rules: [{
+      test: /\.(ts|tsx)$/,
+      exclude: /node_modules/,
+      use: 'ts-loader'
+    }, {
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader'
-      }
+      use: 'babel-loader'
     }, {
       test: /\.html$/,
       loader: 'html-loader'
     }, {
       test: /\.css$/,
-      use: [{
-        loader: MiniCssExtractPlugin.loader
-      }, 'css-loader']
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader'
+      ]
     }]
   },
   output: {

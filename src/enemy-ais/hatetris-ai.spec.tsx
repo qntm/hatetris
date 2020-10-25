@@ -3,11 +3,11 @@
 'use strict'
 
 import { shallow } from 'enzyme'
-import React from 'react'
+import * as React from 'react'
 
-import Game from '../components/Game/Game'
-import { Hatetris0, Hatetris1 } from './hatetris-ai'
-import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
+import Game from '../components/Game/Game.tsx'
+import { Hatetris0, Hatetris1 } from './hatetris-ai.ts'
+import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system.ts'
 
 // Note: well bits are flipped compared to what you would see on the screen.
 // Least significant bit is rendered on the *left* on web, but appears to the
@@ -15,7 +15,7 @@ import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system
 
 describe('HatetrisAi', () => {
   describe('Hatetris0', () => {
-    const game = shallow(
+    const game = shallow<Game>(
       <Game
         bar={4}
         EnemyAi={Hatetris0}
@@ -24,9 +24,9 @@ describe('HatetrisAi', () => {
         wellDepth={8}
         wellWidth={10}
       />
-    ).instance()
+    )
 
-    const hatetris0 = game.enemyAi
+    const hatetris0 = game.state().enemyAi
 
     it('generates an S by default', () => {
       expect(hatetris0([
@@ -139,7 +139,7 @@ describe('HatetrisAi', () => {
   })
 
   describe('Hatetris1', () => {
-    const game = shallow(
+    const game = shallow<Game>(
       <Game
         bar={4}
         EnemyAi={Hatetris1}
@@ -148,9 +148,9 @@ describe('HatetrisAi', () => {
         wellDepth={8}
         wellWidth={10}
       />
-    ).instance()
+    )
 
-    const hatetris1 = game.enemyAi
+    const hatetris1 = game.state().enemyAi
 
     it('picks a different piece in some situations', () => {
       expect(hatetris1([

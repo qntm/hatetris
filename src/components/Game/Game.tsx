@@ -4,16 +4,56 @@
 
 'use strict'
 
-import React from 'react'
+import * as React from 'react'
 
-import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
-import Well from '../Well/Well.jsx'
+import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec.ts'
+import Well from '../Well/Well.tsx'
 import './Game.css'
 
 const minWidth = 4
 
-class Game extends React.Component {
-  constructor (props) {
+type Orientation = {
+	yMin: number,
+	yDim: number,
+	xMin: number,
+	xDim: number,
+	rows: number[]
+}
+
+type RotationSystem = {
+	placeNewPiece: (wellWidth: number, pieceId: number) => any;
+	rotations: Orientation[][]
+}
+
+type GameWellState = {
+	piece: any,
+	score: number,
+	well: number[],
+}
+
+type GameProps = {
+	bar: any,
+	replayTimeout: number,
+	rotationSystem: RotationSystem,
+	wellDepth: any,
+	wellWidth: any,
+	EnemyAi: any
+}
+
+type GameState = {
+	enemyAi: any,
+	firstWellState: GameWellState,
+	mode: string,
+	wellStateId: number,
+	wellStates: GameWellState[],
+	replay: any[],
+	replayTimeoutId: ReturnType<typeof setTimeout>
+}
+
+export type { GameWellState, GameProps }
+
+class Game extends React.Component<GameProps, GameState> {
+  constructor (props: GameProps) {
     super(props)
 
     const {
@@ -36,17 +76,19 @@ class Game extends React.Component {
       throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
     }
 
-    this.enemyAi = EnemyAi(this)
+		const enemyAi = EnemyAi(this)
 
     const firstWell = Array(wellDepth).fill(0)
 
-    this.firstWellState = {
+    const firstWellState = {
       well: firstWell,
       score: 0,
-      piece: rotationSystem.placeNewPiece(wellWidth, this.enemyAi(firstWell))
+      piece: rotationSystem.placeNewPiece(wellWidth, enemyAi(firstWell))
     }
 
     this.state = {
+			enemyAi,
+			firstWellState,
       mode: 'GAME_OVER',
       wellStateId: -1,
       wellStates: [],
@@ -63,14 +105,14 @@ class Game extends React.Component {
     this.handleDown = this.handleDown.bind(this)
     this.handleUndo = this.handleUndo.bind(this)
     this.handleRedo = this.handleRedo.bind(this)
-    this.onKeyDown = this.onKeyDown.bind(this)
+    this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this)
   }
 
   /**
     Input {wellState, piece} and a move, return
     the new {wellState, piece}.
   */
-  getNextState (wellState, move) {
+  getNextState (wellState: GameWellState, move: string): GameWellState {
     const {
       rotationSystem,
       bar,
@@ -165,6 +207,7 @@ class Game extends React.Component {
 
   handleClickStart () {
     const {
+			firstWellState,
       replayTimeoutId
     } = this.state
 
@@ -178,7 +221,7 @@ class Game extends React.Component {
     this.setState({
       mode: 'PLAYING',
       wellStateId: 0,
-      wellStates: [this.firstWellState],
+      wellStates: [firstWellState],
       replay: [],
       replayTimeoutId: undefined
     })
@@ -190,6 +233,7 @@ class Game extends React.Component {
     } = this.props
 
     let {
+			firstWellState,
       replayTimeoutId
     } = this.state
 
@@ -215,7 +259,7 @@ class Game extends React.Component {
     this.setState({
       mode: mode,
       wellStateId: wellStateId,
-      wellStates: [this.firstWellState],
+      wellStates: [firstWellState],
       replay: replay,
       replayTimeoutId: replayTimeoutId
     })
@@ -252,7 +296,7 @@ class Game extends React.Component {
   // Accepts the input of a move and attempts to apply that
   // transform to the live piece in the live well.
   // Returns the new state.
-  handleMove (move) {
+  handleMove (move: string) {
     const {
       bar,
       rotationSystem,
@@ -260,6 +304,7 @@ class Game extends React.Component {
     } = this.props
 
     const {
+			enemyAi,
       mode,
       replay,
       wellStateId,
@@ -302,7 +347,7 @@ class Game extends React.Component {
       // TODO: `nextWellState.well` should be more complex and contain colour
       // information, whereas the well passed to `enemyAi` should be a simple
       // array of integers
-      nextWellState.piece = rotationSystem.placeNewPiece(wellWidth, this.enemyAi(nextWellState.well))
+      nextWellState.piece = rotationSystem.placeNewPiece(wellWidth, enemyAi(nextWellState.well))
     }
 
     this.setState({
@@ -395,28 +440,28 @@ class Game extends React.Component {
     }
   }
 
-  onKeyDown (event) {
-    if (event.keyCode === 37) {
+  handleDocumentKeyDown (event: KeyboardEvent) {
+    if (event.key === 'Left' || event.key === 'ArrowLeft') {
       this.handleLeft()
     }
 
-    if (event.keyCode === 39) {
+    if (event.key === 'Right' || event.key === 'ArrowRight') {
       this.handleRight()
     }
 
-    if (event.keyCode === 40) {
+    if (event.key === 'Down' || event.key === 'ArrowDown') {
       this.handleDown()
     }
 
-    if (event.keyCode === 38) {
+    if (event.key === 'Up' || event.key === 'ArrowUp') {
       this.handleUp()
     }
 
-    if (event.keyCode === 90 && event.ctrlKey === true) {
+    if (event.key === 'Z' && event.ctrlKey === true) {
       this.handleUndo()
     }
 
-    if (event.keyCode === 89 && event.ctrlKey === true) {
+    if (event.key === 'Y' && event.ctrlKey === true) {
       this.handleRedo()
     }
   }
@@ -509,7 +554,7 @@ class Game extends React.Component {
   }
 
   componentDidMount () {
-    document.addEventListener('keydown', this.onKeyDown)
+    document.addEventListener('keydown', this.handleDocumentKeyDown)
   }
 
   componentWillUnmount () {
@@ -521,7 +566,7 @@ class Game extends React.Component {
       clearTimeout(replayTimeoutId)
     }
 
-    document.removeEventListener('keydown', this.onKeyDown)
+    document.removeEventListener('keydown', this.handleDocumentKeyDown)
   }
 }
 

@@ -4,9 +4,16 @@
 // given in the rotation system. At present it just returns whatever
 // the first one is!
 
+import Game from '../components/Game/Game.tsx'
+import type { GameWellState } from '../components/Game/Game.tsx'
+
 const moves = ['L', 'R', 'D', 'U']
 
-const HatetrisAi = options => game => {
+interface Options {
+  searchDepth: number
+}
+
+const HatetrisAi = (options: Options) => (game: Game) => {
   const {
     rotationSystem,
     wellDepth,
@@ -19,7 +26,7 @@ const HatetrisAi = options => game => {
     `y` varies between 0 and (`wellDepth` + 2) inclusive, so range = `wellDepth` + 3
     `o` varies between 0 and 3 inclusive, so range = 4
   */
-  const hashCode = (x, y, o) =>
+  const hashCode = (x: number, y: number, o: number) =>
     (x * (wellDepth + 3) + y) * 4 + o
 
   /**
@@ -28,7 +35,7 @@ const HatetrisAi = options => game => {
     will have `null` `piece` because the piece is landed; some will have
     an increased `score`.
   */
-  const getPossibleFutures = (well, pieceId) => {
+  const getPossibleFutures = (well: number[], pieceId: number): GameWellState[] => {
     let piece = rotationSystem.placeNewPiece(wellWidth, pieceId)
 
     // move the piece down to a lower position before we have to
@@ -51,7 +58,7 @@ const HatetrisAi = options => game => {
     const seen = new Set()
     seen.add(hashCode(piece.x, piece.y, piece.o))
 
-    const possibleFutures = []
+    const possibleFutures: GameWellState[] = []
 
     // a simple for loop won't work here because
     // we are increasing the list as we go
@@ -90,7 +97,7 @@ const HatetrisAi = options => game => {
     return possibleFutures
   }
 
-  const getHighestBlue = well => {
+  const getHighestBlue = (well: number[]): number => {
     let row
     for (row = 0; row < well.length; row++) {
       if (well[row] !== 0) {
@@ -103,29 +110,33 @@ const HatetrisAi = options => game => {
   // deeper lines are worth less than immediate lines
   // this is so the game will never give you a line if it can avoid it
   // NOTE: make sure rating doesn't return a range of more than 100 values...
-  const getWellRating = (well, depthRemaining) =>
+  const getWellRating = (well: number[], depthRemaining: number): number =>
     getHighestBlue(well) + (depthRemaining === 0 ? 0 : getWorstPieceDetails(well, depthRemaining - 1).rating / 100)
 
   /**
     Given a well and a piece, find the best possible location to put it.
     Return the best rating found.
   */
-  const getBestWellRating = (well, pieceId, depthRemaining) =>
+  const getBestWellRating = (well: number[], pieceId: number, depthRemaining: number): number =>
     Math.max.apply(Math, getPossibleFutures(well, pieceId).map(possibleFuture =>
       getWellRating(possibleFuture.well, depthRemaining)
     ))
 
   // pick the worst piece that could be put into this well
-  const getWorstPieceDetails = (well, depthRemaining) =>
+  const getWorstPieceDetails = (well: number[], depthRemaining: number): {
+    pieceId: number,
+    rating: number
+  } =>
     Object
       .keys(rotationSystem.rotations)
       .map(pieceId => ({
-        pieceId,
-        rating: getBestWellRating(well, pieceId, depthRemaining)
+        pieceId: Number(pieceId),
+        rating: getBestWellRating(well, Number(pieceId), depthRemaining)
       }))
       .sort((a, b) => a.rating - b.rating)[0]
 
-  return well => getWorstPieceDetails(well, options.searchDepth).pieceId
+  return (well: number[]): number =>
+    getWorstPieceDetails(well, options.searchDepth).pieceId
 }
 
 export const Hatetris0 = HatetrisAi({ searchDepth: 0 })

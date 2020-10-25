@@ -1,11 +1,36 @@
 'use strict'
 
 import classnames from 'classnames'
-import React from 'react'
+import * as React from 'react'
+import type { GameWellState } from '../Game/Game.tsx'
 
 import './Well.css'
 
-export default props => {
+type WellProps = {
+	bar: number;
+	rotationSystem: any;
+	wellDepth: number;
+	wellWidth: number;
+	onClickL: () => void;
+	onClickR: () => void;
+	onClickU: () => void;
+	onClickD: () => void;
+	onClickZ: () => void;
+	onClickY: () => void;
+	wellState: GameWellState
+}
+
+type Cell = {
+	landed: boolean,
+	live: boolean,
+	handleClick?: () => void,
+	symbol?: string,
+	title?: string
+}
+
+export type { WellProps }
+
+export default (props: WellProps) => {
   const {
     bar,
     rotationSystem,
@@ -23,28 +48,27 @@ export default props => {
   const well = wellState && wellState.well
   const piece = wellState && wellState.piece
 
-  const cellses = []
+  const cellses: Cell[][] = []
   for (let y = 0; y < wellDepth; y++) {
     const cells = []
     for (let x = 0; x < wellWidth; x++) {
-      const cell = {}
+			const landed = well !== null && (well[y] & (1 << x)) !== 0
 
-      cell.landed = well !== null && well[y] & (1 << x)
-
+			let live
       if (piece === null) {
-        cell.live = false
+        live = false
       } else {
         const orientation = rotationSystem.rotations[piece.id][piece.o]
         const y2 = y - piece.y - orientation.yMin
         const x2 = x - piece.x - orientation.xMin
-        cell.live = (
+        live = (
           y2 >= 0 && y2 < orientation.yDim &&
           x2 >= 0 && x2 < orientation.xDim &&
           (orientation.rows[y2] & (1 << x2))
-        )
+        ) !== 0
       }
 
-      cells.push(cell)
+      cells.push({ landed, live })
     }
     cellses.push(cells)
   }
@@ -76,7 +100,7 @@ export default props => {
                 className={classnames({
                   well__cell: true,
                   'well__cell--bar': y === bar,
-                  'well__cell--manual': cell.onClick,
+                  'well__cell--manual': cell.handleClick,
                   'well__cell--landed': cell.landed,
                   'well__cell--live': cell.live
                 })}

@@ -3,17 +3,18 @@
 'use strict'
 
 import { shallow } from 'enzyme'
-import React from 'react'
+import * as React from 'react'
 
-import Well from './Well'
-import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
+import Well from './Well.tsx'
+import type { WellProps } from './Well.tsx'
+import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system.ts'
 
 const bar = 4
 const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
 
 describe('<Well>', () => {
-  const getWell = props => shallow(
+  const getWell = (props: Partial<WellProps> = {}) => shallow(
     <Well
       bar={bar}
       rotationSystem={hatetrisRotationSystem}
@@ -38,7 +39,7 @@ describe('<Well>', () => {
     const downCell = well.find('tr').at(1).find('td').at(1)
     expect(downCell.text()).toBe('\u2193')
     expect(downCell.props().title).toBe('Press Down to move down')
-    downCell.props().onClick()
+    downCell.simulate('click')
     expect(onClickD).toHaveBeenCalled()
   })
 

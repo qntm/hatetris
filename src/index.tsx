@@ -4,13 +4,13 @@
 
 'use strict'
 
-import React from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 
 import './index.css'
-import Game from './components/Game/Game.jsx'
-import { Hatetris0 } from './enemy-ais/hatetris-ai'
-import hatetrisRotationSystem from './rotation-systems/hatetris-rotation-system'
+import Game from './components/Game/Game.tsx'
+import { Hatetris0 } from './enemy-ais/hatetris-ai.ts'
+import hatetrisRotationSystem from './rotation-systems/hatetris-rotation-system.ts'
 
 ReactDOM.render(
   (
