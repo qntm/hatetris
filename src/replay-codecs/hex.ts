@@ -4,15 +4,13 @@
 
 'use strict'
 
-import { moves } from './move.ts'
-
 const hexChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
 
 const forwardLookup: {
   [key: string]: {
     [key: string]: string
   }
-}= {
+} = {
   L: { L: '0', R: '1', D: '2', U: '3' },
   R: { L: '4', R: '5', D: '6', U: '7' },
   D: { L: '8', R: '9', D: 'A', U: 'B' },
@@ -52,8 +50,7 @@ const encode = (inputMoves: string[]): string => inputMoves
     // trailing unpaired move behaves as if an extra "D" was appended
     const move2 = i + 1 in inputMoves ? inputMoves[i + 1] : 'D'
 
-    const x = forwardLookup[move1] || {}
-    return x[move2] || ''
+    return forwardLookup[move1][move2]
   })
   .join('')
   .replace(/(....)/g, '$1 ')
