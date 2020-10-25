@@ -1,5 +1,4 @@
 import type { Move } from './move.ts'
-import * as base65536 from 'base65536'
 import runLength from './../utils/run-length.ts'
 
 const forwardEntryLookup: {

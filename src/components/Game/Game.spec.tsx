@@ -14,32 +14,32 @@ jest.useFakeTimers()
 
 describe('<Game>', () => {
   const getGame = (props: Partial<GameProps> = {}) => {
-		return shallow<Game>(
-			<Game
-				bar={4}
-				EnemyAi={Hatetris0}
-				replayTimeout={0}
-				rotationSystem={hatetrisRotationSystem}
-				wellDepth={20}
-				wellWidth={10}
-				{...props}
-			/>
-		)
-	}
+    return shallow<Game>(
+      <Game
+        bar={4}
+        EnemyAi={Hatetris0}
+        replayTimeout={0}
+        rotationSystem={hatetrisRotationSystem}
+        wellDepth={20}
+        wellWidth={10}
+        {...props}
+      />
+    )
+  }
 
-	const firstWellState = {
-		piece: { id: 0, o: 0, x: 3, y: 0 },
-		score: 0,
-		well: Array(20).fill(0)
-	}
+  const firstWellState = {
+    piece: { id: 0, o: 0, x: 3, y: 0 },
+    score: 0,
+    well: Array(20).fill(0)
+  }
 
   it('rejects a rotation system with no pieces', () => {
     expect(() => getGame({
-			rotationSystem: {
-				placeNewPiece: () => {},
-				rotations: []
-			}
-		})).toThrowError()
+      rotationSystem: {
+        placeNewPiece: () => {},
+        rotations: []
+      }
+    })).toThrowError()
   })
 
   it('rejects a well depth below the bar', () => {
@@ -53,8 +53,8 @@ describe('<Game>', () => {
   it('ignores all keystrokes before the game has begun', () => {
     const game = getGame()
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'GAME_OVER',
       wellStateId: -1,
       wellStates: [],
@@ -63,7 +63,7 @@ describe('<Game>', () => {
     })
 
     const warn = jest.spyOn(console, 'warn')
-		warn.mockImplementation(() => {})
+    warn.mockImplementation(() => {})
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Left' }))
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Right' }))
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Down' }))
@@ -72,8 +72,8 @@ describe('<Game>', () => {
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(6)
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'GAME_OVER',
       wellStateId: -1,
       wellStates: [],
@@ -88,8 +88,8 @@ describe('<Game>', () => {
   it('lets you play a few moves', () => {
     const game = getGame()
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'GAME_OVER',
       wellStateId: -1,
       wellStates: [],
@@ -99,8 +99,8 @@ describe('<Game>', () => {
 
     game.find('.game__start-button').simulate('click')
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
@@ -114,8 +114,8 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'PLAYING',
       wellStateId: 1,
       wellStates: [{
@@ -133,8 +133,8 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'PLAYING',
       wellStateId: 2,
       wellStates: [{
@@ -156,8 +156,8 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
@@ -183,8 +183,8 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
@@ -214,8 +214,8 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Z', ctrlKey: true }))
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
@@ -245,8 +245,8 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Y', ctrlKey: true }))
     expect(game.state()).toEqual({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
@@ -276,7 +276,7 @@ describe('<Game>', () => {
 
     // Warn on attempted redo at end of history
     const warn = jest.spyOn(console, 'warn')
-		warn.mockImplementation(() => {})
+    warn.mockImplementation(() => {})
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(1)
@@ -289,13 +289,13 @@ describe('<Game>', () => {
     const game = getGame()
 
     const prompt = jest.spyOn(window, 'prompt')
-		prompt.mockReturnValueOnce('')
+    prompt.mockReturnValueOnce('')
     game.find('.game__replay-button').simulate('click')
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
-			enemyAi: expect.any(Function),
-			firstWellState,
+      enemyAi: expect.any(Function),
+      firstWellState,
       mode: 'PLAYING',
       replay: [],
       replayTimeoutId: undefined,
@@ -315,7 +315,7 @@ describe('<Game>', () => {
       game = getGame()
 
       const prompt = jest.spyOn(window, 'prompt')
-			prompt.mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2')
+      prompt.mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2')
       game.find('.game__replay-button').simulate('click')
       prompt.mockRestore()
 
@@ -325,8 +325,8 @@ describe('<Game>', () => {
       jest.runOnlyPendingTimers()
 
       expect(game.state()).toEqual(expect.objectContaining({
-				enemyAi: expect.any(Function),
-				firstWellState,
+        enemyAi: expect.any(Function),
+        firstWellState,
         mode: 'REPLAYING',
         wellStates: [
           expect.anything(),
@@ -346,8 +346,8 @@ describe('<Game>', () => {
     it('lets you start a new game', () => {
       game.find('.game__start-button').simulate('click')
       expect(game.state()).toEqual(expect.objectContaining({
-				enemyAi: expect.any(Function),
-				firstWellState,
+        enemyAi: expect.any(Function),
+        firstWellState,
         mode: 'PLAYING',
         wellStates: [
           expect.anything()
@@ -359,13 +359,13 @@ describe('<Game>', () => {
 
     it('lets you start a new replay', () => {
       const prompt = jest.spyOn(window, 'prompt')
-			prompt.mockReturnValueOnce('AAAA 1234 BCDE 2345 CDEF 3456')
+      prompt.mockReturnValueOnce('AAAA 1234 BCDE 2345 CDEF 3456')
       game.find('.game__replay-button').simulate('click')
       prompt.mockRestore()
 
       expect(game.state()).toEqual(expect.objectContaining({
-				enemyAi: expect.any(Function),
-				firstWellState,
+        enemyAi: expect.any(Function),
+        firstWellState,
         mode: 'REPLAYING',
         wellStates: [
           expect.anything()
@@ -378,8 +378,8 @@ describe('<Game>', () => {
     it('lets you undo and stops replaying if you do so', () => {
       game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Z', ctrlKey: true }))
       expect(game.state()).toEqual(expect.objectContaining({
-				enemyAi: expect.any(Function),
-				firstWellState,
+        enemyAi: expect.any(Function),
+        firstWellState,
         mode: 'PLAYING', // no longer replaying
         wellStates: [
           expect.anything(),
@@ -467,7 +467,7 @@ describe('<Game>', () => {
             const game = getGame()
 
             const prompt = jest.spyOn(window, 'prompt')
-						prompt.mockReturnValueOnce(string)
+            prompt.mockReturnValueOnce(string)
             game.instance().handleClickReplay()
             prompt.mockRestore()
 

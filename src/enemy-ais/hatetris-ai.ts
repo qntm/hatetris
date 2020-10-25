@@ -111,6 +111,7 @@ const HatetrisAi = (options: Options) => (game: Game) => {
   // this is so the game will never give you a line if it can avoid it
   // NOTE: make sure rating doesn't return a range of more than 100 values...
   const getWellRating = (well: number[], depthRemaining: number): number =>
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     getHighestBlue(well) + (depthRemaining === 0 ? 0 : getWorstPieceDetails(well, depthRemaining - 1).rating / 100)
 
   /**

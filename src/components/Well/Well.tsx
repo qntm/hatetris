@@ -7,25 +7,25 @@ import type { GameWellState } from '../Game/Game.tsx'
 import './Well.css'
 
 type WellProps = {
-	bar: number;
-	rotationSystem: any;
-	wellDepth: number;
-	wellWidth: number;
-	onClickL: () => void;
-	onClickR: () => void;
-	onClickU: () => void;
-	onClickD: () => void;
-	onClickZ: () => void;
-	onClickY: () => void;
-	wellState: GameWellState
+  bar: number;
+  rotationSystem: any;
+  wellDepth: number;
+  wellWidth: number;
+  onClickL: () => void;
+  onClickR: () => void;
+  onClickU: () => void;
+  onClickD: () => void;
+  onClickZ: () => void;
+  onClickY: () => void;
+  wellState: GameWellState
 }
 
 type Cell = {
-	landed: boolean,
-	live: boolean,
-	handleClick?: () => void,
-	symbol?: string,
-	title?: string
+  landed: boolean,
+  live: boolean,
+  handleClick?: () => void,
+  symbol?: string,
+  title?: string
 }
 
 export type { WellProps }
@@ -52,9 +52,9 @@ export default (props: WellProps) => {
   for (let y = 0; y < wellDepth; y++) {
     const cells = []
     for (let x = 0; x < wellWidth; x++) {
-			const landed = well !== null && (well[y] & (1 << x)) !== 0
+      const landed = well !== null && (well[y] & (1 << x)) !== 0
 
-			let live
+      let live
       if (piece === null) {
         live = false
       } else {

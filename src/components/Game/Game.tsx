@@ -13,41 +13,41 @@ import './Game.css'
 const minWidth = 4
 
 type Orientation = {
-	yMin: number,
-	yDim: number,
-	xMin: number,
-	xDim: number,
-	rows: number[]
+  yMin: number,
+  yDim: number,
+  xMin: number,
+  xDim: number,
+  rows: number[]
 }
 
 type RotationSystem = {
-	placeNewPiece: (wellWidth: number, pieceId: number) => any;
-	rotations: Orientation[][]
+  placeNewPiece: (wellWidth: number, pieceId: number) => any;
+  rotations: Orientation[][]
 }
 
 type GameWellState = {
-	piece: any,
-	score: number,
-	well: number[],
+  piece: any,
+  score: number,
+  well: number[],
 }
 
 type GameProps = {
-	bar: any,
-	replayTimeout: number,
-	rotationSystem: RotationSystem,
-	wellDepth: any,
-	wellWidth: any,
-	EnemyAi: any
+  bar: any,
+  replayTimeout: number,
+  rotationSystem: RotationSystem,
+  wellDepth: any,
+  wellWidth: any,
+  EnemyAi: any
 }
 
 type GameState = {
-	enemyAi: any,
-	firstWellState: GameWellState,
-	mode: string,
-	wellStateId: number,
-	wellStates: GameWellState[],
-	replay: any[],
-	replayTimeoutId: ReturnType<typeof setTimeout>
+  enemyAi: any,
+  firstWellState: GameWellState,
+  mode: string,
+  wellStateId: number,
+  wellStates: GameWellState[],
+  replay: any[],
+  replayTimeoutId: ReturnType<typeof setTimeout>
 }
 
 export type { GameWellState, GameProps }
@@ -76,7 +76,7 @@ class Game extends React.Component<GameProps, GameState> {
       throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
     }
 
-		const enemyAi = EnemyAi(this)
+    const enemyAi = EnemyAi(this)
 
     const firstWell = Array(wellDepth).fill(0)
 
@@ -87,8 +87,8 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     this.state = {
-			enemyAi,
-			firstWellState,
+      enemyAi,
+      firstWellState,
       mode: 'GAME_OVER',
       wellStateId: -1,
       wellStates: [],
@@ -207,7 +207,7 @@ class Game extends React.Component<GameProps, GameState> {
 
   handleClickStart () {
     const {
-			firstWellState,
+      firstWellState,
       replayTimeoutId
     } = this.state
 
@@ -233,7 +233,7 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     let {
-			firstWellState,
+      firstWellState,
       replayTimeoutId
     } = this.state
 
@@ -251,7 +251,8 @@ class Game extends React.Component<GameProps, GameState> {
     // TODO: what if the replay is bad?
 
     const wellStateId = 0
-    replayTimeoutId = wellStateId in replay ? setTimeout(this.inputReplayStep, replayTimeout)
+    replayTimeoutId = wellStateId in replay
+      ? setTimeout(this.inputReplayStep, replayTimeout)
       : undefined
     const mode = wellStateId in replay ? 'REPLAYING' : 'PLAYING'
 
@@ -304,7 +305,7 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
-			enemyAi,
+      enemyAi,
       mode,
       replay,
       wellStateId,
@@ -506,7 +507,7 @@ class Game extends React.Component<GameProps, GameState> {
         <div className='game__right'>
           <p className='game__paragraph'>
             <a href='http://qntm.org/hatetris'>
-              You're playing HATETRIS by qntm
+              You&apos;re playing HATETRIS by qntm
             </a>
           </p>
 
