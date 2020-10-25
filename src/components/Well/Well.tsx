@@ -64,8 +64,8 @@ export default (props: WellProps) => {
         live = (
           y2 >= 0 && y2 < orientation.yDim &&
           x2 >= 0 && x2 < orientation.xDim &&
-          (orientation.rows[y2] & (1 << x2))
-        ) !== 0
+          (orientation.rows[y2] & (1 << x2)) !== 0
+        )
       }
 
       cells.push({ landed, live })

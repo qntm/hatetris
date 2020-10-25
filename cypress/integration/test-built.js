@@ -9,7 +9,7 @@ describe('HATETRIS', () => {
     cy.get('.e2e__score').contains('0')
 
     for (let i = 0; i < 90; i++) {
-      cy.get('body').trigger('keydown', { keyCode: 40 })
+      cy.get('body').trigger('keydown', { key: 'Down' })
     }
 
     cy.get('.e2e__score').contains('0')
