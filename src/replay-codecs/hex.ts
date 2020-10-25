@@ -25,7 +25,7 @@ const forwardLookup: {
 const reverseLookup: {
   [key in HexChar]: [Move, Move]
 } = {
-  0: ['L', 'E'],
+  0: ['L', 'L'],
   1: ['L', 'R'],
   2: ['L', 'D'],
   3: ['L', 'U'],

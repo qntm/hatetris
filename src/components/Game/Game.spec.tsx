@@ -27,6 +27,12 @@ describe('<Game>', () => {
 		)
 	}
 
+	const firstWellState = {
+		piece: { id: 0, o: 0, x: 3, y: 0 },
+		score: 0,
+		well: Array(20).fill(0)
+	}
+
   it('rejects a rotation system with no pieces', () => {
     expect(() => getGame({
 			rotationSystem: {
@@ -47,6 +53,8 @@ describe('<Game>', () => {
   it('ignores all keystrokes before the game has begun', () => {
     const game = getGame()
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'GAME_OVER',
       wellStateId: -1,
       wellStates: [],
@@ -64,6 +72,8 @@ describe('<Game>', () => {
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(6)
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'GAME_OVER',
       wellStateId: -1,
       wellStates: [],
@@ -78,6 +88,8 @@ describe('<Game>', () => {
   it('lets you play a few moves', () => {
     const game = getGame()
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'GAME_OVER',
       wellStateId: -1,
       wellStates: [],
@@ -87,12 +99,14 @@ describe('<Game>', () => {
 
     game.find('.game__start-button').simulate('click')
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }],
       replay: [],
       replayTimeoutId: undefined
@@ -100,16 +114,18 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'PLAYING',
       wellStateId: 1,
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 2, y: 0 }
+        piece: { id: 0, o: 0, x: 2, y: 0 }
       }],
       replay: ['L'],
       replayTimeoutId: undefined
@@ -117,20 +133,22 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'PLAYING',
       wellStateId: 2,
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 2, y: 0 }
+        piece: { id: 0, o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }],
       replay: ['L', 'R'],
       replayTimeoutId: undefined
@@ -138,24 +156,26 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 2, y: 0 }
+        piece: { id: 0, o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 1 }
+        piece: { id: 0, o: 0, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D'],
       replayTimeoutId: undefined
@@ -163,28 +183,30 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 2, y: 0 }
+        piece: { id: 0, o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 1 }
+        piece: { id: 0, o: 0, x: 3, y: 1 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 1, x: 3, y: 1 }
+        piece: { id: 0, o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
       replayTimeoutId: undefined
@@ -192,28 +214,30 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Z', ctrlKey: true }))
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 2, y: 0 }
+        piece: { id: 0, o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 1 }
+        piece: { id: 0, o: 0, x: 3, y: 1 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 1, x: 3, y: 1 }
+        piece: { id: 0, o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
       replayTimeoutId: undefined
@@ -221,28 +245,30 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Y', ctrlKey: true }))
     expect(game.state()).toEqual({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 2, y: 0 }
+        piece: { id: 0, o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 0 }
+        piece: { id: 0, o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 0, x: 3, y: 1 }
+        piece: { id: 0, o: 0, x: 3, y: 1 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: '0', o: 1, x: 3, y: 1 }
+        piece: { id: 0, o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
       replayTimeoutId: undefined
@@ -268,6 +294,8 @@ describe('<Game>', () => {
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
+			enemyAi: expect.any(Function),
+			firstWellState,
       mode: 'PLAYING',
       replay: [],
       replayTimeoutId: undefined,
@@ -297,6 +325,8 @@ describe('<Game>', () => {
       jest.runOnlyPendingTimers()
 
       expect(game.state()).toEqual(expect.objectContaining({
+				enemyAi: expect.any(Function),
+				firstWellState,
         mode: 'REPLAYING',
         wellStates: [
           expect.anything(),
@@ -316,6 +346,8 @@ describe('<Game>', () => {
     it('lets you start a new game', () => {
       game.find('.game__start-button').simulate('click')
       expect(game.state()).toEqual(expect.objectContaining({
+				enemyAi: expect.any(Function),
+				firstWellState,
         mode: 'PLAYING',
         wellStates: [
           expect.anything()
@@ -332,6 +364,8 @@ describe('<Game>', () => {
       prompt.mockRestore()
 
       expect(game.state()).toEqual(expect.objectContaining({
+				enemyAi: expect.any(Function),
+				firstWellState,
         mode: 'REPLAYING',
         wellStates: [
           expect.anything()
@@ -344,6 +378,8 @@ describe('<Game>', () => {
     it('lets you undo and stops replaying if you do so', () => {
       game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Z', ctrlKey: true }))
       expect(game.state()).toEqual(expect.objectContaining({
+				enemyAi: expect.any(Function),
+				firstWellState,
         mode: 'PLAYING', // no longer replaying
         wellStates: [
           expect.anything(),

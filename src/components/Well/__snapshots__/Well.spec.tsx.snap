@@ -7,7 +7,7 @@ exports[`<Well> game over well state 1`] = `
       key="0"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="0"
         onClick={[MockFunction]}
         title="Press Ctrl+Z to undo"
@@ -15,7 +15,7 @@ exports[`<Well> game over well state 1`] = `
         ↶
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="1"
         onClick={[MockFunction]}
         title="Press Up to rotate"
@@ -23,7 +23,7 @@ exports[`<Well> game over well state 1`] = `
         ⟳
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="2"
         onClick={[MockFunction]}
         title="Press Ctrl+Y to redo"
@@ -63,7 +63,7 @@ exports[`<Well> game over well state 1`] = `
       key="1"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="0"
         onClick={[MockFunction]}
         title="Press Left to move left"
@@ -71,7 +71,7 @@ exports[`<Well> game over well state 1`] = `
         ←
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="1"
         onClick={[MockFunction]}
         title="Press Down to move down"
@@ -79,7 +79,7 @@ exports[`<Well> game over well state 1`] = `
         ↓
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="2"
         onClick={[MockFunction]}
         title="Press Right to move right"
@@ -918,7 +918,7 @@ exports[`<Well> initial well state 1`] = `
       key="0"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual well__cell--live"
         key="0"
         onClick={[MockFunction]}
         title="Press Ctrl+Z to undo"
@@ -926,7 +926,7 @@ exports[`<Well> initial well state 1`] = `
         ↶
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual well__cell--live"
         key="1"
         onClick={[MockFunction]}
         title="Press Up to rotate"
@@ -934,7 +934,7 @@ exports[`<Well> initial well state 1`] = `
         ⟳
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual well__cell--live"
         key="2"
         onClick={[MockFunction]}
         title="Press Ctrl+Y to redo"
@@ -942,31 +942,31 @@ exports[`<Well> initial well state 1`] = `
         ↷
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -974,7 +974,7 @@ exports[`<Well> initial well state 1`] = `
       key="1"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual well__cell--live"
         key="0"
         onClick={[MockFunction]}
         title="Press Left to move left"
@@ -982,7 +982,7 @@ exports[`<Well> initial well state 1`] = `
         ←
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual well__cell--live"
         key="1"
         onClick={[MockFunction]}
         title="Press Down to move down"
@@ -990,7 +990,7 @@ exports[`<Well> initial well state 1`] = `
         ↓
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual well__cell--live"
         key="2"
         onClick={[MockFunction]}
         title="Press Right to move right"
@@ -998,7 +998,7 @@ exports[`<Well> initial well state 1`] = `
         →
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
@@ -1014,15 +1014,15 @@ exports[`<Well> initial well state 1`] = `
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1030,19 +1030,19 @@ exports[`<Well> initial well state 1`] = `
       key="2"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
@@ -1058,15 +1058,15 @@ exports[`<Well> initial well state 1`] = `
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1074,43 +1074,43 @@ exports[`<Well> initial well state 1`] = `
       key="3"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1118,43 +1118,43 @@ exports[`<Well> initial well state 1`] = `
       key="4"
     >
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="0"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="1"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="2"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="3"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="4"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="5"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="6"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="7"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="8"
       />
       <td
-        className="well__cell well__cell--bar"
+        className="well__cell well__cell--bar well__cell--live"
         key="9"
       />
     </tr>
@@ -1162,43 +1162,43 @@ exports[`<Well> initial well state 1`] = `
       key="5"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1206,43 +1206,43 @@ exports[`<Well> initial well state 1`] = `
       key="6"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1250,43 +1250,43 @@ exports[`<Well> initial well state 1`] = `
       key="7"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1294,43 +1294,43 @@ exports[`<Well> initial well state 1`] = `
       key="8"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1338,43 +1338,43 @@ exports[`<Well> initial well state 1`] = `
       key="9"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1382,43 +1382,43 @@ exports[`<Well> initial well state 1`] = `
       key="10"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1426,43 +1426,43 @@ exports[`<Well> initial well state 1`] = `
       key="11"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1470,43 +1470,43 @@ exports[`<Well> initial well state 1`] = `
       key="12"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1514,43 +1514,43 @@ exports[`<Well> initial well state 1`] = `
       key="13"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1558,43 +1558,43 @@ exports[`<Well> initial well state 1`] = `
       key="14"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1602,43 +1602,43 @@ exports[`<Well> initial well state 1`] = `
       key="15"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1646,43 +1646,43 @@ exports[`<Well> initial well state 1`] = `
       key="16"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1690,43 +1690,43 @@ exports[`<Well> initial well state 1`] = `
       key="17"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1734,43 +1734,43 @@ exports[`<Well> initial well state 1`] = `
       key="18"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1778,43 +1778,43 @@ exports[`<Well> initial well state 1`] = `
       key="19"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="0"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="1"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="2"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="3"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="4"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="5"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="6"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="7"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="8"
       />
       <td
-        className="well__cell"
+        className="well__cell well__cell--live"
         key="9"
       />
     </tr>
@@ -1829,7 +1829,7 @@ exports[`<Well> null well state 1`] = `
       key="0"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="0"
         onClick={[MockFunction]}
         title="Press Ctrl+Z to undo"
@@ -1837,7 +1837,7 @@ exports[`<Well> null well state 1`] = `
         ↶
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="1"
         onClick={[MockFunction]}
         title="Press Up to rotate"
@@ -1845,7 +1845,7 @@ exports[`<Well> null well state 1`] = `
         ⟳
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="2"
         onClick={[MockFunction]}
         title="Press Ctrl+Y to redo"
@@ -1885,7 +1885,7 @@ exports[`<Well> null well state 1`] = `
       key="1"
     >
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="0"
         onClick={[MockFunction]}
         title="Press Left to move left"
@@ -1893,7 +1893,7 @@ exports[`<Well> null well state 1`] = `
         ←
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="1"
         onClick={[MockFunction]}
         title="Press Down to move down"
@@ -1901,7 +1901,7 @@ exports[`<Well> null well state 1`] = `
         ↓
       </td>
       <td
-        className="well__cell"
+        className="well__cell well__cell--manual"
         key="2"
         onClick={[MockFunction]}
         title="Press Right to move right"
