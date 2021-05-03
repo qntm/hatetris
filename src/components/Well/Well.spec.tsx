@@ -5,9 +5,9 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Well from './Well.tsx'
-import type { WellProps } from './Well.tsx'
-import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system.ts'
+import Well from './Well'
+import type { WellProps } from './Well'
+import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 const bar = 4
 const wellDepth = 20 // min = bar

@@ -6,8 +6,8 @@
 
 import * as React from 'react'
 
-import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec.ts'
-import Well from '../Well/Well.tsx'
+import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
+import Well from '../Well/Well'
 import './Game.css'
 
 const minWidth = 4

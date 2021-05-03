@@ -4,8 +4,8 @@
 // given in the rotation system. At present it just returns whatever
 // the first one is!
 
-import Game from '../components/Game/Game.tsx'
-import type { GameWellState } from '../components/Game/Game.tsx'
+import Game from '../components/Game/Game.jsx'
+import type { GameWellState } from '../components/Game/Game.jsx'
 
 const moves = ['L', 'R', 'D', 'U']
 

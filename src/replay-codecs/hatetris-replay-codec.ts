@@ -4,9 +4,9 @@
 
 'use strict'
 
-import hex from './hex.ts'
-import * as base65536 from './base65536.ts'
-import * as base2048 from './base2048.ts'
+import hex from './hex'
+import * as base65536 from './base65536'
+import * as base2048 from './base2048'
 
 /**
   Convert an array of moves into a replay

@@ -5,10 +5,10 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Game from './Game.tsx'
-import type { GameProps } from './Game.tsx'
-import { Hatetris0 } from '../../enemy-ais/hatetris-ai.ts'
-import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system.ts'
+import Game from './Game'
+import type { GameProps } from './Game'
+import { Hatetris0 } from '../../enemy-ais/hatetris-ai'
+import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 jest.useFakeTimers()
 

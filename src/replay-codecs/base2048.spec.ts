@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import * as base2048 from './base2048.ts'
+import * as base2048 from './base2048'
 
 describe('base2048', () => {
   it('works', () => {
