@@ -95,17 +95,6 @@ class Game extends React.Component<GameProps, GameState> {
       replay: [],
       replayTimeoutId: undefined
     }
-
-    this.handleClickStart = this.handleClickStart.bind(this)
-    this.handleClickReplay = this.handleClickReplay.bind(this)
-    this.inputReplayStep = this.inputReplayStep.bind(this)
-    this.handleLeft = this.handleLeft.bind(this)
-    this.handleRight = this.handleRight.bind(this)
-    this.handleUp = this.handleUp.bind(this)
-    this.handleDown = this.handleDown.bind(this)
-    this.handleUndo = this.handleUndo.bind(this)
-    this.handleRedo = this.handleRedo.bind(this)
-    this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this)
   }
 
   /**
@@ -205,7 +194,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  handleClickStart () {
+  handleClickStart = () => {
     const {
       firstWellState,
       replayTimeoutId
@@ -213,9 +202,7 @@ class Game extends React.Component<GameProps, GameState> {
 
     // there may be a replay in progress, this
     // must be killed
-    if (replayTimeoutId) {
-      clearTimeout(replayTimeoutId)
-    }
+    clearTimeout(replayTimeoutId)
 
     // clear the field and get ready for a new game
     this.setState({
@@ -227,7 +214,7 @@ class Game extends React.Component<GameProps, GameState> {
     })
   }
 
-  handleClickReplay () {
+  handleClickReplay = () => {
     const {
       replayTimeout
     } = this.props
@@ -239,10 +226,7 @@ class Game extends React.Component<GameProps, GameState> {
 
     // there may be a replay in progress, this
     // must be killed
-    if (replayTimeoutId) {
-      clearTimeout(replayTimeoutId)
-      replayTimeoutId = undefined
-    }
+    clearTimeout(replayTimeoutId)
 
     // user inputs replay string
     const string = window.prompt()
@@ -252,7 +236,7 @@ class Game extends React.Component<GameProps, GameState> {
 
     const wellStateId = 0
     replayTimeoutId = wellStateId in replay
-      ? setTimeout(this.inputReplayStep, replayTimeout)
+      ? setTimeout(this.handleReplayTimeout, replayTimeout)
       : undefined
     const mode = wellStateId in replay ? 'REPLAYING' : 'PLAYING'
 
@@ -266,7 +250,7 @@ class Game extends React.Component<GameProps, GameState> {
     })
   }
 
-  inputReplayStep () {
+  handleReplayTimeout = () => {
     const {
       replayTimeout
     } = this.props
@@ -283,7 +267,7 @@ class Game extends React.Component<GameProps, GameState> {
       this.handleRedo()
 
       if (wellStateId + 1 in replay) {
-        nextReplayTimeoutId = setTimeout(this.inputReplayStep, replayTimeout)
+        nextReplayTimeoutId = setTimeout(this.handleReplayTimeout, replayTimeout)
       }
     } else {
       console.warn('Ignoring input replay step because mode is', mode)
@@ -359,7 +343,7 @@ class Game extends React.Component<GameProps, GameState> {
     })
   }
 
-  handleLeft () {
+  handleLeft = () => {
     const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('L')
@@ -368,7 +352,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  handleRight () {
+  handleRight = () => {
     const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('R')
@@ -377,7 +361,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  handleDown () {
+  handleDown = () => {
     const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('D')
@@ -386,7 +370,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  handleUp () {
+  handleUp = () => {
     const { mode } = this.state
     if (mode === 'PLAYING') {
       this.handleMove('U')
@@ -395,7 +379,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  handleUndo () {
+  handleUndo = () => {
     const {
       replayTimeoutId,
       wellStateId,
@@ -404,26 +388,23 @@ class Game extends React.Component<GameProps, GameState> {
 
     // There may be a replay in progress, this
     // must be killed
-    if (replayTimeoutId) {
-      clearTimeout(replayTimeoutId)
-      this.setState({
-        replayTimeoutId: undefined
-      })
-    }
+    clearTimeout(replayTimeoutId)
+    this.setState({
+      replayTimeoutId: undefined
+    })
 
     const nextWellStateId = wellStateId - 1
     if (nextWellStateId in wellStates) {
       this.setState({
         mode: 'PLAYING',
-        wellStateId: nextWellStateId,
-        replayTimeoutId: undefined
+        wellStateId: nextWellStateId
       })
     } else {
       console.warn('Ignoring undo event because start of history has been reached')
     }
   }
 
-  handleRedo () {
+  handleRedo = () => {
     const {
       mode,
       replay,
@@ -441,7 +422,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  handleDocumentKeyDown (event: KeyboardEvent) {
+  handleDocumentKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Left' || event.key === 'ArrowLeft') {
       this.handleLeft()
     }
@@ -563,9 +544,7 @@ class Game extends React.Component<GameProps, GameState> {
       replayTimeoutId
     } = this.state
 
-    if (replayTimeoutId) {
-      clearTimeout(replayTimeoutId)
-    }
+    clearTimeout(replayTimeoutId)
 
     document.removeEventListener('keydown', this.handleDocumentKeyDown)
   }

@@ -1,4 +1,4 @@
-import runLength from './../utils/run-length.ts'
+import runLength from './run-length.ts'
 
 const forwardEntryLookup: {
   [key: string]: number
