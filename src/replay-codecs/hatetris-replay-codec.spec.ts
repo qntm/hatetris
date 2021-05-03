@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import hatetrisReplayCodec from './hatetris-replay-codec.ts'
+import hatetrisReplayCodec from './hatetris-replay-codec'
 
 describe('hatetrisReplayCodec', () => {
   it('works', () => {

@@ -2,7 +2,7 @@
 
 import classnames from 'classnames'
 import * as React from 'react'
-import type { GameWellState } from '../Game/Game.tsx'
+import type { GameWellState } from '../Game/Game.jsx'
 
 import './Well.css'
 

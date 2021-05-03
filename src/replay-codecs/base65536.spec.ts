@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import * as base65536 from './base65536.ts'
+import * as base65536 from './base65536'
 
 describe('base65536', () => {
   it('works', () => {

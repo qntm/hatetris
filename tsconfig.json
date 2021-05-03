@@ -4,6 +4,7 @@
     "outDir": "./dist/",
     "noImplicitAny": true,
     "module": "es6",
+    "moduleResolution": "node",
     "lib": [
       "dom",
       "es2019"
