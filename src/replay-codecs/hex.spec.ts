@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import hex from './hex.ts'
+import hex from './hex'
 
 describe('hex', () => {
   it('works', () => {

@@ -5,9 +5,9 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Game from '../components/Game/Game.tsx'
-import { Hatetris0, Hatetris1 } from './hatetris-ai.ts'
-import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system.ts'
+import Game from '../components/Game/Game'
+import { Hatetris0, Hatetris1 } from './hatetris-ai'
+import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
 
 // Note: well bits are flipped compared to what you would see on the screen.
 // Least significant bit is rendered on the *left* on web, but appears to the

@@ -2,7 +2,7 @@
 
 'use strict'
 
-import hatetrisRotationSystem from './hatetris-rotation-system.ts'
+import hatetrisRotationSystem from './hatetris-rotation-system'
 
 describe('hatetrisRotationSystem', () => {
   it('has the right rotations', () => {
