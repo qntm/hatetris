@@ -7,15 +7,13 @@
 import hex from './hex'
 import * as base65536 from './base65536'
 import * as base2048 from './base2048'
-import * as space2048 from './space2048'
 
 /**
   Convert an array of moves into a replay
 */
 // const encode = (moves: string[]): string => hex.encode(moves)
 // const encode = (moves: string[]): string => base65536.encode(moves)
-// const encode = (moves: string[]): string => base2048.encode(moves)
-const encode = (moves: string[]): string => space2048.encode(moves)
+const encode = (moves: string[]): string => base2048.encode(moves)
 
 /**
   Convert a string back into an array of moves
@@ -31,13 +29,7 @@ const decode = (string: string): string[] => {
     // not Base65536, no problem
   }
 
-  try {
-    return base2048.decode(string)
-  } catch (e) {
-    // not Base2048, no problem
-  }
-
-  return space2048.decode(string)
+  return base2048.decode(string)
 }
 
 export default { encode, decode }
