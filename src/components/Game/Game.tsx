@@ -530,7 +530,7 @@ class Game extends React.Component<GameProps, GameState> {
           </p>
 
           <p className='game__paragraph'>
-            <span className='e2e__replay-out'>
+            <span className='game__replay-out e2e__replay-out'>
               {replayOut}
             </span>
           </p>
