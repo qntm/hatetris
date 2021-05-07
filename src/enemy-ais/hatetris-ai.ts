@@ -119,7 +119,7 @@ const HatetrisAi = (options: Options) => (game: Game) => {
     Return the best rating found.
   */
   const getBestWellRating = (well: number[], pieceId: number, depthRemaining: number): number =>
-    Math.max.apply(Math, getPossibleFutures(well, pieceId).map(possibleFuture =>
+    Math.min.apply(Math, getPossibleFutures(well, pieceId).map(possibleFuture =>
       getWellRating(possibleFuture.well, depthRemaining)
     ))
 
