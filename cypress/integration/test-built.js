@@ -2,7 +2,7 @@
 
 describe('HATETRIS', () => {
   it('plays a game', () => {
-    cy.visit('http://localhost:3000/dist/hatetris.html')
+    cy.visit('http://localhost:3000/hatetris.html')
     cy.contains('You\'re playing HATETRIS by qntm')
 
     cy.get('button').contains('start new game').click()
@@ -19,7 +19,7 @@ describe('HATETRIS', () => {
   it('plays a Base2048 replay', () => {
     const replay = 'ϥقໂɝƐඖДݹஶʈງƷ௨ೲໃܤѢقҾחࢲටฅڗ௨ΡІݪ௨ళȣݹࢴටງ໒௨ஶໃܥ௨റІݮ௨ఴІݥذඡଈݹƍق๓অஒॴแђञඖЅи௨sǶɔۑడПݷޠقԩݹࠉൿຟɓతණງஈশ੬෪অࠑථධٽଫ൝ଆࡨশ૫СܭߜయլݚɶऋഭܭرɤธӃస൯'
 
-    cy.visit('http://localhost:3000/dist/hatetris.html', {
+    cy.visit('http://localhost:3000/hatetris.html', {
       onBeforeLoad: window => {
         cy.stub(window, 'prompt').returns(replay)
       }

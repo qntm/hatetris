@@ -9,10 +9,15 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "pretest": "eslint src --ext .ts,.tsx",
-    "test": "jest",
-    "test-built": "start-server-and-test \"node cypress/server.js\" http://localhost:3000/dist/hatetris.html \"cypress run\""
+    "build": "webpack --config ./config/webpack.config.prod.js",
+    "cypress": "start-server-and-test \"npm run start\" http://localhost:3000/hatetris.html \"cypress run\"",
+    "cypress-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/hatetris.html \"cypress run\"",
+    "eslint": "eslint src --ext .ts,.tsx",
+    "jest": "jest",
+    "pretest": "npm run eslint",
+    "start": "node scripts/start.js",
+    "start-built": "node scripts/start-built.js",
+    "test": "npm run jest"
   },
   "keywords": [
     "tetris"
@@ -56,11 +61,14 @@
     "jest": "^26.4.2",
     "mini-css-extract-plugin": "^1.0.0",
     "react": "^16.13.1",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.13.1",
     "start-server-and-test": "^1.11.3",
     "ts-loader": "^9.1.1",
     "typescript": "^4.0.3",
     "webpack": "^5.2.0",
-    "webpack-cli": "^4.0.0"
+    "webpack-cli": "^4.0.0",
+    "webpack-dev-middleware": "^4.1.0",
+    "webpack-hot-middleware": "^2.25.0"
   }
 }

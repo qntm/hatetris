@@ -2,8 +2,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
-  mode: 'development',
-  entry: './src/index.tsx',
+  mode: 'production',
+
+  // "Recommended choice for production builds with high quality SourceMaps"
+  devtool: 'source-map',
+
+  entry: [
+    './src/index.tsx'
+  ],
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'bundle.css'
