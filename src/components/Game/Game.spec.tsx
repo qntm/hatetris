@@ -464,6 +464,9 @@ describe('<Game>', () => {
       describe(run.name, () => {
         Object.entries(run.replays).forEach(([encoding, string]) => {
           it(encoding, () => {
+            const warn = console.warn
+            console.warn = jest.fn()
+
             const game = getGame()
 
             const prompt = jest.spyOn(window, 'prompt')
@@ -478,6 +481,9 @@ describe('<Game>', () => {
             expect(state.wellStates[state.wellStateId].score).toBe(run.expectedScore)
 
             game.unmount()
+
+            // TODO: maybe some assertions about how many trailing moves were ignored
+            console.warn = warn
           })
         })
       })
