@@ -9,16 +9,14 @@ import type { GameWellState } from '../components/Game/Game.jsx'
 
 const moves = ['L', 'R', 'D', 'U']
 
-interface Options {
-  searchDepth: number
-}
-
-const HatetrisAi = (options: Options) => (game: Game) => {
+export const HatetrisAi = (game: Game) => {
   const {
     rotationSystem,
     wellDepth,
     wellWidth
   } = game.props
+
+  const pieceIds = Object.keys(rotationSystem.rotations).map(pieceId => Number(pieceId))
 
   /**
     Generate a unique integer to describe the position and orientation of this piece.
@@ -60,8 +58,7 @@ const HatetrisAi = (options: Options) => (game: Game) => {
 
     const possibleFutures: GameWellState[] = []
 
-    // a simple for loop won't work here because
-    // we are increasing the list as we go
+    // A simple `forEach` won't work here because we are appending to the list as we go
     let i = 0
     while (i < piecePositions.length) {
       piece = piecePositions[i]
@@ -97,48 +94,35 @@ const HatetrisAi = (options: Options) => (game: Game) => {
     return possibleFutures
   }
 
-  const getHighestBlue = (well: number[]): number => {
-    let row
-    for (row = 0; row < well.length; row++) {
-      if (well[row] !== 0) {
-        break
+  // Pick the worst piece that could be put into this well.
+  // Rating is the row where the highest blue appears, or `wellDepth` if the well is empty.
+  // For the player, higher is better because it indicates a lower stack.
+  // For the AI, lower is better
+  return (well: number[]): number => {
+    let worstPieceId
+    let lowestHighestRating = Infinity
+    pieceIds.forEach(pieceId => {
+      let highestRating = -Infinity
+      getPossibleFutures(well, pieceId).forEach(possibleFuture => {
+        let rating = possibleFuture.well.findIndex(row => row !== 0)
+
+        if (rating === -1) {
+          // Well is completely empty after placing this piece in this location
+          // (note: this is impossible in practice)
+          rating = wellDepth
+        }
+
+        if (rating > highestRating) {
+          highestRating = rating
+        }
+      })
+
+      if (highestRating < lowestHighestRating) {
+        worstPieceId = pieceId
+        lowestHighestRating = highestRating
       }
-    }
-    return row
+    })
+
+    return worstPieceId
   }
-
-  // deeper lines are worth less than immediate lines
-  // this is so the game will never give you a line if it can avoid it
-  // NOTE: make sure rating doesn't return a range of more than 100 values...
-  const getWellRating = (well: number[], depthRemaining: number): number =>
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    getHighestBlue(well) + (depthRemaining === 0 ? 0 : getWorstPieceDetails(well, depthRemaining - 1).rating / 100)
-
-  /**
-    Given a well and a piece, find the best possible location to put it.
-    Return the best rating found.
-  */
-  const getBestWellRating = (well: number[], pieceId: number, depthRemaining: number): number =>
-    Math.max.apply(Math, getPossibleFutures(well, pieceId).map(possibleFuture =>
-      getWellRating(possibleFuture.well, depthRemaining)
-    ))
-
-  // pick the worst piece that could be put into this well
-  const getWorstPieceDetails = (well: number[], depthRemaining: number): {
-    pieceId: number,
-    rating: number
-  } =>
-    Object
-      .keys(rotationSystem.rotations)
-      .map(pieceId => ({
-        pieceId: Number(pieceId),
-        rating: getBestWellRating(well, Number(pieceId), depthRemaining)
-      }))
-      .sort((a, b) => a.rating - b.rating)[0]
-
-  return (well: number[]): number =>
-    getWorstPieceDetails(well, options.searchDepth).pieceId
 }
-
-export const Hatetris0 = HatetrisAi({ searchDepth: 0 })
-export const Hatetris1 = HatetrisAi({ searchDepth: 1 })
