@@ -7,7 +7,7 @@ import * as React from 'react'
 
 import Game from './Game'
 import type { GameProps } from './Game'
-import { Hatetris0 } from '../../enemy-ais/hatetris-ai'
+import { HatetrisAi } from '../../enemy-ais/hatetris-ai'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 jest.useFakeTimers()
@@ -17,7 +17,7 @@ describe('<Game>', () => {
     return shallow<Game>(
       <Game
         bar={4}
-        EnemyAi={Hatetris0}
+        EnemyAi={HatetrisAi}
         replayTimeout={0}
         rotationSystem={hatetrisRotationSystem}
         wellDepth={20}
