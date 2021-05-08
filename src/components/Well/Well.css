@@ -17,7 +17,7 @@
 }
 
 .well__cell--landed {
-	background-color: blue;
+	background-color: rgb(0,162,232);
 }
 
 .well__cell--live {
