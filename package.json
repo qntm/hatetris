@@ -10,13 +10,14 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config ./config/webpack.config.prod.js",
+    "cypress": "start-server-and-test \"npm run start\" http://localhost:3000/hatetris.html \"cypress run\"",
+    "cypress-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/hatetris.html \"cypress run\"",
     "eslint": "eslint src --ext .ts,.tsx",
     "jest": "jest",
     "pretest": "npm run eslint",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",
-    "test": "npm run jest",
-    "test-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/dist/hatetris.html \"cypress run\""
+    "test": "npm run jest"
   },
   "keywords": [
     "tetris"

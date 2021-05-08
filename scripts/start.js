@@ -1,6 +1,5 @@
 const express = require('express')
 const WebpackDevServerUtils = require('react-dev-utils/WebpackDevServerUtils')
-const openBrowser = require('react-dev-utils/openBrowser')
 const webpack = require('webpack')
 const WebpackDevMiddleware = require('webpack-dev-middleware')
 const WebpackHotMiddleware = require('webpack-hot-middleware')
@@ -19,5 +18,5 @@ express()
   .use(WebpackHotMiddleware(compiler))
   .listen(3000, () => {
     console.log('listening')
-    openBrowser('http://localhost:3000/hatetris.html')
+    console.log('http://localhost:3000/hatetris.html')
   })
