@@ -90,7 +90,7 @@ class Game extends React.Component<GameProps, GameState> {
     this.state = {
       enemyAi,
       firstWellState,
-      mode: 'GAME_OVER',
+      mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
       replay: [],
@@ -444,11 +444,12 @@ class Game extends React.Component<GameProps, GameState> {
       this.handleUp()
     }
 
-    if (event.key === 'Z' && event.ctrlKey === true) {
+    console.log(event.key, event.ctrlKey)
+    if (event.key === 'z' && event.ctrlKey === true) {
       this.handleUndo()
     }
 
-    if (event.key === 'Y' && event.ctrlKey === true) {
+    if (event.key === 'y' && event.ctrlKey === true) {
       this.handleRedo()
     }
   }
@@ -470,6 +471,12 @@ class Game extends React.Component<GameProps, GameState> {
   handleCopiedTimeout = () => {
     this.setState({
       replayCopiedTimeoutId: undefined
+    })
+  }
+
+  handleClickDone = () => {
+    this.setState({
+      mode: 'INITIAL'
     })
   }
 
@@ -495,96 +502,176 @@ class Game extends React.Component<GameProps, GameState> {
 
     return (
       <div className='game'>
-        <div className='game__left'>
-          <Well
-            bar={bar}
-            rotationSystem={rotationSystem}
-            wellDepth={wellDepth}
-            wellWidth={wellWidth}
-            wellState={wellState}
-            onClickL={this.handleLeft}
-            onClickR={this.handleRight}
-            onClickU={this.handleUp}
-            onClickD={this.handleDown}
-            onClickZ={this.handleUndo}
-            onClickY={this.handleRedo}
-          />
-        </div>
-        <div className='game__right'>
-          <p className='game__paragraph'>
-            <a href='http://qntm.org/hatetris'>
-              you&apos;re playing HATETRIS by qntm
-            </a>
-          </p>
-
-          <p className='game__paragraph'>
-            <button
-              className='game__button e2e__start-button'
-              type='button'
-              onClick={this.handleClickStart}
-            >
-              start new game
-            </button>
-          </p>
-
-          <p className='game__paragraph'>
-            <button
-              className='game__button e2e__replay-button'
-              type='button'
-              onClick={this.handleClickReplay}
-            >
-              show a replay
-            </button>
-          </p>
-
-          {score !== null && (
+        <div className='game__top'>
+          <div className='game__topleft'>
+            <Well
+              bar={bar}
+              rotationSystem={rotationSystem}
+              wellDepth={wellDepth}
+              wellWidth={wellWidth}
+              wellState={wellState}
+            />
+          </div>
+          <div className='game__topright'>
             <p className='game__paragraph'>
-              <span className='e2e__score'>
-                score: {score}
-              </span>
+              you&apos;re playing <b>HATETRIS</b> by qntm
             </p>
-          )}
 
-          {mode === 'GAME_OVER' && replay.length > 0 && (
-            <>
-              <p className='game__paragraph'>
-                replay of last game:
+            {score !== null && (
+              <p className='game__paragraph e2e__score'>
+                score: {score}
               </p>
-              <p className='game__paragraph game__replay-out e2e__replay-out'>
-                {hatetrisReplayCodec.encode(replay)}
-              </p>
-              <p className='game__paragraph'>
-                <button
-                  className='game__button e2e__copy-replay'
-                  type='button'
-                  onClick={this.handleClickCopyReplay}
-                >
-                  copy replay
-                </button>
-              </p>
-              {replayCopiedTimeoutId && (
-                <p className='game__paragraph e2e__copied'>
-                  copied!
-                </p>
-              )}
-            </>
-          )}
+            )}
 
-          <div className='game__spacer' />
+            <div className='game__spacer' />
 
-          <p className='game__paragraph'>
-            undo: Ctrl+Z<br />
-            redo: Ctrl+Y<br />
-          </p>
+            <p className='game__paragraph'>
+              <a href='http://qntm.org/hatetris'>
+                about
+              </a>
+            </p>
 
-          <p className='game__paragraph'>
-            <a href='https://github.com/qntm/hatetris'>source code</a>
-          </p>
+            <p className='game__paragraph'>
+              <a href='https://github.com/qntm/hatetris'>
+                source code
+              </a>
+            </p>
 
-          <p className='game__paragraph'>
-            replays encoded using <a href='https://github.com/qntm/base2048'>Base2048</a><br />
-          </p>
+            <p className='game__paragraph'>
+              replays encoded using <a href='https://github.com/qntm/base2048'>Base2048</a>
+            </p>
+          </div>
         </div>
+
+        {mode === 'INITIAL' && (
+          <div className='game__bottom game__bottom--initial'>
+            <p className='game__paragraph'>
+              <button
+                className='game__button e2e__start-button'
+                type='button'
+                onClick={this.handleClickStart}
+              >
+                start new game
+              </button>
+            </p>
+
+            <p className='game__paragraph'>
+              <button
+                className='game__button e2e__replay-button'
+                type='button'
+                onClick={this.handleClickReplay}
+              >
+                show a replay
+              </button>
+            </p>
+          </div>
+        )}
+
+        {mode === 'PLAYING' && (
+          <div className='game__bottom game__bottom--playing'>
+            <div className='game__control-col'>
+              <button
+                className='game__button'
+                disabled={!(wellStateId - 1 in wellStates)}
+                type='button'
+                onClick={this.handleUndo}
+                title='Press Ctrl+Z to undo'
+              >
+                ↶
+              </button>
+
+              <button
+                className='game__button'
+                type='button'
+                onClick={this.handleLeft}
+                title='Press Left to move left'
+              >
+                ←
+              </button>
+            </div>
+            <div className='game__control-col'>
+              <button
+                className='game__button'
+                type='button'
+                onClick={this.handleUp}
+                title='Press Up to rotate'
+              >
+                ⟳
+              </button>
+
+              <button
+                className='game__button'
+                type='button'
+                onClick={this.handleDown}
+                title='Press Down to move down'
+              >
+                ↓
+              </button>
+            </div>
+            <div className='game__control-col'>
+              <button
+                className='game__button'
+                disabled={!(wellStateId + 1 in wellStates)}
+                type='button'
+                onClick={this.handleRedo}
+                title='Press Ctrl+Y to redo'
+              >
+                ↷
+              </button>
+
+              <button
+                className='game__button'
+                type='button'
+                onClick={this.handleRight}
+                title='Press Right to move right'
+              >
+                →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {mode === 'REPLAYING' && (
+          <div className='game__bottom game__bottom--replaying'>
+            replaying...
+          </div>
+        )}
+
+        {mode === 'GAME_OVER' && (
+          <div className='game__bottom game__bottom--game-over'>
+            <p className='game__paragraph'>
+              replay of last game:
+            </p>
+            <div className='game__replay-out e2e__replay-out'>
+              {hatetrisReplayCodec.encode(replay).repeat(15)}
+            </div>
+            <div className='game__game-over-buttons'>
+              <button
+                className='game__button game__button--game-over e2e__replay-button'
+                type='button'
+                onClick={this.handleUndo}
+              >
+                undo last move
+              </button>
+
+              <button
+                className='game__button game__button--game-over e2e__copy-replay'
+                type='button'
+                onClick={this.handleClickCopyReplay}
+              >
+                {replayCopiedTimeoutId ? 'copied!' : 'copy replay'}
+              </button>
+
+              <button
+                className='game__button game__button--game-over e2e__done'
+                type='button'
+                onClick={this.handleClickDone}
+              >
+                done
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     )
   }

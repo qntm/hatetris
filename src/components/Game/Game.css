@@ -1,21 +1,31 @@
 .game {
 	box-sizing: border-box;
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	max-width: 360px;
+	height: 100vh;
+	margin: 0 auto;
 	font-family: arial;
-	padding: 50px;
+	padding: 10px;
 	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
-.game__left {
+.game__top {
+	flex: 0 0 auto;
+	display: flex;
+	gap: 10px;
+	flex-direction: row;
+}
+
+.game__topleft {
 	flex: 0 0 auto;
 }
 
-.game__right {
+.game__topright {
 	flex: 1 1 auto;
 	display: flex;
 	flex-direction: column;
-	padding: 10px;
 }
 
 .game__paragraph {
@@ -30,13 +40,18 @@
 
 .game__replay-out {
 	background-color: rgba(189, 189, 189, .3);
-	padding: .5rem;
+	width: 100%;
+	padding: 8px;
 	line-height: normal;
-	word-break: break-all;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-bottom: 10px;
 }
 
 .game__button {
 	border: 0;
+	height: 48px;
+	width: 100%;
 	font-size: 1em; /* avoid shrinkage */
 	font-family: inherit;
 	padding: .5rem .75rem;
@@ -54,10 +69,52 @@
 	background-color: red;
 }
 
+.game__button[disabled] {
+	background-color: grey;
+	cursor: default;
+}
+
 :focus {
 	outline: 2px solid black;
 }
 
 .game__spacer {
 	flex: 1 1 auto;
+}
+
+.game__bottom {
+	flex: 1 1 auto;
+}
+
+.game__bottom--initial {
+	display: block;
+}
+
+.game__bottom--playing {
+	display: flex;
+	gap: 10px;
+}
+
+.game__bottomleft {
+	flex: 0 1 50%;
+}
+
+.game__bottomright {
+	flex: 0 1 50%;
+}
+
+.game__control-col {
+	flex: 0 1 33%;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.game__game-over-buttons {
+	display: flex;
+	gap: 10px;
+}
+
+.game__button--game-over {
+	flex: 0 1 33%;
 }
