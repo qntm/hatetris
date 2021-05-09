@@ -3,7 +3,7 @@
 describe('HATETRIS', () => {
   it('plays a game', () => {
     cy.visit('http://localhost:3000/hatetris.html')
-    cy.contains('You\'re playing HATETRIS by qntm')
+    cy.contains('you\'re playing HATETRIS by qntm')
 
     cy.get('button').contains('start new game').click()
     cy.get('.e2e__score').contains('0')
