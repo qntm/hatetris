@@ -47,6 +47,7 @@ type GameState = {
   wellStateId: number,
   wellStates: GameWellState[],
   replay: any[],
+  replayCopiedTimeoutId: ReturnType<typeof setTimeout>,
   replayTimeoutId: ReturnType<typeof setTimeout>
 }
 
@@ -93,6 +94,7 @@ class Game extends React.Component<GameProps, GameState> {
       wellStateId: -1,
       wellStates: [],
       replay: [],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     }
   }
@@ -197,12 +199,14 @@ class Game extends React.Component<GameProps, GameState> {
   handleClickStart = () => {
     const {
       firstWellState,
+      replayCopiedTimeoutId,
       replayTimeoutId
     } = this.state
 
     // there may be a replay in progress, this
     // must be killed
     clearTimeout(replayTimeoutId)
+    clearTimeout(replayCopiedTimeoutId)
 
     // clear the field and get ready for a new game
     this.setState({
@@ -210,6 +214,7 @@ class Game extends React.Component<GameProps, GameState> {
       wellStateId: 0,
       wellStates: [firstWellState],
       replay: [],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
   }
@@ -242,11 +247,11 @@ class Game extends React.Component<GameProps, GameState> {
 
     // GO
     this.setState({
-      mode: mode,
-      wellStateId: wellStateId,
+      mode,
+      wellStateId,
       wellStates: [firstWellState],
-      replay: replay,
-      replayTimeoutId: replayTimeoutId
+      replay,
+      replayTimeoutId
     })
   }
 
@@ -314,14 +319,14 @@ class Game extends React.Component<GameProps, GameState> {
 
     if (!(nextWellStateId in nextWellStates)) {
       const nextWellState = this.getNextState(nextWellStates[wellStateId], move)
-      nextWellStates = nextWellStates.slice().concat([nextWellState])
+      nextWellStates = [...nextWellStates, nextWellState]
     }
 
     const nextWellState = nextWellStates[nextWellStateId]
 
     // Is the game over?
-    // It is impossible to get bits at row (bar - 2) or higher without getting a bit at row (bar - 1),
-    // so there is only one line which we need to check.
+    // It is impossible to get bits at row (bar - 2) or higher without getting a bit at
+    // row (bar - 1), so there is only one line which we need to check.
     const gameIsOver = nextWellState.well[bar - 1] !== 0
 
     const nextMode = gameIsOver ? 'GAME_OVER' : mode
@@ -448,6 +453,26 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
+  handleClickCopyReplay = () => {
+    const {
+      replay
+    } = this.state
+
+    return navigator.clipboard.writeText(hatetrisReplayCodec.encode(replay))
+      .then(() => {
+        const replayCopiedTimeoutId = setTimeout(this.handleCopiedTimeout, 3000)
+        this.setState({
+          replayCopiedTimeoutId
+        })
+      })
+  }
+
+  handleCopiedTimeout = () => {
+    this.setState({
+      replayCopiedTimeoutId: undefined
+    })
+  }
+
   render () {
     const {
       bar,
@@ -459,6 +484,7 @@ class Game extends React.Component<GameProps, GameState> {
     const {
       mode,
       replay,
+      replayCopiedTimeoutId,
       wellStateId,
       wellStates
     } = this.state
@@ -466,7 +492,6 @@ class Game extends React.Component<GameProps, GameState> {
     const wellState = wellStateId === -1 ? null : wellStates[wellStateId]
 
     const score = wellState && wellState.score
-    const replayOut = mode === 'GAME_OVER' && replay.length > 0 && 'replay of last game: ' + hatetrisReplayCodec.encode(replay)
 
     return (
       <div className='game'>
@@ -488,39 +513,68 @@ class Game extends React.Component<GameProps, GameState> {
         <div className='game__right'>
           <p className='game__paragraph'>
             <a href='http://qntm.org/hatetris'>
-              You&apos;re playing HATETRIS by qntm
+              you&apos;re playing HATETRIS by qntm
             </a>
           </p>
 
           <p className='game__paragraph'>
-            <button className='game__start-button' type='button' onClick={this.handleClickStart}>
+            <button
+              className='game__button e2e__start-button'
+              type='button'
+              onClick={this.handleClickStart}
+            >
               start new game
             </button>
           </p>
 
           <p className='game__paragraph'>
-            <button type='button' className='game__replay-button' onClick={this.handleClickReplay}>
+            <button
+              className='game__button e2e__replay-button'
+              type='button'
+              onClick={this.handleClickReplay}
+            >
               show a replay
             </button>
           </p>
 
-          <p className='game__paragraph'>
-            <span className='e2e__score'>
-              {score}
-            </span>
-          </p>
+          {score !== null && (
+            <p className='game__paragraph'>
+              <span className='e2e__score'>
+                score: {score}
+              </span>
+            </p>
+          )}
 
-          <p className='game__paragraph'>
-            <span className='game__replay-out e2e__replay-out'>
-              {replayOut}
-            </span>
-          </p>
+          {mode === 'GAME_OVER' && replay.length > 0 && (
+            <>
+              <p className='game__paragraph'>
+                replay of last game:
+              </p>
+              <p className='game__paragraph game__replay-out e2e__replay-out'>
+                {hatetrisReplayCodec.encode(replay)}
+              </p>
+              <p className='game__paragraph'>
+                <button
+                  className='game__button e2e__copy-replay'
+                  type='button'
+                  onClick={this.handleClickCopyReplay}
+                >
+                  copy replay
+                </button>
+              </p>
+              {replayCopiedTimeoutId && (
+                <p className='game__paragraph e2e__copied'>
+                  copied!
+                </p>
+              )}
+            </>
+          )}
 
           <div className='game__spacer' />
 
           <p className='game__paragraph'>
-            Undo: Ctrl+Z<br />
-            Redo: Ctrl+Y<br />
+            undo: Ctrl+Z<br />
+            redo: Ctrl+Y<br />
           </p>
 
           <p className='game__paragraph'>
@@ -541,9 +595,11 @@ class Game extends React.Component<GameProps, GameState> {
 
   componentWillUnmount () {
     const {
+      replayCopiedTimeoutId,
       replayTimeoutId
     } = this.state
 
+    clearTimeout(replayCopiedTimeoutId)
     clearTimeout(replayTimeoutId)
 
     document.removeEventListener('keydown', this.handleDocumentKeyDown)

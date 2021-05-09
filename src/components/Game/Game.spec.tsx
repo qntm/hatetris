@@ -59,6 +59,7 @@ describe('<Game>', () => {
       wellStateId: -1,
       wellStates: [],
       replay: [],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -78,6 +79,7 @@ describe('<Game>', () => {
       wellStateId: -1,
       wellStates: [],
       replay: [],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -94,10 +96,11 @@ describe('<Game>', () => {
       wellStateId: -1,
       wellStates: [],
       replay: [],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
-    game.find('.game__start-button').simulate('click')
+    game.find('.e2e__start-button').simulate('click')
     expect(game.state()).toEqual({
       enemyAi: expect.any(Function),
       firstWellState,
@@ -109,6 +112,7 @@ describe('<Game>', () => {
         piece: { id: 0, o: 0, x: 3, y: 0 }
       }],
       replay: [],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -128,6 +132,7 @@ describe('<Game>', () => {
         piece: { id: 0, o: 0, x: 2, y: 0 }
       }],
       replay: ['L'],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -151,6 +156,7 @@ describe('<Game>', () => {
         piece: { id: 0, o: 0, x: 3, y: 0 }
       }],
       replay: ['L', 'R'],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -178,6 +184,7 @@ describe('<Game>', () => {
         piece: { id: 0, o: 0, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D'],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -209,6 +216,7 @@ describe('<Game>', () => {
         piece: { id: 0, o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -240,6 +248,7 @@ describe('<Game>', () => {
         piece: { id: 0, o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -271,6 +280,7 @@ describe('<Game>', () => {
         piece: { id: 0, o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
+      replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
 
@@ -290,7 +300,7 @@ describe('<Game>', () => {
 
     const prompt = jest.spyOn(window, 'prompt')
     prompt.mockReturnValueOnce('')
-    game.find('.game__replay-button').simulate('click')
+    game.find('.e2e__replay-button').simulate('click')
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
@@ -316,7 +326,7 @@ describe('<Game>', () => {
 
       const prompt = jest.spyOn(window, 'prompt')
       prompt.mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2')
-      game.find('.game__replay-button').simulate('click')
+      game.find('.e2e__replay-button').simulate('click')
       prompt.mockRestore()
 
       // Play a little of the replay
@@ -344,7 +354,7 @@ describe('<Game>', () => {
     })
 
     it('lets you start a new game', () => {
-      game.find('.game__start-button').simulate('click')
+      game.find('.e2e__start-button').simulate('click')
       expect(game.state()).toEqual(expect.objectContaining({
         enemyAi: expect.any(Function),
         firstWellState,
@@ -360,7 +370,7 @@ describe('<Game>', () => {
     it('lets you start a new replay', () => {
       const prompt = jest.spyOn(window, 'prompt')
       prompt.mockReturnValueOnce('AAAA 1234 BCDE 2345 CDEF 3456')
-      game.find('.game__replay-button').simulate('click')
+      game.find('.e2e__replay-button').simulate('click')
       prompt.mockRestore()
 
       expect(game.state()).toEqual(expect.objectContaining({
@@ -471,7 +481,7 @@ describe('<Game>', () => {
 
             const prompt = jest.spyOn(window, 'prompt')
             prompt.mockReturnValueOnce(string)
-            game.instance().handleClickReplay()
+            game.find('.e2e__replay-button').simulate('click')
             prompt.mockRestore()
 
             jest.runAllTimers()
@@ -480,10 +490,29 @@ describe('<Game>', () => {
             expect(state.mode).toBe('GAME_OVER')
             expect(state.wellStates[state.wellStateId].score).toBe(run.expectedScore)
 
-            game.unmount()
+            // Copy the replay
+            return game.instance().handleClickCopyReplay()
+              .then(() => navigator.clipboard.readText())
+              .then(contents => {
+                if (encoding === 'Base2048') {
+                  expect(contents).toBe(run.replays.Base2048)
+                } else {
+                  // Other encodings have differing amounts of padding so result in slightly
+                  // different output Base2048
+                }
 
-            // TODO: maybe some assertions about how many trailing moves were ignored
-            console.warn = warn
+                // "copied!" disappears after a while
+                expect(game.state().replayCopiedTimeoutId).toEqual(expect.any(Number))
+                expect(game.find('.e2e__copied').text()).toBe('copied!')
+
+                jest.runAllTimers()
+                expect(game.state().replayCopiedTimeoutId).toBeUndefined()
+
+                game.unmount()
+
+                // TODO: maybe some assertions about how many trailing moves were ignored
+                console.warn = warn
+              })
           })
         })
       })

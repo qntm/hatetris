@@ -29,7 +29,33 @@
 }
 
 .game__replay-out {
+	background-color: rgba(189, 189, 189, .3);
+	padding: .5rem;
+	line-height: normal;
 	word-break: break-all;
+}
+
+.game__button {
+	border: 0;
+	font-size: 1em; /* avoid shrinkage */
+	font-family: inherit;
+	padding: .5rem .75rem;
+	background-color: rgb(16, 82, 225);
+	color: white;
+	cursor: pointer;
+	line-height: 1rem;
+}
+
+.game__button:hover {
+	background-color: rgb(5, 52, 185);
+}
+
+.game__button:active {
+	background-color: red;
+}
+
+:focus {
+	outline: 2px solid black;
 }
 
 .game__spacer {
