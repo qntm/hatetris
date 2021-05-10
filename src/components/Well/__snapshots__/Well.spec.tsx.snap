@@ -7,29 +7,17 @@ exports[`<Well> game over well state 1`] = `
       key="0"
     >
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="0"
-        onClick={[MockFunction]}
-        title="Press Ctrl+Z to undo"
-      >
-        ↶
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="1"
-        onClick={[MockFunction]}
-        title="Press Up to rotate"
-      >
-        ⟳
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="2"
-        onClick={[MockFunction]}
-        title="Press Ctrl+Y to redo"
-      >
-        ↷
-      </td>
+      />
       <td
         className="well__cell"
         key="3"
@@ -63,29 +51,17 @@ exports[`<Well> game over well state 1`] = `
       key="1"
     >
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="0"
-        onClick={[MockFunction]}
-        title="Press Left to move left"
-      >
-        ←
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="1"
-        onClick={[MockFunction]}
-        title="Press Down to move down"
-      >
-        ↓
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="2"
-        onClick={[MockFunction]}
-        title="Press Right to move right"
-      >
-        →
-      </td>
+      />
       <td
         className="well__cell"
         key="3"
@@ -918,29 +894,17 @@ exports[`<Well> initial well state 1`] = `
       key="0"
     >
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="0"
-        onClick={[MockFunction]}
-        title="Press Ctrl+Z to undo"
-      >
-        ↶
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="1"
-        onClick={[MockFunction]}
-        title="Press Up to rotate"
-      >
-        ⟳
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="2"
-        onClick={[MockFunction]}
-        title="Press Ctrl+Y to redo"
-      >
-        ↷
-      </td>
+      />
       <td
         className="well__cell"
         key="3"
@@ -974,29 +938,17 @@ exports[`<Well> initial well state 1`] = `
       key="1"
     >
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="0"
-        onClick={[MockFunction]}
-        title="Press Left to move left"
-      >
-        ←
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="1"
-        onClick={[MockFunction]}
-        title="Press Down to move down"
-      >
-        ↓
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="2"
-        onClick={[MockFunction]}
-        title="Press Right to move right"
-      >
-        →
-      </td>
+      />
       <td
         className="well__cell"
         key="3"
@@ -1829,29 +1781,17 @@ exports[`<Well> null well state 1`] = `
       key="0"
     >
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="0"
-        onClick={[MockFunction]}
-        title="Press Ctrl+Z to undo"
-      >
-        ↶
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="1"
-        onClick={[MockFunction]}
-        title="Press Up to rotate"
-      >
-        ⟳
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="2"
-        onClick={[MockFunction]}
-        title="Press Ctrl+Y to redo"
-      >
-        ↷
-      </td>
+      />
       <td
         className="well__cell"
         key="3"
@@ -1885,29 +1825,17 @@ exports[`<Well> null well state 1`] = `
       key="1"
     >
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="0"
-        onClick={[MockFunction]}
-        title="Press Left to move left"
-      >
-        ←
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="1"
-        onClick={[MockFunction]}
-        title="Press Down to move down"
-      >
-        ↓
-      </td>
+      />
       <td
-        className="well__cell well__cell--manual"
+        className="well__cell"
         key="2"
-        onClick={[MockFunction]}
-        title="Press Right to move right"
-      >
-        →
-      </td>
+      />
       <td
         className="well__cell"
         key="3"

@@ -11,37 +11,22 @@ type WellProps = {
   rotationSystem: any;
   wellDepth: number;
   wellWidth: number;
-  onClickL: () => void;
-  onClickR: () => void;
-  onClickU: () => void;
-  onClickD: () => void;
-  onClickZ: () => void;
-  onClickY: () => void;
   wellState: GameWellState
 }
 
 type Cell = {
   landed: boolean,
-  live: boolean,
-  handleClick?: () => void,
-  symbol?: string,
-  title?: string
+  live: boolean
 }
 
 export type { WellProps }
 
-export default (props: WellProps) => {
+export const Well = (props: WellProps) => {
   const {
     bar,
     rotationSystem,
     wellDepth,
     wellWidth,
-    onClickL,
-    onClickR,
-    onClickU,
-    onClickD,
-    onClickZ,
-    onClickY,
     wellState
   } = props
 
@@ -73,22 +58,6 @@ export default (props: WellProps) => {
     cellses.push(cells)
   }
 
-  // put some buttons on the playing field
-  const buttons = [
-    { y: 0, x: 0, handleClick: onClickZ, symbol: '\u21B6', title: 'Press Ctrl+Z to undo' },
-    { y: 0, x: 1, handleClick: onClickU, symbol: '\u27F3', title: 'Press Up to rotate' },
-    { y: 0, x: 2, handleClick: onClickY, symbol: '\u21B7', title: 'Press Ctrl+Y to redo' },
-    { y: 1, x: 0, handleClick: onClickL, symbol: '\u2190', title: 'Press Left to move left' },
-    { y: 1, x: 1, handleClick: onClickD, symbol: '\u2193', title: 'Press Down to move down' },
-    { y: 1, x: 2, handleClick: onClickR, symbol: '\u2192', title: 'Press Right to move right' }
-  ]
-
-  buttons.forEach(button => {
-    cellses[button.y][button.x].handleClick = button.handleClick
-    cellses[button.y][button.x].symbol = button.symbol
-    cellses[button.y][button.x].title = button.title
-  })
-
   return (
     <table>
       <tbody>
@@ -100,15 +69,10 @@ export default (props: WellProps) => {
                 className={classnames({
                   well__cell: true,
                   'well__cell--bar': y === bar,
-                  'well__cell--manual': cell.handleClick,
                   'well__cell--landed': cell.landed,
                   'well__cell--live': cell.live
                 })}
-                onClick={cell.handleClick}
-                title={cell.title}
-              >
-                {cell.symbol}
-              </td>
+              />
             ))}
           </tr>
         ))}

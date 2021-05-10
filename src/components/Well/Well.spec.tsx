@@ -5,7 +5,7 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Well from './Well'
+import { Well } from './Well'
 import type { WellProps } from './Well'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
@@ -20,27 +20,14 @@ describe('<Well>', () => {
       rotationSystem={hatetrisRotationSystem}
       wellDepth={wellDepth}
       wellWidth={wellWidth}
-      onClickL={jest.fn()}
-      onClickR={jest.fn()}
-      onClickU={jest.fn()}
-      onClickD={jest.fn()}
-      onClickZ={jest.fn()}
-      onClickY={jest.fn()}
       wellState={null}
       {...props}
     />
   )
 
   it('null well state', () => {
-    const onClickD = jest.fn()
-    const well = getWell({ onClickD })
+    const well = getWell()
     expect(well).toMatchSnapshot()
-
-    const downCell = well.find('tr').at(1).find('td').at(1)
-    expect(downCell.text()).toBe('\u2193')
-    expect(downCell.props().title).toBe('Press Down to move down')
-    downCell.simulate('click')
-    expect(onClickD).toHaveBeenCalled()
   })
 
   it('initial well state', () => {
