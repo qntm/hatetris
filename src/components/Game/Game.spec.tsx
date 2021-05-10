@@ -491,13 +491,19 @@ describe('<Game>', () => {
             const state = game.state()
             expect(state.mode).toBe('GAME_OVER')
             expect(state.wellStates[state.wellStateId].score).toBe(run.expectedScore)
+            if (encoding === 'Base2048') {
+              expect(game.find('.e2e__replay-out').text()).toBe(string)
+            } else {
+              // Other encodings have differing amounts of padding so result in slightly
+              // different output Base2048
+            }
 
             // Copy the replay
             return game.instance().handleClickCopyReplay()
               .then(() => navigator.clipboard.readText())
               .then(contents => {
                 if (encoding === 'Base2048') {
-                  expect(contents).toBe(run.replays.Base2048)
+                  expect(contents).toBe(string)
                 } else {
                   // Other encodings have differing amounts of padding so result in slightly
                   // different output Base2048

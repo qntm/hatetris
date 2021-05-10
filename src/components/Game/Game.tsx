@@ -642,7 +642,7 @@ class Game extends React.Component<GameProps, GameState> {
               replay of last game:
             </p>
             <div className='game__replay-out e2e__replay-out'>
-              {hatetrisReplayCodec.encode(replay).repeat(15)}
+              {hatetrisReplayCodec.encode(replay)}
             </div>
             <div className='game__game-over-buttons'>
               <button
