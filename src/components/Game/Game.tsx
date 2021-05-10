@@ -7,7 +7,7 @@
 import * as React from 'react'
 
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
-import Well from '../Well/Well'
+import { Well } from '../Well/Well'
 import './Game.css'
 
 const minWidth = 4
@@ -444,7 +444,6 @@ class Game extends React.Component<GameProps, GameState> {
       this.handleUp()
     }
 
-    console.log(event.key, event.ctrlKey)
     if (event.key === 'z' && event.ctrlKey === true) {
       this.handleUndo()
     }

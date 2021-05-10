@@ -55,7 +55,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       enemyAi: expect.any(Function),
       firstWellState,
-      mode: 'GAME_OVER',
+      mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
       replay: [],
@@ -69,13 +69,13 @@ describe('<Game>', () => {
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Right' }))
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Down' }))
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Up' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Z', ctrlKey: true }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Y', ctrlKey: true }))
+    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
+    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(6)
     expect(game.state()).toEqual({
       enemyAi: expect.any(Function),
       firstWellState,
-      mode: 'GAME_OVER',
+      mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
       replay: [],
@@ -92,7 +92,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       enemyAi: expect.any(Function),
       firstWellState,
-      mode: 'GAME_OVER',
+      mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
       replay: [],
@@ -220,7 +220,7 @@ describe('<Game>', () => {
       replayTimeoutId: undefined
     })
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Z', ctrlKey: true }))
+    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
     expect(game.state()).toEqual({
       enemyAi: expect.any(Function),
       firstWellState,
@@ -252,7 +252,7 @@ describe('<Game>', () => {
       replayTimeoutId: undefined
     })
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Y', ctrlKey: true }))
+    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(game.state()).toEqual({
       enemyAi: expect.any(Function),
       firstWellState,
@@ -288,7 +288,7 @@ describe('<Game>', () => {
     const warn = jest.spyOn(console, 'warn')
     warn.mockImplementation(() => {})
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Y', ctrlKey: true }))
+    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(1)
 
     warn.mockRestore()
@@ -354,7 +354,8 @@ describe('<Game>', () => {
     })
 
     it('lets you start a new game', () => {
-      game.find('.e2e__start-button').simulate('click')
+      // TODO: this is no longer provided in the UI...
+      game.instance().handleClickStart()
       expect(game.state()).toEqual(expect.objectContaining({
         enemyAi: expect.any(Function),
         firstWellState,
@@ -368,9 +369,10 @@ describe('<Game>', () => {
     })
 
     it('lets you start a new replay', () => {
+      // TODO: this is no longer provided in the UI...
       const prompt = jest.spyOn(window, 'prompt')
       prompt.mockReturnValueOnce('AAAA 1234 BCDE 2345 CDEF 3456')
-      game.find('.e2e__replay-button').simulate('click')
+      game.instance().handleClickReplay()
       prompt.mockRestore()
 
       expect(game.state()).toEqual(expect.objectContaining({
@@ -386,7 +388,7 @@ describe('<Game>', () => {
     })
 
     it('lets you undo and stops replaying if you do so', () => {
-      game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Z', ctrlKey: true }))
+      game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
       expect(game.state()).toEqual(expect.objectContaining({
         enemyAi: expect.any(Function),
         firstWellState,
@@ -503,11 +505,13 @@ describe('<Game>', () => {
 
                 // "copied!" disappears after a while
                 expect(game.state().replayCopiedTimeoutId).toEqual(expect.any(Number))
-                expect(game.find('.e2e__copied').text()).toBe('copied!')
+                expect(game.find('.e2e__copy-replay').text()).toBe('copied!')
 
                 jest.runAllTimers()
                 expect(game.state().replayCopiedTimeoutId).toBeUndefined()
 
+                game.find('.e2e__done').simulate('click')
+                expect(game.state().mode).toBe('INITIAL')
                 game.unmount()
 
                 // TODO: maybe some assertions about how many trailing moves were ignored

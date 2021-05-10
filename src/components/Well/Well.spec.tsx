@@ -5,7 +5,7 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Well from './Well'
+import { Well } from './Well'
 import type { WellProps } from './Well'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 

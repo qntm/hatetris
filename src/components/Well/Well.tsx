@@ -21,7 +21,7 @@ type Cell = {
 
 export type { WellProps }
 
-export default (props: WellProps) => {
+export const Well = (props: WellProps) => {
   const {
     bar,
     rotationSystem,
