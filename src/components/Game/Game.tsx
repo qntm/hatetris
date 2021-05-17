@@ -29,13 +29,6 @@ type RotationSystem = {
   rotations: Rotations
 }
 
-type Piece = {
-  id: string,
-  x: number,
-  y: number,
-  o: number
-}
-
 type GameWellState = {
   piece: any,
   score: number,
