@@ -9,7 +9,11 @@ import type { GameWellState } from '../components/Game/Game.jsx'
 
 const moves = ['L', 'R', 'D', 'U']
 
-const pieceRankings = {
+type PieceRankings = {
+  [pieceId: string]: number
+}
+
+const pieceRankings: PieceRankings = {
   S: 1, // most preferable in a tie break
   Z: 2,
   O: 3,
@@ -18,6 +22,10 @@ const pieceRankings = {
   J: 6,
   T: 7 // least preferable in a tie break
 }
+
+const getPieceRanking = (pieceId: string): number => pieceId in pieceRankings
+  ? pieceRankings[pieceId]
+  : Infinity
 
 const getHatetrisAi = (loveMode: boolean) => (game: Game) => {
   const {
@@ -41,7 +49,7 @@ const getHatetrisAi = (loveMode: boolean) => (game: Game) => {
     will have `null` `piece` because the piece is landed; some will have
     an increased `score`.
   */
-  const getPossibleFutures = (well: number[], pieceId: number): GameWellState[] => {
+  const getPossibleFutures = (well: number[], pieceId: string): GameWellState[] => {
     let piece = rotationSystem.placeNewPiece(wellWidth, pieceId)
 
     // move the piece down to a lower position before we have to
@@ -106,7 +114,7 @@ const getHatetrisAi = (loveMode: boolean) => (game: Game) => {
   // Rating is the row where the highest blue appears, or `wellDepth` if the well is empty.
   // For the player, higher is better because it indicates a lower stack.
   // For the AI, lower is better
-  return (well: number[]): number => {
+  return (well: number[]): string => {
     const highestRatings = Object.keys(rotationSystem.rotations).map(pieceId => {
       let highestRating = -Infinity
       getPossibleFutures(well, pieceId).forEach(possibleFuture => {
@@ -123,14 +131,14 @@ const getHatetrisAi = (loveMode: boolean) => (game: Game) => {
         }
       })
 
-      return { pieceId, highestRating }
+      return { pieceId, pieceRanking: getPieceRanking(pieceId), highestRating }
     })
 
     highestRatings.sort((a, b) =>
       (a.highestRating - b.highestRating) ||
 
       // Tie breaker is piece ID rating
-      pieceRankings[a.pieceId] - pieceRankings[b.pieceId]
+      a.pieceRanking - b.pieceRanking
     )
 
     return highestRatings[loveMode ? highestRatings.length - 1 : 0].pieceId

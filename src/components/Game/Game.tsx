@@ -20,13 +20,20 @@ type Orientation = {
   rows: number[]
 }
 
-interface Rotations {
+type Rotations = {
   [pieceId: string]: Orientation[]
 }
 
 type RotationSystem = {
-  placeNewPiece: (wellWidth: number, pieceId: number) => any;
+  placeNewPiece: (wellWidth: number, pieceId: string) => any;
   rotations: Rotations
+}
+
+type Piece = {
+  id: string,
+  x: number,
+  y: number,
+  o: number
 }
 
 type GameWellState = {

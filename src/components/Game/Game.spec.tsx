@@ -37,7 +37,7 @@ describe('<Game>', () => {
     expect(() => getGame({
       rotationSystem: {
         placeNewPiece: () => {},
-        rotations: []
+        rotations: {}
       }
     })).toThrowError()
   })
