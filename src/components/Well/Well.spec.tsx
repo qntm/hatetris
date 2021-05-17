@@ -56,7 +56,7 @@ describe('<Well>', () => {
           0b0000000000
         ],
         score: 31,
-        piece: { id: '0', x: 3, y: 0, o: 0 }
+        piece: { id: 'S', x: 3, y: 0, o: 0 }
       }
     })).toMatchSnapshot()
   })

@@ -16,7 +16,7 @@ export const HatetrisAi = (game: Game) => {
     wellWidth
   } = game.props
 
-  const pieceIds = Object.keys(rotationSystem.rotations).map(pieceId => Number(pieceId))
+  const pieceIds = Object.keys(rotationSystem.rotations)
 
   /**
     Generate a unique integer to describe the position and orientation of this piece.

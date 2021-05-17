@@ -37,7 +37,7 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b0000000000,
       0b0000000000
-    ])).toBe(0) // S
+    ])).toBe('S')
   })
 
   it('generates a Z when an S would result in a lower stack', () => {
@@ -50,7 +50,7 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b0001000000,
       0b1111011111
-    ])).toBe(1) // Z
+    ])).toBe('Z')
   })
 
   it('generates an O when an S or Z would result in a lower stack', () => {
@@ -63,7 +63,7 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b0000000000,
       0b1111101111
-    ])).toBe(2) // O
+    ])).toBe('O')
   })
 
   it('generates an I when an S, Z or O would result in a lower stack', () => {
@@ -76,7 +76,7 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b0000000000,
       0b1111001111
-    ])).toBe(3) // I
+    ])).toBe('I')
   })
 
   it('generates an L when an S, Z, O or I would result in a lower stack', () => {
@@ -89,7 +89,7 @@ describe('HatetrisAi', () => {
       0b1111100111,
       0b1011100111,
       0b1111110111
-    ])).toBe(4) // L
+    ])).toBe('L')
   })
 
   it('generates a J when an S, Z, O, I or L would result in a lower stack', () => {
@@ -102,7 +102,7 @@ describe('HatetrisAi', () => {
       0b1111100111,
       0b1011100111,
       0b1111101111
-    ])).toBe(5) // J
+    ])).toBe('J')
   })
 
   it('generates a T when an S, Z, O, I, L or J would result in a lower stack', () => {
@@ -115,7 +115,7 @@ describe('HatetrisAi', () => {
       0b1000000000,
       0b1111000011,
       0b1111100111
-    ])).toBe(6) // T
+    ])).toBe('T')
   })
 
   // Only while writing these unit tests did I discover this subtle piece of
@@ -133,7 +133,7 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b1111000011,
       0b1111100111
-    ])).toBe(4) // L
+    ])).toBe('L')
   })
 
   // Coverage...
@@ -147,6 +147,6 @@ describe('HatetrisAi', () => {
       0b1111111110,
       0b1111111110,
       0b1111111110
-    ])).toBe(0) // S
+    ])).toBe('S')
   })
 })

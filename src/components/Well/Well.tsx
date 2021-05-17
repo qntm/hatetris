@@ -2,13 +2,13 @@
 
 import classnames from 'classnames'
 import * as React from 'react'
-import type { GameWellState } from '../Game/Game.jsx'
+import type { GameWellState, RotationSystem } from '../Game/Game.jsx'
 
 import './Well.css'
 
 type WellProps = {
   bar: number;
-  rotationSystem: any;
+  rotationSystem: RotationSystem;
   wellDepth: number;
   wellWidth: number;
   wellState: GameWellState

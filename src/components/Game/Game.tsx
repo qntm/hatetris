@@ -20,9 +20,13 @@ type Orientation = {
   rows: number[]
 }
 
+interface Rotations {
+  [pieceId: string]: Orientation[]
+}
+
 type RotationSystem = {
   placeNewPiece: (wellWidth: number, pieceId: number) => any;
-  rotations: Orientation[][]
+  rotations: Rotations
 }
 
 type GameWellState = {
@@ -51,7 +55,7 @@ type GameState = {
   replayTimeoutId: ReturnType<typeof setTimeout>
 }
 
-export type { GameWellState, GameProps }
+export type { GameWellState, GameProps, RotationSystem }
 
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
@@ -65,7 +69,7 @@ class Game extends React.Component<GameProps, GameState> {
       EnemyAi
     } = this.props
 
-    if (rotationSystem.rotations.length < 1) {
+    if (Object.keys(rotationSystem.rotations).length < 1) {
       throw Error('Have to have at least one piece!')
     }
 

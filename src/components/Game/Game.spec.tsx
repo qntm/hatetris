@@ -28,7 +28,7 @@ describe('<Game>', () => {
   }
 
   const firstWellState = {
-    piece: { id: 0, o: 0, x: 3, y: 0 },
+    piece: { id: 'S', o: 0, x: 3, y: 0 },
     score: 0,
     well: Array(20).fill(0)
   }
@@ -109,7 +109,7 @@ describe('<Game>', () => {
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }],
       replay: [],
       replayCopiedTimeoutId: undefined,
@@ -125,11 +125,11 @@ describe('<Game>', () => {
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 2, y: 0 }
+        piece: { id: 'S', o: 0, x: 2, y: 0 }
       }],
       replay: ['L'],
       replayCopiedTimeoutId: undefined,
@@ -145,15 +145,15 @@ describe('<Game>', () => {
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 2, y: 0 }
+        piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }],
       replay: ['L', 'R'],
       replayCopiedTimeoutId: undefined,
@@ -169,19 +169,19 @@ describe('<Game>', () => {
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 2, y: 0 }
+        piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 1 }
+        piece: { id: 'S', o: 0, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D'],
       replayCopiedTimeoutId: undefined,
@@ -197,23 +197,23 @@ describe('<Game>', () => {
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 2, y: 0 }
+        piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 1 }
+        piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 1, x: 3, y: 1 }
+        piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
       replayCopiedTimeoutId: undefined,
@@ -229,23 +229,23 @@ describe('<Game>', () => {
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 2, y: 0 }
+        piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 1 }
+        piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 1, x: 3, y: 1 }
+        piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
       replayCopiedTimeoutId: undefined,
@@ -261,23 +261,23 @@ describe('<Game>', () => {
       wellStates: [{
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 2, y: 0 }
+        piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 0 }
+        piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 0, x: 3, y: 1 }
+        piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
         well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         score: 0,
-        piece: { id: 0, o: 1, x: 3, y: 1 }
+        piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
       replayCopiedTimeoutId: undefined,
