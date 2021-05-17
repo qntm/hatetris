@@ -23,9 +23,13 @@ const pieceRankings: PieceRankings = {
   T: 7 // least preferable in a tie break
 }
 
-const getPieceRanking = (pieceId: string): number => pieceId in pieceRankings
-  ? pieceRankings[pieceId]
-  : Infinity
+const getPieceRanking = (pieceId: string): number => {
+  if (pieceId in pieceRankings) {
+    return pieceRankings[pieceId]
+  }
+
+  throw Error('Unrecognised piece')
+}
 
 const getHatetrisAi = (loveMode: boolean) => (game: Game) => {
   const {

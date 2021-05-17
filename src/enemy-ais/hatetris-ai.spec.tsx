@@ -149,6 +149,30 @@ describe('HatetrisAi', () => {
       0b1111111110
     ])).toBe('S')
   })
+
+  it('throws an exception on an unrecognised piece', () => {
+    expect(() => shallow<Game>(
+      <Game
+        bar={4}
+        EnemyAi={HatetrisAi}
+        replayTimeout={0}
+        rotationSystem={{
+          rotations: {
+            DOT: [
+              { xMin: 0, yMin: 0, xDim: 1, yDim: 1, rows: [1] },
+              { xMin: 0, yMin: 0, xDim: 1, yDim: 1, rows: [1] },
+              { xMin: 0, yMin: 0, xDim: 1, yDim: 1, rows: [1] },
+              { xMin: 0, yMin: 0, xDim: 1, yDim: 1, rows: [1] }
+            ]
+          },
+          placeNewPiece: hatetrisRotationSystem.placeNewPiece
+        }}
+        wellDepth={8}
+        wellWidth={10}
+      />
+    ))
+      .toThrowError('Unrecognised piece')
+  })
 })
 
 describe('LovetrisAi', () => {
