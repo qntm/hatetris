@@ -6,7 +6,7 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import Game from '../components/Game/Game'
-import { HatetrisAi } from './hatetris-ai'
+import { HatetrisAi, LovetrisAi } from './hatetris-ai'
 import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
 
 // Note: well bits are flipped compared to what you would see on the screen.
@@ -148,5 +148,33 @@ describe('HatetrisAi', () => {
       0b1111111110,
       0b1111111110
     ])).toBe('S')
+  })
+})
+
+describe('LovetrisAi', () => {
+  const game = shallow<Game>(
+    <Game
+      bar={4}
+      EnemyAi={LovetrisAi}
+      replayTimeout={0}
+      rotationSystem={hatetrisRotationSystem}
+      wellDepth={8}
+      wellWidth={10}
+    />
+  )
+
+  const lovetris = game.state().enemyAi
+
+  it('generates a T by default', () => {
+    expect(lovetris([
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b1000000000,
+      0b1000000000,
+      0b1000000000,
+      0b1000000000
+    ])).toBe('T')
   })
 })

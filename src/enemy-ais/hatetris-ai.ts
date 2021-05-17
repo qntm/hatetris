@@ -9,14 +9,22 @@ import type { GameWellState } from '../components/Game/Game.jsx'
 
 const moves = ['L', 'R', 'D', 'U']
 
-export const HatetrisAi = (game: Game) => {
+const pieceRankings = {
+  S: 1, // most preferable in a tie break
+  Z: 2,
+  O: 3,
+  I: 4,
+  L: 5,
+  J: 6,
+  T: 7 // least preferable in a tie break
+}
+
+const getHatetrisAi = (loveMode: boolean) => (game: Game) => {
   const {
     rotationSystem,
     wellDepth,
     wellWidth
   } = game.props
-
-  const pieceIds = Object.keys(rotationSystem.rotations)
 
   /**
     Generate a unique integer to describe the position and orientation of this piece.
@@ -99,9 +107,7 @@ export const HatetrisAi = (game: Game) => {
   // For the player, higher is better because it indicates a lower stack.
   // For the AI, lower is better
   return (well: number[]): number => {
-    let worstPieceId
-    let lowestHighestRating = Infinity
-    pieceIds.forEach(pieceId => {
+    const highestRatings = Object.keys(rotationSystem.rotations).map(pieceId => {
       let highestRating = -Infinity
       getPossibleFutures(well, pieceId).forEach(possibleFuture => {
         let rating = possibleFuture.well.findIndex(row => row !== 0)
@@ -117,12 +123,19 @@ export const HatetrisAi = (game: Game) => {
         }
       })
 
-      if (highestRating < lowestHighestRating) {
-        worstPieceId = pieceId
-        lowestHighestRating = highestRating
-      }
+      return { pieceId, highestRating }
     })
 
-    return worstPieceId
+    highestRatings.sort((a, b) =>
+      (a.highestRating - b.highestRating) ||
+
+      // Tie breaker is piece ID rating
+      pieceRankings[a.pieceId] - pieceRankings[b.pieceId]
+    )
+
+    return highestRatings[loveMode ? highestRatings.length - 1 : 0].pieceId
   }
 }
+
+export const HatetrisAi = getHatetrisAi(false)
+export const LovetrisAi = getHatetrisAi(true)
