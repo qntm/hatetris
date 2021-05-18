@@ -6,18 +6,18 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import Game from '../components/Game/Game'
-import { HatetrisAi, LovetrisAi } from './hatetris-ai'
+import { hatetrisAi, lovetrisAi } from './hatetris-ai'
 import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
 
 // Note: well bits are flipped compared to what you would see on the screen.
 // Least significant bit is rendered on the *left* on web, but appears to the
 // *right* of each binary numeric literal
 
-describe('HatetrisAi', () => {
+describe('hatetrisAi', () => {
   const game = shallow<Game>(
     <Game
       bar={4}
-      EnemyAi={HatetrisAi}
+      enemyAi={hatetrisAi}
       replayTimeout={0}
       rotationSystem={hatetrisRotationSystem}
       wellDepth={8}
@@ -25,10 +25,10 @@ describe('HatetrisAi', () => {
     />
   )
 
-  const hatetris = game.state().enemyAi
+  const getPossibleFutures = game.instance().getPossibleFutures
 
   it('generates an S by default', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -37,11 +37,11 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b0000000000,
       0b0000000000
-    ])).toBe('S')
+    ], getPossibleFutures)).toBe('S')
   })
 
   it('generates a Z when an S would result in a lower stack', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -50,11 +50,11 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b0001000000,
       0b1111011111
-    ])).toBe('Z')
+    ], getPossibleFutures)).toBe('Z')
   })
 
   it('generates an O when an S or Z would result in a lower stack', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -63,11 +63,11 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b0000000000,
       0b1111101111
-    ])).toBe('O')
+    ], getPossibleFutures)).toBe('O')
   })
 
   it('generates an I when an S, Z or O would result in a lower stack', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -76,11 +76,11 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b0000000000,
       0b1111001111
-    ])).toBe('I')
+    ], getPossibleFutures)).toBe('I')
   })
 
   it('generates an L when an S, Z, O or I would result in a lower stack', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -89,11 +89,11 @@ describe('HatetrisAi', () => {
       0b1111100111,
       0b1011100111,
       0b1111110111
-    ])).toBe('L')
+    ], getPossibleFutures)).toBe('L')
   })
 
   it('generates a J when an S, Z, O, I or L would result in a lower stack', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -102,11 +102,11 @@ describe('HatetrisAi', () => {
       0b1111100111,
       0b1011100111,
       0b1111101111
-    ])).toBe('J')
+    ], getPossibleFutures)).toBe('J')
   })
 
   it('generates a T when an S, Z, O, I, L or J would result in a lower stack', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -115,7 +115,7 @@ describe('HatetrisAi', () => {
       0b1000000000,
       0b1111000011,
       0b1111100111
-    ])).toBe('T')
+    ], getPossibleFutures)).toBe('T')
   })
 
   // Only while writing these unit tests did I discover this subtle piece of
@@ -124,7 +124,7 @@ describe('HatetrisAi', () => {
   // reaching y = 6. L comes first so it is selected. This happens even though
   // L and J *give you a line* while T would not.
   it('just gives you a line sometimes!', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -133,12 +133,12 @@ describe('HatetrisAi', () => {
       0b0000000000,
       0b1111000011,
       0b1111100111
-    ])).toBe('L')
+    ], getPossibleFutures)).toBe('L')
   })
 
   // Coverage...
   it('generates an S when say an I would clear the board', () => {
-    expect(hatetris([
+    expect(hatetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -147,39 +147,15 @@ describe('HatetrisAi', () => {
       0b1111111110,
       0b1111111110,
       0b1111111110
-    ])).toBe('S')
-  })
-
-  it('throws an exception on an unrecognised piece', () => {
-    expect(() => shallow<Game>(
-      <Game
-        bar={4}
-        EnemyAi={HatetrisAi}
-        replayTimeout={0}
-        rotationSystem={{
-          rotations: {
-            DOT: [
-              { xMin: 0, yMin: 0, xDim: 1, yDim: 1, rows: [1] },
-              { xMin: 0, yMin: 0, xDim: 1, yDim: 1, rows: [1] },
-              { xMin: 0, yMin: 0, xDim: 1, yDim: 1, rows: [1] },
-              { xMin: 0, yMin: 0, xDim: 1, yDim: 1, rows: [1] }
-            ]
-          },
-          placeNewPiece: hatetrisRotationSystem.placeNewPiece
-        }}
-        wellDepth={8}
-        wellWidth={10}
-      />
-    ))
-      .toThrowError('Unrecognised piece')
+    ], getPossibleFutures)).toBe('S')
   })
 })
 
-describe('LovetrisAi', () => {
+describe('lovetrisAi', () => {
   const game = shallow<Game>(
     <Game
       bar={4}
-      EnemyAi={LovetrisAi}
+      enemyAi={lovetrisAi}
       replayTimeout={0}
       rotationSystem={hatetrisRotationSystem}
       wellDepth={8}
@@ -187,10 +163,10 @@ describe('LovetrisAi', () => {
     />
   )
 
-  const lovetris = game.state().enemyAi
+  const getPossibleFutures = game.instance().getPossibleFutures
 
   it('generates a T by default', () => {
-    expect(lovetris([
+    expect(lovetrisAi([
       0b0000000000,
       0b0000000000,
       0b0000000000,
@@ -199,6 +175,6 @@ describe('LovetrisAi', () => {
       0b1000000000,
       0b1000000000,
       0b1000000000
-    ])).toBe('T')
+    ], getPossibleFutures)).toBe('T')
   })
 })

@@ -7,7 +7,7 @@ import * as React from 'react'
 
 import Game from './Game'
 import type { GameProps } from './Game'
-import { HatetrisAi } from '../../enemy-ais/hatetris-ai'
+import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 jest.useFakeTimers()
@@ -17,7 +17,7 @@ describe('<Game>', () => {
     return shallow<Game>(
       <Game
         bar={4}
-        EnemyAi={HatetrisAi}
+        enemyAi={hatetrisAi}
         replayTimeout={0}
         rotationSystem={hatetrisRotationSystem}
         wellDepth={20}
@@ -36,7 +36,7 @@ describe('<Game>', () => {
   it('rejects a rotation system with no pieces', () => {
     expect(() => getGame({
       rotationSystem: {
-        placeNewPiece: () => {},
+        placeNewPiece: () => ({ id: '', o: NaN, x: NaN, y: NaN }),
         rotations: {}
       }
     })).toThrowError()
@@ -53,7 +53,7 @@ describe('<Game>', () => {
   it('ignores all keystrokes before the game has begun', () => {
     const game = getGame()
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'INITIAL',
       wellStateId: -1,
@@ -73,7 +73,7 @@ describe('<Game>', () => {
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(6)
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'INITIAL',
       wellStateId: -1,
@@ -90,7 +90,7 @@ describe('<Game>', () => {
   it('lets you play a few moves', () => {
     const game = getGame()
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'INITIAL',
       wellStateId: -1,
@@ -102,7 +102,7 @@ describe('<Game>', () => {
 
     game.find('.e2e__start-button').simulate('click')
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'PLAYING',
       wellStateId: 0,
@@ -118,7 +118,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'PLAYING',
       wellStateId: 1,
@@ -138,7 +138,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'PLAYING',
       wellStateId: 2,
@@ -162,7 +162,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'PLAYING',
       wellStateId: 3,
@@ -190,7 +190,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'PLAYING',
       wellStateId: 4,
@@ -222,7 +222,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'PLAYING',
       wellStateId: 3,
@@ -254,7 +254,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(game.state()).toEqual({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'PLAYING',
       wellStateId: 4,
@@ -304,7 +304,7 @@ describe('<Game>', () => {
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
-      enemyAi: expect.any(Function),
+      enemyAi: hatetrisAi,
       firstWellState,
       mode: 'PLAYING',
       replay: [],
@@ -335,7 +335,7 @@ describe('<Game>', () => {
       jest.runOnlyPendingTimers()
 
       expect(game.state()).toEqual(expect.objectContaining({
-        enemyAi: expect.any(Function),
+        enemyAi: hatetrisAi,
         firstWellState,
         mode: 'REPLAYING',
         wellStates: [
@@ -357,7 +357,7 @@ describe('<Game>', () => {
       // TODO: this is no longer provided in the UI...
       game.instance().handleClickStart()
       expect(game.state()).toEqual(expect.objectContaining({
-        enemyAi: expect.any(Function),
+        enemyAi: hatetrisAi,
         firstWellState,
         mode: 'PLAYING',
         wellStates: [
@@ -376,7 +376,7 @@ describe('<Game>', () => {
       prompt.mockRestore()
 
       expect(game.state()).toEqual(expect.objectContaining({
-        enemyAi: expect.any(Function),
+        enemyAi: hatetrisAi,
         firstWellState,
         mode: 'REPLAYING',
         wellStates: [
@@ -390,7 +390,7 @@ describe('<Game>', () => {
     it('lets you undo and stops replaying if you do so', () => {
       game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
       expect(game.state()).toEqual(expect.objectContaining({
-        enemyAi: expect.any(Function),
+        enemyAi: hatetrisAi,
         firstWellState,
         mode: 'PLAYING', // no longer replaying
         wellStates: [

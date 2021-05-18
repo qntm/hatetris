@@ -12,6 +12,15 @@ import './Game.css'
 
 const minWidth = 4
 
+const moves = ['L', 'R', 'D', 'U']
+
+type Piece = {
+  x: number,
+  y: number,
+  o: number,
+  id: string
+}
+
 type Orientation = {
   yMin: number,
   yDim: number,
@@ -25,27 +34,32 @@ type Rotations = {
 }
 
 type RotationSystem = {
-  placeNewPiece: (wellWidth: number, pieceId: string) => any;
+  placeNewPiece: (wellWidth: number, pieceId: string) => Piece;
   rotations: Rotations
 }
 
 type GameWellState = {
-  piece: any,
+  piece: Piece,
   score: number,
   well: number[],
 }
 
+type EnemyAi = (
+  well: number[],
+  getPossibleFutures: (well: number[], pieceId: string) => GameWellState[]
+) => string
+
 type GameProps = {
-  bar: any,
+  bar: number,
   replayTimeout: number,
   rotationSystem: RotationSystem,
-  wellDepth: any,
-  wellWidth: any,
-  EnemyAi: any
+  wellDepth: number,
+  wellWidth: number,
+  enemyAi: EnemyAi
 }
 
 type GameState = {
-  enemyAi: any,
+  enemyAi: EnemyAi,
   firstWellState: GameWellState,
   mode: string,
   wellStateId: number,
@@ -55,7 +69,7 @@ type GameState = {
   replayTimeoutId: ReturnType<typeof setTimeout>
 }
 
-export type { GameWellState, GameProps, RotationSystem }
+export type { GameWellState, GameProps, RotationSystem, EnemyAi }
 
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
@@ -66,7 +80,7 @@ class Game extends React.Component<GameProps, GameState> {
       bar,
       wellDepth,
       wellWidth,
-      EnemyAi
+      enemyAi
     } = this.props
 
     if (Object.keys(rotationSystem.rotations).length < 1) {
@@ -81,14 +95,15 @@ class Game extends React.Component<GameProps, GameState> {
       throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
     }
 
-    const enemyAi = EnemyAi(this)
-
     const firstWell = Array(wellDepth).fill(0)
 
     const firstWellState = {
       well: firstWell,
       score: 0,
-      piece: rotationSystem.placeNewPiece(wellWidth, enemyAi(firstWell))
+      piece: rotationSystem.placeNewPiece(
+        wellWidth,
+        enemyAi(firstWell, this.getPossibleFutures)
+      )
     }
 
     this.state = {
@@ -101,6 +116,87 @@ class Game extends React.Component<GameProps, GameState> {
       replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     }
+  }
+
+  /**
+    Generate a unique integer to describe the position and orientation of this piece.
+    `x` varies between -3 and (`wellWidth` - 1) inclusive, so range = `wellWidth` + 3
+    `y` varies between 0 and (`wellDepth` + 2) inclusive, so range = `wellDepth` + 3
+    `o` varies between 0 and 3 inclusive, so range = 4
+  */
+  hashCode = (piece: Piece): number =>
+    (piece.x * (this.props.wellDepth + 3) + piece.y) * 4 + piece.o
+
+  /**
+    Given a well and a piece ID, find all possible places where it could land
+    and return the array of "possible future" states. All of these states
+    will have `null` `piece` because the piece is landed; some will have
+    a positive `score`.
+  */
+  getPossibleFutures = (well: number[], pieceId: string): GameWellState[] => {
+    const {
+      rotationSystem,
+      wellDepth,
+      wellWidth
+    } = this.props
+
+    let piece = rotationSystem.placeNewPiece(wellWidth, pieceId)
+
+    // move the piece down to a lower position before we have to
+    // start pathfinding for it
+    // move through empty rows
+    while (
+      piece.y + 4 < wellDepth && // piece is above the bottom
+      well[piece.y + 4] === 0 // nothing immediately below it
+    ) {
+      piece = this.getNextState({
+        well: well,
+        score: 0,
+        piece: piece
+      }, 'D').piece
+    }
+
+    const piecePositions = [piece]
+
+    const seen = new Set()
+    seen.add(this.hashCode(piece))
+
+    const possibleFutures: GameWellState[] = []
+
+    // A simple `forEach` won't work here because we are appending to the list as we go
+    let i = 0
+    while (i < piecePositions.length) {
+      piece = piecePositions[i]
+
+      // apply all possible moves
+      moves.forEach(move => {
+        const nextState = this.getNextState({
+          well,
+          score: 0,
+          piece
+        }, move)
+        const newPiece = nextState.piece
+
+        if (newPiece === null) {
+          // piece locked? better add that to the list
+          // do NOT check locations, they aren't significant here
+          possibleFutures.push(nextState)
+        } else {
+          // transform succeeded?
+          // new location? append to list
+          // check locations, they are significant
+          const newHashCode = this.hashCode(newPiece)
+
+          if (!seen.has(newHashCode)) {
+            piecePositions.push(newPiece)
+            seen.add(newHashCode)
+          }
+        }
+      })
+      i++
+    }
+
+    return possibleFutures
   }
 
   /**
@@ -341,7 +437,10 @@ class Game extends React.Component<GameProps, GameState> {
       // TODO: `nextWellState.well` should be more complex and contain colour
       // information, whereas the well passed to `enemyAi` should be a simple
       // array of integers
-      nextWellState.piece = rotationSystem.placeNewPiece(wellWidth, enemyAi(nextWellState.well))
+      nextWellState.piece = rotationSystem.placeNewPiece(
+        wellWidth,
+        enemyAi(nextWellState.well, this.getPossibleFutures)
+      )
     }
 
     this.setState({
