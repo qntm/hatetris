@@ -1,6 +1,6 @@
 'use strict'
 
-import type { GameWellState, EnemyAi } from '../components/Game/Game.jsx'
+import type { Core, EnemyAi } from '../components/Game/Game.jsx'
 
 // 1 = worst for the player, 7 = best
 const pieceRankings = { S: 1, Z: 2, O: 3, I: 4, L: 5, J: 6, T: 7 }
@@ -10,22 +10,22 @@ const pieceRankings = { S: 1, Z: 2, O: 3, I: 4, L: 5, J: 6, T: 7 }
 // For the player, higher is better because it indicates a lower stack.
 // For the AI, lower is better
 export const hatetrisAi: EnemyAi = (
-  well: number[],
-  getPossibleFutures: (well: number[], pieceId: string) => GameWellState[]
+  now: Core,
+  getPossibleFutures: (pieceId: string, core: Core) => Core[]
 ): string => {
   const highestRatings = Object.entries(pieceRankings)
     .map(([pieceId, pieceRanking]) => ({
       pieceId,
       pieceRanking,
       highestRating: Math.max(
-        ...getPossibleFutures(well, pieceId)
+        ...getPossibleFutures(pieceId, now)
           .map(possibleFuture => {
             const rating = possibleFuture.well.findIndex(row => row !== 0)
 
             return rating === -1
               // Well is completely empty after placing this piece in this location
               // (note: this is impossible in practice)
-              ? well.length
+              ? now.well.length
               : rating
           })
       )

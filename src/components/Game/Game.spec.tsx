@@ -5,9 +5,8 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Game from './Game'
+import Game, { hatetris } from './Game'
 import type { GameProps } from './Game'
-import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 jest.useFakeTimers()
@@ -24,12 +23,6 @@ describe('<Game>', () => {
         {...props}
       />
     )
-  }
-
-  const firstWellState = {
-    piece: { id: 'S', o: 0, x: 3, y: 0 },
-    score: 0,
-    well: Array(20).fill(0)
   }
 
   it('rejects a rotation system with no pieces', () => {
@@ -52,8 +45,7 @@ describe('<Game>', () => {
   it('ignores all keystrokes before the game has begun', () => {
     const game = getGame()
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -72,8 +64,7 @@ describe('<Game>', () => {
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(6)
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -89,8 +80,7 @@ describe('<Game>', () => {
   it('lets you play a few moves', () => {
     const game = getGame()
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -101,13 +91,14 @@ describe('<Game>', () => {
 
     game.find('.e2e__start-button').simulate('click')
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }],
       replay: [],
@@ -117,17 +108,20 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 1,
       wellStates: [{
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }],
       replay: ['L'],
@@ -137,21 +131,26 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 2,
       wellStates: [{
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }],
       replay: ['L', 'R'],
@@ -161,25 +160,32 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D'],
@@ -189,29 +195,38 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
@@ -221,29 +236,38 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
@@ -253,29 +277,38 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(game.state()).toEqual({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
-        well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        score: 0,
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U'],
@@ -303,8 +336,7 @@ describe('<Game>', () => {
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
-      enemyAi: hatetrisAi,
-      firstWellState,
+      enemy: hatetris,
       mode: 'PLAYING',
       replay: [],
       replayTimeoutId: undefined,
@@ -312,6 +344,26 @@ describe('<Game>', () => {
         expect.anything()
       ],
       wellStateId: 0
+    }))
+
+    game.unmount()
+  })
+
+  it('lets you decide not to replay anything', () => {
+    const game = getGame()
+
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce(null)
+    game.find('.e2e__replay-button').simulate('click')
+    prompt.mockRestore()
+
+    expect(game.state()).toEqual(expect.objectContaining({
+      enemy: hatetris,
+      mode: 'INITIAL',
+      replay: [],
+      replayTimeoutId: undefined,
+      wellStates: [],
+      wellStateId: -1
     }))
 
     game.unmount()
@@ -334,8 +386,7 @@ describe('<Game>', () => {
       jest.runOnlyPendingTimers()
 
       expect(game.state()).toEqual(expect.objectContaining({
-        enemyAi: hatetrisAi,
-        firstWellState,
+        enemy: hatetris,
         mode: 'REPLAYING',
         wellStates: [
           expect.anything(),
@@ -356,8 +407,7 @@ describe('<Game>', () => {
       // TODO: this is no longer provided in the UI...
       game.instance().handleClickStart()
       expect(game.state()).toEqual(expect.objectContaining({
-        enemyAi: hatetrisAi,
-        firstWellState,
+        enemy: hatetris,
         mode: 'PLAYING',
         wellStates: [
           expect.anything()
@@ -375,8 +425,7 @@ describe('<Game>', () => {
       prompt.mockRestore()
 
       expect(game.state()).toEqual(expect.objectContaining({
-        enemyAi: hatetrisAi,
-        firstWellState,
+        enemy: hatetris,
         mode: 'REPLAYING',
         wellStates: [
           expect.anything()
@@ -389,8 +438,7 @@ describe('<Game>', () => {
     it('lets you undo and stops replaying if you do so', () => {
       game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
       expect(game.state()).toEqual(expect.objectContaining({
-        enemyAi: hatetrisAi,
-        firstWellState,
+        enemy: hatetris,
         mode: 'PLAYING', // no longer replaying
         wellStates: [
           expect.anything(),
@@ -489,7 +537,7 @@ describe('<Game>', () => {
 
             const state = game.state()
             expect(state.mode).toBe('GAME_OVER')
-            expect(state.wellStates[state.wellStateId].score).toBe(run.expectedScore)
+            expect(state.wellStates[state.wellStateId].core.score).toBe(run.expectedScore)
             if (encoding === 'Base2048') {
               expect(game.find('.e2e__replay-out').text()).toBe(string)
             } else {

@@ -27,94 +27,115 @@ const getPossibleFutures = game.instance().getPossibleFutures
 
 describe('hatetrisAi', () => {
   it('generates an S by default', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000
-    ], getPossibleFutures)).toBe('S')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000
+      ]
+    }, getPossibleFutures)).toBe('S')
   })
 
   it('generates a Z when an S would result in a lower stack', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0001000000,
-      0b1111011111
-    ], getPossibleFutures)).toBe('Z')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0001000000,
+        0b1111011111
+      ]
+    }, getPossibleFutures)).toBe('Z')
   })
 
   it('generates an O when an S or Z would result in a lower stack', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b1111101111
-    ], getPossibleFutures)).toBe('O')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b1111101111
+      ]
+    }, getPossibleFutures)).toBe('O')
   })
 
   it('generates an I when an S, Z or O would result in a lower stack', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b1111001111
-    ], getPossibleFutures)).toBe('I')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b1111001111
+      ]
+    }, getPossibleFutures)).toBe('I')
   })
 
   it('generates an L when an S, Z, O or I would result in a lower stack', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b1111100111,
-      0b1011100111,
-      0b1111110111
-    ], getPossibleFutures)).toBe('L')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b1111100111,
+        0b1011100111,
+        0b1111110111
+      ]
+    }, getPossibleFutures)).toBe('L')
   })
 
   it('generates a J when an S, Z, O, I or L would result in a lower stack', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b1111100111,
-      0b1011100111,
-      0b1111101111
-    ], getPossibleFutures)).toBe('J')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b1111100111,
+        0b1011100111,
+        0b1111101111
+      ]
+    }, getPossibleFutures)).toBe('J')
   })
 
   it('generates a T when an S, Z, O, I, L or J would result in a lower stack', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b1000000000,
-      0b1111000011,
-      0b1111100111
-    ], getPossibleFutures)).toBe('T')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b1000000000,
+        0b1111000011,
+        0b1111100111
+      ]
+    }, getPossibleFutures)).toBe('T')
   })
 
   // Only while writing these unit tests did I discover this subtle piece of
@@ -123,44 +144,53 @@ describe('hatetrisAi', () => {
   // reaching y = 6. L comes first so it is selected. This happens even though
   // L and J *give you a line* while T would not.
   it('just gives you a line sometimes!', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b1111000011,
-      0b1111100111
-    ], getPossibleFutures)).toBe('L')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b1111000011,
+        0b1111100111
+      ]
+    }, getPossibleFutures)).toBe('L')
   })
 
   // Coverage...
   it('generates an S when say an I would clear the board', () => {
-    expect(hatetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b1111111110,
-      0b1111111110,
-      0b1111111110,
-      0b1111111110
-    ], getPossibleFutures)).toBe('S')
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b1111111110,
+        0b1111111110,
+        0b1111111110,
+        0b1111111110
+      ]
+    }, getPossibleFutures)).toBe('S')
   })
 })
 
 describe('lovetrisAi', () => {
-  it('generates a T by default', () => {
-    expect(lovetrisAi([
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b0000000000,
-      0b1000000000,
-      0b1000000000,
-      0b1000000000,
-      0b1000000000
-    ], getPossibleFutures)).toBe('T')
+  it('generates I every time right now', () => {
+    expect(lovetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000
+      ]
+    }, getPossibleFutures)).toBe('I')
   })
 })
