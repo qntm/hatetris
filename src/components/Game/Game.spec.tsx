@@ -45,6 +45,7 @@ describe('<Game>', () => {
   it('ignores all keystrokes before the game has begun', () => {
     const game = getGame()
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
@@ -64,6 +65,7 @@ describe('<Game>', () => {
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(6)
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
@@ -80,6 +82,7 @@ describe('<Game>', () => {
   it('lets you play a few moves', () => {
     const game = getGame()
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
@@ -91,6 +94,7 @@ describe('<Game>', () => {
 
     game.find('.e2e__start-button').simulate('click')
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 0,
@@ -108,6 +112,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 1,
@@ -131,6 +136,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 2,
@@ -160,6 +166,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 3,
@@ -195,6 +202,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 4,
@@ -236,6 +244,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 3,
@@ -277,6 +286,7 @@ describe('<Game>', () => {
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'PLAYING',
       wellStateId: 4,
@@ -336,6 +346,7 @@ describe('<Game>', () => {
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'PLAYING',
       replay: [],
@@ -352,6 +363,7 @@ describe('<Game>', () => {
   it('lets you select a different AI and play a full game with it and provide no replay', () => {
     const game = getGame()
     expect(game.state()).toEqual({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
@@ -363,12 +375,14 @@ describe('<Game>', () => {
 
     game.find('.e2e__select-ai').simulate('click')
     expect(game.state()).toEqual(expect.objectContaining({
+      displayEnemy: false,
       enemy: hatetris,
       mode: 'SELECT_AI'
     }))
 
     game.find('.e2e__enemy').at(1).simulate('click')
     expect(game.state()).toEqual(expect.objectContaining({
+      displayEnemy: true,
       enemy: lovetris,
       mode: 'INITIAL'
     }))
@@ -376,6 +390,7 @@ describe('<Game>', () => {
     game.find('.e2e__start-button').simulate('click')
     expect(game.find('.e2e__enemy-short').text()).toBe('AI: ❤️')
     expect(game.state()).toEqual({
+      displayEnemy: true,
       enemy: lovetris,
       mode: 'PLAYING',
       wellStateId: 0,
