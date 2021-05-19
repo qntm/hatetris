@@ -5,7 +5,7 @@
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Game, { hatetris } from './Game'
+import Game, { hatetris, lovetris } from './Game'
 import type { GameProps } from './Game'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
@@ -347,6 +347,64 @@ describe('<Game>', () => {
     }))
 
     game.unmount()
+  })
+
+  it('lets you select a different AI and play a full game with it and provide no replay', () => {
+    const game = getGame()
+    expect(game.state()).toEqual({
+      enemy: hatetris,
+      mode: 'INITIAL',
+      wellStateId: -1,
+      wellStates: [],
+      replay: [],
+      replayCopiedTimeoutId: undefined,
+      replayTimeoutId: undefined
+    })
+
+    game.find('.e2e__select-ai').simulate('click')
+    expect(game.state()).toEqual(expect.objectContaining({
+      enemy: hatetris,
+      mode: 'SELECT_AI'
+    }))
+
+    game.find('.e2e__enemy').at(1).simulate('click')
+    expect(game.state()).toEqual(expect.objectContaining({
+      enemy: lovetris,
+      mode: 'INITIAL'
+    }))
+
+    game.find('.e2e__start-button').simulate('click')
+    expect(game.find('.e2e__enemy-short').text()).toBe('AI: all I pieces')
+    expect(game.state()).toEqual({
+      enemy: lovetris,
+      mode: 'PLAYING',
+      wellStateId: 0,
+      wellStates: [{
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
+        piece: { id: 'I', o: 0, x: 3, y: 0 } // An I piece!
+      }],
+      replay: [],
+      replayCopiedTimeoutId: undefined,
+      replayTimeoutId: undefined
+    })
+
+    for (let i = 0; i < 187; i++) {
+      expect(game.state().mode).toBe('PLAYING')
+      game.instance().handleDown()
+    }
+
+    expect(game.state()).toEqual(expect.objectContaining({
+      enemy: lovetris,
+      mode: 'GAME_OVER',
+      wellStateId: 187,
+      wellStates: expect.any(Array)
+    }))
+
+    expect(game.find('.e2e__replay-out').length).toBe(0)
+    expect(game.find('.e2e__copy-replay').length).toBe(0)
   })
 
   it('lets you decide not to replay anything', () => {

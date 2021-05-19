@@ -86,11 +86,13 @@ export const hatetris = {
   description: 'HATETRIS, the original and worst'
 }
 
-const enemies = [hatetris, {
+export const lovetris = {
   ai: lovetrisAi,
   short: 'all I pieces',
   description: 'all I pieces, all the time'
-}]
+}
+
+const enemies = [hatetris, lovetris]
 
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
@@ -661,7 +663,7 @@ class Game extends React.Component<GameProps, GameState> {
             </p>
 
             {enemy !== hatetris && (
-              <p className='game__paragraph'>
+              <p className='game__paragraph e2e__enemy-short'>
                 AI: {enemy.short}
               </p>
             )}
@@ -714,7 +716,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
 
               <button
-                className='game__button e2e__start-love-button'
+                className='game__button e2e__select-ai'
                 type='button'
                 onClick={this.handleClickSelectAi}
               >
@@ -732,7 +734,7 @@ class Game extends React.Component<GameProps, GameState> {
             {
               enemies.map(enemy => (
                 <button
-                  className='game__button'
+                  className='game__button e2e__enemy'
                   key={enemy.short}
                   type='button'
                   onClick={() => this.handleClickEnemy(enemy)}
