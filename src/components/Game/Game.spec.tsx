@@ -17,7 +17,6 @@ describe('<Game>', () => {
     return shallow<Game>(
       <Game
         bar={4}
-        enemyAi={hatetrisAi}
         replayTimeout={0}
         rotationSystem={hatetrisRotationSystem}
         wellDepth={20}

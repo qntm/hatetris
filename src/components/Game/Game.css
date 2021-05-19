@@ -116,5 +116,5 @@
 }
 
 .game__button--game-over {
-	flex: 0 1 33%;
+	flex: 0 1 100%;
 }

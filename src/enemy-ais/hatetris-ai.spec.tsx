@@ -13,20 +13,19 @@ import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system
 // Least significant bit is rendered on the *left* on web, but appears to the
 // *right* of each binary numeric literal
 
+const game = shallow<Game>(
+  <Game
+    bar={4}
+    replayTimeout={0}
+    rotationSystem={hatetrisRotationSystem}
+    wellDepth={8}
+    wellWidth={10}
+  />
+)
+
+const getPossibleFutures = game.instance().getPossibleFutures
+
 describe('hatetrisAi', () => {
-  const game = shallow<Game>(
-    <Game
-      bar={4}
-      enemyAi={hatetrisAi}
-      replayTimeout={0}
-      rotationSystem={hatetrisRotationSystem}
-      wellDepth={8}
-      wellWidth={10}
-    />
-  )
-
-  const getPossibleFutures = game.instance().getPossibleFutures
-
   it('generates an S by default', () => {
     expect(hatetrisAi([
       0b0000000000,
@@ -152,19 +151,6 @@ describe('hatetrisAi', () => {
 })
 
 describe('lovetrisAi', () => {
-  const game = shallow<Game>(
-    <Game
-      bar={4}
-      enemyAi={lovetrisAi}
-      replayTimeout={0}
-      rotationSystem={hatetrisRotationSystem}
-      wellDepth={8}
-      wellWidth={10}
-    />
-  )
-
-  const getPossibleFutures = game.instance().getPossibleFutures
-
   it('generates a T by default', () => {
     expect(lovetrisAi([
       0b0000000000,

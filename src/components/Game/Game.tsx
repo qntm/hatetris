@@ -6,6 +6,7 @@
 
 import * as React from 'react'
 
+import { hatetrisAi, lovetrisAi } from '../../enemy-ais/hatetris-ai'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 import { Well } from '../Well/Well'
 import './Game.css'
@@ -54,19 +55,18 @@ type GameProps = {
   replayTimeout: number,
   rotationSystem: RotationSystem,
   wellDepth: number,
-  wellWidth: number,
-  enemyAi: EnemyAi
+  wellWidth: number
 }
 
 type GameState = {
   enemyAi: EnemyAi,
-  firstWellState: GameWellState,
   mode: string,
   wellStateId: number,
   wellStates: GameWellState[],
   replay: any[],
   replayCopiedTimeoutId: ReturnType<typeof setTimeout>,
-  replayTimeoutId: ReturnType<typeof setTimeout>
+  replayTimeoutId: ReturnType<typeof setTimeout>,
+  showAiSelector: boolean
 }
 
 export type { GameWellState, GameProps, RotationSystem, EnemyAi }
@@ -79,8 +79,7 @@ class Game extends React.Component<GameProps, GameState> {
       rotationSystem,
       bar,
       wellDepth,
-      wellWidth,
-      enemyAi
+      wellWidth
     } = this.props
 
     if (Object.keys(rotationSystem.rotations).length < 1) {
@@ -95,26 +94,34 @@ class Game extends React.Component<GameProps, GameState> {
       throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
     }
 
+    this.state = {
+      enemyAi: hatetrisAi,
+      mode: 'INITIAL',
+      wellStateId: -1,
+      wellStates: [],
+      replay: [],
+      replayCopiedTimeoutId: undefined,
+      replayTimeoutId: undefined,
+      showAiSelector: false
+    }
+  }
+
+  getFirstWellState (enemyAi: EnemyAi): GameWellState {
+    const {
+      rotationSystem,
+      wellDepth,
+      wellWidth
+    } = this.props
+
     const firstWell = Array(wellDepth).fill(0)
 
-    const firstWellState = {
+    return {
       well: firstWell,
       score: 0,
       piece: rotationSystem.placeNewPiece(
         wellWidth,
         enemyAi(firstWell, this.getPossibleFutures)
       )
-    }
-
-    this.state = {
-      enemyAi,
-      firstWellState,
-      mode: 'INITIAL',
-      wellStateId: -1,
-      wellStates: [],
-      replay: [],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
     }
   }
 
@@ -296,9 +303,8 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  handleClickStart = () => {
+  startGame (enemyAi: EnemyAi) {
     const {
-      firstWellState,
       replayCopiedTimeoutId,
       replayTimeoutId
     } = this.state
@@ -310,12 +316,23 @@ class Game extends React.Component<GameProps, GameState> {
 
     // clear the field and get ready for a new game
     this.setState({
+      enemyAi,
       mode: 'PLAYING',
       wellStateId: 0,
-      wellStates: [firstWellState],
+      wellStates: [this.getFirstWellState(enemyAi)],
       replay: [],
       replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
+    })
+  }
+
+  handleClickStart = () => {
+    this.startGame(hatetrisAi)
+  }
+
+  handleClickSelectAi = () => {
+    this.setState({
+      showAiSelector: true
     })
   }
 
@@ -325,7 +342,6 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     let {
-      firstWellState,
       replayTimeoutId
     } = this.state
 
@@ -349,7 +365,7 @@ class Game extends React.Component<GameProps, GameState> {
     this.setState({
       mode,
       wellStateId,
-      wellStates: [firstWellState],
+      wellStates: [this.getFirstWellState(hatetrisAi)],
       replay,
       replayTimeoutId
     })
@@ -591,9 +607,11 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
+      enemyAi,
       mode,
       replay,
       replayCopiedTimeoutId,
+      showAiSelector,
       wellStateId,
       wellStates
     } = this.state
@@ -657,7 +675,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
             </p>
 
-            <p className='game__paragraph'>
+            <div className='game__paragraph' style={{ display: 'flex', gap: '10px' }}>
               <button
                 className='game__button e2e__replay-button'
                 type='button'
@@ -665,7 +683,15 @@ class Game extends React.Component<GameProps, GameState> {
               >
                 show a replay
               </button>
-            </p>
+
+              <button
+                className='game__button e2e__start-love-button'
+                type='button'
+                onClick={this.handleClickSelectAi}
+              >
+                select AI
+              </button>
+            </div>
           </div>
         )}
 
@@ -741,12 +767,17 @@ class Game extends React.Component<GameProps, GameState> {
 
         {mode === 'GAME_OVER' && (
           <div className='game__bottom game__bottom--game-over'>
-            <p className='game__paragraph'>
-              replay of last game:
-            </p>
-            <div className='game__replay-out e2e__replay-out'>
-              {hatetrisReplayCodec.encode(replay)}
-            </div>
+            {enemyAi === hatetrisAi && (
+              <>
+                <p className='game__paragraph'>
+                  replay of last game:
+                </p>
+                <div className='game__replay-out e2e__replay-out'>
+                  {hatetrisReplayCodec.encode(replay)}
+                </div>
+              </>
+            )}
+
             <div className='game__game-over-buttons'>
               <button
                 className='game__button game__button--game-over e2e__replay-button'
@@ -758,6 +789,7 @@ class Game extends React.Component<GameProps, GameState> {
 
               <button
                 className='game__button game__button--game-over e2e__copy-replay'
+                disabled={enemyAi !== hatetrisAi}
                 type='button'
                 onClick={this.handleClickCopyReplay}
               >
@@ -772,6 +804,21 @@ class Game extends React.Component<GameProps, GameState> {
                 done
               </button>
             </div>
+          </div>
+        )}
+
+        {showAiSelector && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '20px',
+              left: '20px',
+              right: '20px',
+              bottom: '20px',
+              border: '1px solid gray'
+            }}
+          >
+            hello world
           </div>
         )}
       </div>
