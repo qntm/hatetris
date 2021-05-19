@@ -374,7 +374,7 @@ describe('<Game>', () => {
     }))
 
     game.find('.e2e__start-button').simulate('click')
-    expect(game.find('.e2e__enemy-short').text()).toBe('AI: all I pieces')
+    expect(game.find('.e2e__enemy-short').text()).toBe('AI: ❤️')
     expect(game.state()).toEqual({
       enemy: lovetris,
       mode: 'PLAYING',

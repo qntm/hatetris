@@ -69,6 +69,7 @@ type GameProps = {
 }
 
 type GameState = {
+  displayEnemy: boolean,
   enemy: Enemy,
   mode: string,
   wellStateId: number,
@@ -88,8 +89,8 @@ export const hatetris = {
 
 export const lovetris = {
   ai: lovetrisAi,
-  short: 'all I pieces',
-  description: 'all I pieces, all the time'
+  short: '❤️',
+  description: 'all 4x1 pieces, all the time'
 }
 
 const enemies = [hatetris, lovetris]
@@ -118,6 +119,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     this.state = {
+      displayEnemy: false, // don't show it unless the user selects one manually
       enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
@@ -619,6 +621,7 @@ class Game extends React.Component<GameProps, GameState> {
 
   handleClickEnemy = (enemy: Enemy) => {
     this.setState({
+      displayEnemy: true,
       enemy,
       mode: 'INITIAL'
     })
@@ -633,6 +636,7 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
+      displayEnemy,
       enemy,
       mode,
       replay,
@@ -662,7 +666,7 @@ class Game extends React.Component<GameProps, GameState> {
               you&apos;re playing <b>HATETRIS</b> by qntm
             </p>
 
-            {enemy !== hatetris && (
+            {displayEnemy && (
               <p className='game__paragraph e2e__enemy-short'>
                 AI: {enemy.short}
               </p>
@@ -760,7 +764,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
 
               <button
-                className='game__button'
+                className='game__button e2e__left'
                 type='button'
                 onClick={this.handleLeft}
                 title='Press Left to move left'
@@ -770,7 +774,7 @@ class Game extends React.Component<GameProps, GameState> {
             </div>
             <div className='game__control-col'>
               <button
-                className='game__button'
+                className='game__button e2e__up'
                 type='button'
                 onClick={this.handleUp}
                 title='Press Up to rotate'
@@ -779,7 +783,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
 
               <button
-                className='game__button'
+                className='game__button e2e__down'
                 type='button'
                 onClick={this.handleDown}
                 title='Press Down to move down'
@@ -799,7 +803,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
 
               <button
-                className='game__button'
+                className='game__button e2e__right'
                 type='button'
                 onClick={this.handleRight}
                 title='Press Right to move right'
