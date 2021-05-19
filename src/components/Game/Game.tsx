@@ -6,6 +6,7 @@
 
 import * as React from 'react'
 
+import { hatetrisAi, lovetrisAi } from '../../enemy-ais/hatetris-ai'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 import { Well } from '../Well/Well'
 import './Game.css'
@@ -38,38 +39,61 @@ type RotationSystem = {
   rotations: Rotations
 }
 
-type GameWellState = {
-  piece: Piece,
+type Core = {
   score: number,
   well: number[],
 }
 
+type WellState = {
+  core: Core,
+  piece: Piece
+}
+
 type EnemyAi = (
-  well: number[],
-  getPossibleFutures: (well: number[], pieceId: string) => GameWellState[]
+  now: Core,
+  getPossibleFutures: (pieceId: string, core: Core) => Core[]
 ) => string
+
+type Enemy = {
+  short: string,
+  description: string,
+  ai: EnemyAi
+}
 
 type GameProps = {
   bar: number,
   replayTimeout: number,
   rotationSystem: RotationSystem,
   wellDepth: number,
-  wellWidth: number,
-  enemyAi: EnemyAi
+  wellWidth: number
 }
 
 type GameState = {
-  enemyAi: EnemyAi,
-  firstWellState: GameWellState,
+  displayEnemy: boolean,
+  enemy: Enemy,
   mode: string,
   wellStateId: number,
-  wellStates: GameWellState[],
+  wellStates: WellState[],
   replay: any[],
   replayCopiedTimeoutId: ReturnType<typeof setTimeout>,
   replayTimeoutId: ReturnType<typeof setTimeout>
 }
 
-export type { GameWellState, GameProps, RotationSystem, EnemyAi }
+export type { Core, WellState, GameProps, RotationSystem, EnemyAi }
+
+export const hatetris = {
+  ai: hatetrisAi,
+  short: 'HATETRIS',
+  description: 'HATETRIS, the original and worst'
+}
+
+export const lovetris = {
+  ai: lovetrisAi,
+  short: '❤️',
+  description: 'all 4x1 pieces, all the time'
+}
+
+const enemies = [hatetris, lovetris]
 
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
@@ -79,8 +103,7 @@ class Game extends React.Component<GameProps, GameState> {
       rotationSystem,
       bar,
       wellDepth,
-      wellWidth,
-      enemyAi
+      wellWidth
     } = this.props
 
     if (Object.keys(rotationSystem.rotations).length < 1) {
@@ -95,26 +118,36 @@ class Game extends React.Component<GameProps, GameState> {
       throw Error("Can't have well with width " + String(wellWidth) + ' less than ' + String(minWidth))
     }
 
-    const firstWell = Array(wellDepth).fill(0)
-
-    const firstWellState = {
-      well: firstWell,
-      score: 0,
-      piece: rotationSystem.placeNewPiece(
-        wellWidth,
-        enemyAi(firstWell, this.getPossibleFutures)
-      )
-    }
-
     this.state = {
-      enemyAi,
-      firstWellState,
+      displayEnemy: false, // don't show it unless the user selects one manually
+      enemy: hatetris,
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
       replay: [],
       replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
+    }
+  }
+
+  getFirstWellState (enemyAi: EnemyAi): WellState {
+    const {
+      rotationSystem,
+      wellDepth,
+      wellWidth
+    } = this.props
+
+    const firstCore = {
+      well: Array(wellDepth).fill(0),
+      score: 0
+    }
+
+    return {
+      core: firstCore,
+      piece: rotationSystem.placeNewPiece(
+        wellWidth,
+        enemyAi(firstCore, this.getPossibleFutures)
+      )
     }
   }
 
@@ -133,7 +166,7 @@ class Game extends React.Component<GameProps, GameState> {
     will have `null` `piece` because the piece is landed; some will have
     a positive `score`.
   */
-  getPossibleFutures = (well: number[], pieceId: string): GameWellState[] => {
+  getPossibleFutures = (pieceId: string, core: Core): Core[] => {
     const {
       rotationSystem,
       wellDepth,
@@ -147,12 +180,11 @@ class Game extends React.Component<GameProps, GameState> {
     // move through empty rows
     while (
       piece.y + 4 < wellDepth && // piece is above the bottom
-      well[piece.y + 4] === 0 // nothing immediately below it
+      core.well[piece.y + 4] === 0 // nothing immediately below it
     ) {
       piece = this.getNextState({
-        well: well,
-        score: 0,
-        piece: piece
+        core,
+        piece
       }, 'D').piece
     }
 
@@ -161,7 +193,7 @@ class Game extends React.Component<GameProps, GameState> {
     const seen = new Set()
     seen.add(this.hashCode(piece))
 
-    const possibleFutures: GameWellState[] = []
+    const possibleFutures: Core[] = []
 
     // A simple `forEach` won't work here because we are appending to the list as we go
     let i = 0
@@ -171,8 +203,7 @@ class Game extends React.Component<GameProps, GameState> {
       // apply all possible moves
       moves.forEach(move => {
         const nextState = this.getNextState({
-          well,
-          score: 0,
+          core,
           piece
         }, move)
         const newPiece = nextState.piece
@@ -180,7 +211,7 @@ class Game extends React.Component<GameProps, GameState> {
         if (newPiece === null) {
           // piece locked? better add that to the list
           // do NOT check locations, they aren't significant here
-          possibleFutures.push(nextState)
+          possibleFutures.push(nextState.core)
         } else {
           // transform succeeded?
           // new location? append to list
@@ -203,7 +234,7 @@ class Game extends React.Component<GameProps, GameState> {
     Input {wellState, piece} and a move, return
     the new {wellState, piece}.
   */
-  getNextState (wellState: GameWellState, move: string): GameWellState {
+  getNextState (wellState: WellState, move: string): WellState {
     const {
       rotationSystem,
       bar,
@@ -211,16 +242,11 @@ class Game extends React.Component<GameProps, GameState> {
       wellWidth
     } = this.props
 
-    let nextWell = wellState.well
-    let nextScore = wellState.score
-    let nextPiece = {
-      id: wellState.piece.id,
-      x: wellState.piece.x,
-      y: wellState.piece.y,
-      o: wellState.piece.o
-    }
+    let nextWell = wellState.core.well
+    let nextScore = wellState.core.score
+    let nextPiece = { ...wellState.piece }
 
-    // apply transform (very fast now)
+    // apply transform
     if (move === 'L') {
       nextPiece.x--
     }
@@ -244,12 +270,12 @@ class Game extends React.Component<GameProps, GameState> {
       yActual < 0 || // off top (??)
       yActual + orientation.yDim > wellDepth || // off bottom
       orientation.rows.some((row, y) =>
-        wellState.well[yActual + y] & (row << xActual)
+        wellState.core.well[yActual + y] & (row << xActual)
       ) // obstruction
     ) {
       if (move === 'D') {
         // Lock piece
-        nextWell = wellState.well.slice()
+        nextWell = wellState.core.well.slice()
 
         const orientation = rotationSystem.rotations[wellState.piece.id][wellState.piece.o]
 
@@ -290,15 +316,17 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     return {
-      well: nextWell,
-      score: nextScore,
+      core: {
+        well: nextWell,
+        score: nextScore
+      },
       piece: nextPiece
     }
   }
 
   handleClickStart = () => {
     const {
-      firstWellState,
+      enemy,
       replayCopiedTimeoutId,
       replayTimeoutId
     } = this.state
@@ -312,10 +340,16 @@ class Game extends React.Component<GameProps, GameState> {
     this.setState({
       mode: 'PLAYING',
       wellStateId: 0,
-      wellStates: [firstWellState],
+      wellStates: [this.getFirstWellState(enemy.ai)],
       replay: [],
       replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
+    })
+  }
+
+  handleClickSelectAi = () => {
+    this.setState({
+      mode: 'SELECT_AI'
     })
   }
 
@@ -325,7 +359,6 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     let {
-      firstWellState,
       replayTimeoutId
     } = this.state
 
@@ -335,6 +368,10 @@ class Game extends React.Component<GameProps, GameState> {
 
     // user inputs replay string
     const string = window.prompt()
+
+    if (string === null) {
+      return
+    }
 
     const replay = hatetrisReplayCodec.decode(string)
     // TODO: what if the replay is bad?
@@ -349,7 +386,7 @@ class Game extends React.Component<GameProps, GameState> {
     this.setState({
       mode,
       wellStateId,
-      wellStates: [firstWellState],
+      wellStates: [this.getFirstWellState(hatetrisAi)],
       replay,
       replayTimeoutId
     })
@@ -394,7 +431,7 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
-      enemyAi,
+      enemy,
       mode,
       replay,
       wellStateId,
@@ -427,7 +464,7 @@ class Game extends React.Component<GameProps, GameState> {
     // Is the game over?
     // It is impossible to get bits at row (bar - 2) or higher without getting a bit at
     // row (bar - 1), so there is only one line which we need to check.
-    const gameIsOver = nextWellState.well[bar - 1] !== 0
+    const gameIsOver = nextWellState.core.well[bar - 1] !== 0
 
     const nextMode = gameIsOver ? 'GAME_OVER' : mode
 
@@ -435,11 +472,11 @@ class Game extends React.Component<GameProps, GameState> {
     // suited to the new world, of course
     if (nextWellState.piece === null && nextMode !== 'GAME_OVER') {
       // TODO: `nextWellState.well` should be more complex and contain colour
-      // information, whereas the well passed to `enemyAi` should be a simple
+      // information, whereas the well passed to `enemy.ai` should be a simple
       // array of integers
       nextWellState.piece = rotationSystem.placeNewPiece(
         wellWidth,
-        enemyAi(nextWellState.well, this.getPossibleFutures)
+        enemy.ai(nextWellState.core, this.getPossibleFutures)
       )
     }
 
@@ -582,6 +619,14 @@ class Game extends React.Component<GameProps, GameState> {
     })
   }
 
+  handleClickEnemy = (enemy: Enemy) => {
+    this.setState({
+      displayEnemy: true,
+      enemy,
+      mode: 'INITIAL'
+    })
+  }
+
   render () {
     const {
       bar,
@@ -591,6 +636,8 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
+      displayEnemy,
+      enemy,
       mode,
       replay,
       replayCopiedTimeoutId,
@@ -600,7 +647,7 @@ class Game extends React.Component<GameProps, GameState> {
 
     const wellState = wellStateId === -1 ? null : wellStates[wellStateId]
 
-    const score = wellState && wellState.score
+    const score = wellState && wellState.core.score
 
     return (
       <div className='game'>
@@ -618,6 +665,12 @@ class Game extends React.Component<GameProps, GameState> {
             <p className='game__paragraph'>
               you&apos;re playing <b>HATETRIS</b> by qntm
             </p>
+
+            {displayEnemy && (
+              <p className='game__paragraph e2e__enemy-short'>
+                AI: {enemy.short}
+              </p>
+            )}
 
             {score !== null && (
               <p className='game__paragraph e2e__score'>
@@ -657,7 +710,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
             </p>
 
-            <p className='game__paragraph'>
+            <div className='game__paragraph' style={{ display: 'flex', gap: '10px' }}>
               <button
                 className='game__button e2e__replay-button'
                 type='button'
@@ -665,7 +718,35 @@ class Game extends React.Component<GameProps, GameState> {
               >
                 show a replay
               </button>
+
+              <button
+                className='game__button e2e__select-ai'
+                type='button'
+                onClick={this.handleClickSelectAi}
+              >
+                select AI
+              </button>
+            </div>
+          </div>
+        )}
+
+        {mode === 'SELECT_AI' && (
+          <div className='game__bottom game__bottom--select-ai'>
+            <p>
+              Select AI:
             </p>
+            {
+              enemies.map(enemy => (
+                <button
+                  className='game__button e2e__enemy'
+                  key={enemy.short}
+                  type='button'
+                  onClick={() => this.handleClickEnemy(enemy)}
+                >
+                  {enemy.description}
+                </button>
+              ))
+            }
           </div>
         )}
 
@@ -683,7 +764,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
 
               <button
-                className='game__button'
+                className='game__button e2e__left'
                 type='button'
                 onClick={this.handleLeft}
                 title='Press Left to move left'
@@ -693,7 +774,7 @@ class Game extends React.Component<GameProps, GameState> {
             </div>
             <div className='game__control-col'>
               <button
-                className='game__button'
+                className='game__button e2e__up'
                 type='button'
                 onClick={this.handleUp}
                 title='Press Up to rotate'
@@ -702,7 +783,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
 
               <button
-                className='game__button'
+                className='game__button e2e__down'
                 type='button'
                 onClick={this.handleDown}
                 title='Press Down to move down'
@@ -722,7 +803,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
 
               <button
-                className='game__button'
+                className='game__button e2e__right'
                 type='button'
                 onClick={this.handleRight}
                 title='Press Right to move right'
@@ -741,12 +822,17 @@ class Game extends React.Component<GameProps, GameState> {
 
         {mode === 'GAME_OVER' && (
           <div className='game__bottom game__bottom--game-over'>
-            <p className='game__paragraph'>
-              replay of last game:
-            </p>
-            <div className='game__replay-out e2e__replay-out'>
-              {hatetrisReplayCodec.encode(replay)}
-            </div>
+            {enemy === hatetris && (
+              <>
+                <p className='game__paragraph'>
+                  replay of last game:
+                </p>
+                <div className='game__replay-out e2e__replay-out'>
+                  {hatetrisReplayCodec.encode(replay)}
+                </div>
+              </>
+            )}
+
             <div className='game__game-over-buttons'>
               <button
                 className='game__button game__button--game-over e2e__replay-button'
@@ -756,13 +842,15 @@ class Game extends React.Component<GameProps, GameState> {
                 undo last move
               </button>
 
-              <button
-                className='game__button game__button--game-over e2e__copy-replay'
-                type='button'
-                onClick={this.handleClickCopyReplay}
-              >
-                {replayCopiedTimeoutId ? 'copied!' : 'copy replay'}
-              </button>
+              {enemy === hatetris && (
+                <button
+                  className='game__button game__button--game-over e2e__copy-replay'
+                  type='button'
+                  onClick={this.handleClickCopyReplay}
+                >
+                  {replayCopiedTimeoutId ? 'copied!' : 'copy replay'}
+                </button>
+              )}
 
               <button
                 className='game__button game__button--game-over e2e__done'

@@ -2,7 +2,6 @@
 	box-sizing: border-box;
 	width: 100vw;
 	max-width: 360px;
-	height: 100vh;
 	margin: 0 auto;
 	font-family: arial;
 	padding: 10px;
@@ -90,6 +89,12 @@
 	display: block;
 }
 
+.game__bottom--select-ai {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
 .game__bottom--playing {
 	display: flex;
 	gap: 10px;
@@ -116,5 +121,5 @@
 }
 
 .game__button--game-over {
-	flex: 0 1 33%;
+	flex: 0 1 100%;
 }

@@ -2,7 +2,7 @@
 
 import classnames from 'classnames'
 import * as React from 'react'
-import type { GameWellState, RotationSystem } from '../Game/Game.jsx'
+import type { WellState, RotationSystem } from '../Game/Game.jsx'
 
 import './Well.css'
 
@@ -11,7 +11,7 @@ type WellProps = {
   rotationSystem: RotationSystem;
   wellDepth: number;
   wellWidth: number;
-  wellState: GameWellState
+  wellState: WellState
 }
 
 type Cell = {
@@ -30,7 +30,7 @@ export const Well = (props: WellProps) => {
     wellState
   } = props
 
-  const well = wellState && wellState.well
+  const well = wellState && wellState.core.well
   const piece = wellState && wellState.piece
 
   const cellses: Cell[][] = []
