@@ -73,7 +73,7 @@ type GameProps = {
 type GameState = {
   error: {
     interpretation: string,
-    real: Error
+    real: string
   },
   displayEnemy: boolean,
   enemy: Enemy,
@@ -102,11 +102,13 @@ export const lovetris: Enemy = {
 
 const enemies = [hatetris, lovetris]
 
+const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
+
 const getValidatedPieceId = (unsafePieceId: any) => {
-  if (!'IJLOSTZ'.split('').includes(unsafePieceId)) {
-    throw Error(`Bad piece ID: ${unsafePieceId}`)
+  if (pieceIds.includes(unsafePieceId)) {
+    return unsafePieceId
   }
-  return unsafePieceId
+  throw Error(`Bad piece ID: ${unsafePieceId}`)
 }
 
 class Game extends React.Component<GameProps, GameState> {
@@ -360,7 +362,7 @@ class Game extends React.Component<GameProps, GameState> {
       this.setState({
         error: {
           interpretation: 'Caught this exception while trying to instantiate your custom enemy AI. Game abandoned.',
-          real: error
+          real: error.message
         }
       })
       return
@@ -374,7 +376,7 @@ class Game extends React.Component<GameProps, GameState> {
       this.setState({
         error: {
           interpretation: 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.',
-          real: error
+          real: error.message
         }
       })
       return
@@ -412,7 +414,7 @@ class Game extends React.Component<GameProps, GameState> {
     clearTimeout(replayTimeoutId)
 
     // user inputs replay string
-    const string = window.prompt()
+    const string = window.prompt('Paste replay string...')
 
     if (string === null) {
       return
@@ -533,7 +535,7 @@ class Game extends React.Component<GameProps, GameState> {
         this.setState({
           error: {
             interpretation: 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.',
-            real: error
+            real: error.message
           }
         })
         return
@@ -690,8 +692,7 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   handleClickCustomEnemy = () => {
-    // user inputs replay string
-    const string = window.prompt()
+    const string = window.prompt('Enter JavaScript code...')
 
     if (string === null) {
       return
@@ -699,13 +700,14 @@ class Game extends React.Component<GameProps, GameState> {
 
     let constructAi: EnemyAiConstructor
     try {
+      // eslint-disable-next-line no-eval
       constructAi = eval(string)
     } catch (error) {
       console.error(error)
       this.setState({
         error: {
           interpretation: 'Caught this exception while trying to evaluate your custom AI JavaScript.',
-          real: error
+          real: error.message
         }
       })
       return
@@ -752,7 +754,7 @@ class Game extends React.Component<GameProps, GameState> {
         <div className='game'>
           <h2 style={{ fontWeight: 'bold', fontSize: '150%' }}>Error</h2>
           <p>
-            <code style={{ fontFamily: 'monospace' }}>{error.real.message}</code>
+            <code style={{ fontFamily: 'monospace' }}>{error.real}</code>
           </p>
           <p>
             {error.interpretation}
