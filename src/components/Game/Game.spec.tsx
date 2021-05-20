@@ -47,6 +47,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -67,6 +69,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -84,6 +88,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -96,6 +102,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
@@ -114,6 +122,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 1,
       wellStates: [{
@@ -138,6 +148,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 2,
       wellStates: [{
@@ -168,6 +180,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
@@ -204,6 +218,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
@@ -246,6 +262,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
@@ -288,6 +306,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
@@ -348,6 +368,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual(expect.objectContaining({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       replay: [],
       replayTimeoutId: undefined,
@@ -360,11 +381,13 @@ describe('<Game>', () => {
     game.unmount()
   })
 
-  it('lets you select a different AI and play a full game with it and provide no replay', () => {
+  it('lets you select a different AI and play a full game with it and provides no replay', () => {
     const game = getGame()
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -392,6 +415,8 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: true,
       enemy: lovetris,
+      error: null,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
@@ -420,6 +445,189 @@ describe('<Game>', () => {
 
     expect(game.find('.e2e__replay-out').length).toBe(0)
     expect(game.find('.e2e__copy-replay').length).toBe(0)
+  })
+
+  it('lets you use a custom AI', () => {
+    const game = getGame()
+
+    game.find('.e2e__select-ai').simulate('click')
+
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce('() => () => \'J\'')
+    game.find('.e2e__custom-enemy').simulate('click')
+    prompt.mockRestore()
+    game.find('.e2e__start-button').simulate('click')
+
+    expect(game.find('.e2e__enemy-short').text()).toBe('AI: custom')
+    expect(game.state()).toEqual({
+      displayEnemy: true,
+      enemy: expect.objectContaining({
+        shortDescription: 'custom'
+      }),
+      error: null,
+      selectNewPiece: expect.any(Function),
+      mode: 'PLAYING',
+      wellStateId: 0,
+      wellStates: [{
+        core: {
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          score: 0
+        },
+        piece: { id: 'J', o: 0, x: 3, y: 0 } // A J piece!
+      }],
+      replay: [],
+      replayCopiedTimeoutId: undefined,
+      replayTimeoutId: undefined
+    })
+  })
+
+  it('lets you decide NOT to use a custom AI', () => {
+    const game = getGame()
+
+    game.find('.e2e__select-ai').simulate('click')
+
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce(null)
+    game.find('.e2e__custom-enemy').simulate('click')
+    prompt.mockRestore()
+
+    expect(game.find('.e2e__custom-enemy').length).toBe(1)
+  })
+
+  it('errors out if your custom AI is invalid JavaScript, but you can dismiss it', () => {
+    const game = getGame()
+
+    game.find('.e2e__select-ai').simulate('click')
+
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce('() =>')
+    const error = console.error
+    console.error = jest.fn()
+    game.find('.e2e__custom-enemy').simulate('click')
+    console.error = error
+    prompt.mockRestore()
+
+    expect(game.state()).toEqual(expect.objectContaining({
+      error: {
+        interpretation: 'Caught this exception while trying to evaluate your custom AI JavaScript.',
+        real: expect.any(String)
+      }
+    }))
+
+    game.find('.e2e__dismiss-error').simulate('click')
+    expect(game.state()).toEqual(expect.objectContaining({
+      error: null
+    }))
+  })
+
+  it('errors out if your custom AI throws an error on instantiation', () => {
+    const game = getGame()
+
+    game.find('.e2e__select-ai').simulate('click')
+
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce('() => { throw Error(\'CRUNCH\') }')
+    game.find('.e2e__custom-enemy').simulate('click')
+    prompt.mockRestore()
+
+    const error = console.error
+    console.error = jest.fn()
+    game.find('.e2e__start-button').simulate('click')
+    console.error = error
+
+    expect(game.state()).toEqual(expect.objectContaining({
+      error: {
+        interpretation: 'Caught this exception while trying to instantiate your custom enemy AI. Game abandoned.',
+        real: 'CRUNCH'
+      }
+    }))
+  })
+
+  it('errors out if your custom AI throws an error on the first piece', () => {
+    const game = getGame()
+
+    game.find('.e2e__select-ai').simulate('click')
+
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce('() => () => { throw Error(\'BANG\') }')
+    game.find('.e2e__custom-enemy').simulate('click')
+    prompt.mockRestore()
+
+    const error = console.error
+    console.error = jest.fn()
+    game.find('.e2e__start-button').simulate('click')
+    console.error = error
+
+    expect(game.state()).toEqual(expect.objectContaining({
+      error: {
+        interpretation: 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.',
+        real: 'BANG'
+      }
+    }))
+  })
+
+  it('errors out if your custom AI returns a bad piece', () => {
+    const game = getGame()
+
+    game.find('.e2e__select-ai').simulate('click')
+
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce('() => () => \'K\'')
+    game.find('.e2e__custom-enemy').simulate('click')
+    prompt.mockRestore()
+
+    const error = console.error
+    console.error = jest.fn()
+    game.find('.e2e__start-button').simulate('click')
+    console.error = error
+
+    expect(game.state()).toEqual(expect.objectContaining({
+      error: {
+        interpretation: 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.',
+        real: 'Bad piece ID: K'
+      }
+    }))
+  })
+
+  it('errors out if your custom AI throws an error on a later piece', () => {
+    const game = getGame()
+
+    game.find('.e2e__select-ai').simulate('click')
+
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce(`
+      () => {
+        let first = true
+        return () => {
+          if (first) {
+            first = false
+            return 'I'
+          }
+          throw Error('FZAAPP')
+        }
+      }
+    `)
+    game.find('.e2e__custom-enemy').simulate('click')
+    prompt.mockRestore()
+    game.find('.e2e__start-button').simulate('click')
+
+    for (let i = 0; i < 18; i++) {
+      expect(game.state().error).toBeNull()
+      game.instance().handleDown()
+    }
+
+    const error = console.error
+    console.error = jest.fn()
+    expect(game.state().error).toBeNull()
+    game.instance().handleDown()
+    console.error = error
+
+    expect(game.state()).toEqual(expect.objectContaining({
+      error: {
+        interpretation: 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.',
+        real: 'FZAAPP'
+      }
+    }))
   })
 
   it('lets you decide not to replay anything', () => {

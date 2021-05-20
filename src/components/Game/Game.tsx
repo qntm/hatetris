@@ -6,7 +6,8 @@
 
 import * as React from 'react'
 
-import { hatetrisAi, lovetrisAi } from '../../enemy-ais/hatetris-ai'
+import { HatetrisAi } from '../../enemy-ais/hatetris-ai'
+import { LovetrisAi } from '../../enemy-ais/lovetris-ai'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 import { Well } from '../Well/Well'
 import './Game.css'
@@ -39,25 +40,26 @@ type RotationSystem = {
   rotations: Rotations
 }
 
-type Core = {
+type CoreState = {
   score: number,
   well: number[],
 }
 
 type WellState = {
-  core: Core,
+  core: CoreState,
   piece: Piece
 }
 
-type EnemyAi = (
-  now: Core,
-  getPossibleFutures: (pieceId: string, core: Core) => Core[]
-) => string
+type EnemyAi = (now: CoreState)
+  => string
+
+type EnemyAiConstructor = (getNextCoreStates: (pieceId: string, core: CoreState) => CoreState[])
+  => EnemyAi
 
 type Enemy = {
-  short: string,
-  description: string,
-  ai: EnemyAi
+  shortDescription: string,
+  buttonDescription: string,
+  constructAi: EnemyAiConstructor
 }
 
 type GameProps = {
@@ -69,8 +71,13 @@ type GameProps = {
 }
 
 type GameState = {
+  error: {
+    interpretation: string,
+    real: string
+  },
   displayEnemy: boolean,
   enemy: Enemy,
+  selectNewPiece: EnemyAi,
   mode: string,
   wellStateId: number,
   wellStates: WellState[],
@@ -79,21 +86,30 @@ type GameState = {
   replayTimeoutId: ReturnType<typeof setTimeout>
 }
 
-export type { Core, WellState, GameProps, RotationSystem, EnemyAi }
+export type { CoreState, WellState, GameProps, RotationSystem, EnemyAiConstructor, EnemyAi }
 
-export const hatetris = {
-  ai: hatetrisAi,
-  short: 'HATETRIS',
-  description: 'HATETRIS, the original and worst'
+export const hatetris: Enemy = {
+  shortDescription: 'HATETRIS',
+  buttonDescription: 'HATETRIS, the original and worst',
+  constructAi: HatetrisAi
 }
 
-export const lovetris = {
-  ai: lovetrisAi,
-  short: '❤️',
-  description: 'all 4x1 pieces, all the time'
+export const lovetris: Enemy = {
+  shortDescription: '❤️',
+  buttonDescription: 'all 4x1 pieces, all the time',
+  constructAi: LovetrisAi
 }
 
 const enemies = [hatetris, lovetris]
+
+const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
+
+const getValidatedPieceId = (unsafePieceId: any) => {
+  if (pieceIds.includes(unsafePieceId)) {
+    return unsafePieceId
+  }
+  throw Error(`Bad piece ID: ${unsafePieceId}`)
+}
 
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
@@ -119,8 +135,10 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     this.state = {
+      error: null,
       displayEnemy: false, // don't show it unless the user selects one manually
       enemy: hatetris,
+      selectNewPiece: hatetris.constructAi(this.getNextCoreStates),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -130,24 +148,24 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  getFirstWellState (enemyAi: EnemyAi): WellState {
+  getFirstWellState (selectNewPiece: EnemyAi): WellState {
     const {
       rotationSystem,
       wellDepth,
       wellWidth
     } = this.props
 
-    const firstCore = {
+    const firstCoreState = {
       well: Array(wellDepth).fill(0),
       score: 0
     }
 
+    const unsafePieceId: any = selectNewPiece(firstCoreState)
+    const pieceId: string = getValidatedPieceId(unsafePieceId)
+
     return {
-      core: firstCore,
-      piece: rotationSystem.placeNewPiece(
-        wellWidth,
-        enemyAi(firstCore, this.getPossibleFutures)
-      )
+      core: firstCoreState,
+      piece: rotationSystem.placeNewPiece(wellWidth, pieceId)
     }
   }
 
@@ -166,7 +184,7 @@ class Game extends React.Component<GameProps, GameState> {
     will have `null` `piece` because the piece is landed; some will have
     a positive `score`.
   */
-  getPossibleFutures = (pieceId: string, core: Core): Core[] => {
+  getNextCoreStates = (pieceId: string, core: CoreState): CoreState[] => {
     const {
       rotationSystem,
       wellDepth,
@@ -193,7 +211,7 @@ class Game extends React.Component<GameProps, GameState> {
     const seen = new Set()
     seen.add(this.hashCode(piece))
 
-    const possibleFutures: Core[] = []
+    const possibleFutures: CoreState[] = []
 
     // A simple `forEach` won't work here because we are appending to the list as we go
     let i = 0
@@ -336,11 +354,40 @@ class Game extends React.Component<GameProps, GameState> {
     clearTimeout(replayTimeoutId)
     clearTimeout(replayCopiedTimeoutId)
 
+    let selectNewPiece: EnemyAi
+    try {
+      selectNewPiece = enemy.constructAi(this.getNextCoreStates)
+    } catch (error) {
+      console.error(error)
+      this.setState({
+        error: {
+          interpretation: 'Caught this exception while trying to instantiate your custom enemy AI. Game abandoned.',
+          real: error.message
+        }
+      })
+      return
+    }
+
+    let firstWellState: WellState
+    try {
+      firstWellState = this.getFirstWellState(selectNewPiece)
+    } catch (error) {
+      console.error(error)
+      this.setState({
+        error: {
+          interpretation: 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.',
+          real: error.message
+        }
+      })
+      return
+    }
+
     // clear the field and get ready for a new game
     this.setState({
+      selectNewPiece,
       mode: 'PLAYING',
       wellStateId: 0,
-      wellStates: [this.getFirstWellState(enemy.ai)],
+      wellStates: [firstWellState],
       replay: [],
       replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
@@ -367,7 +414,7 @@ class Game extends React.Component<GameProps, GameState> {
     clearTimeout(replayTimeoutId)
 
     // user inputs replay string
-    const string = window.prompt()
+    const string = window.prompt('Paste replay string...')
 
     if (string === null) {
       return
@@ -382,11 +429,16 @@ class Game extends React.Component<GameProps, GameState> {
       : undefined
     const mode = wellStateId in replay ? 'REPLAYING' : 'PLAYING'
 
-    // GO
+    const selectNewPiece = hatetris.constructAi(this.getNextCoreStates)
+
+    // GO.
     this.setState({
+      // Bug: selecting love mode, then playing a HATETRIS replay
+      // resulted in nonsense (probably)
+      enemy: hatetris,
       mode,
       wellStateId,
-      wellStates: [this.getFirstWellState(hatetrisAi)],
+      wellStates: [this.getFirstWellState(selectNewPiece)],
       replay,
       replayTimeoutId
     })
@@ -431,7 +483,7 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
-      enemy,
+      selectNewPiece,
       mode,
       replay,
       wellStateId,
@@ -471,13 +523,25 @@ class Game extends React.Component<GameProps, GameState> {
     // no live piece? make a new one
     // suited to the new world, of course
     if (nextWellState.piece === null && nextMode !== 'GAME_OVER') {
-      // TODO: `nextWellState.well` should be more complex and contain colour
-      // information, whereas the well passed to `enemy.ai` should be a simple
-      // array of integers
-      nextWellState.piece = rotationSystem.placeNewPiece(
-        wellWidth,
-        enemy.ai(nextWellState.core, this.getPossibleFutures)
-      )
+      let pieceId: string
+      try {
+        // TODO: `nextWellState.well` should be more complex and contain colour
+        // information, whereas the well passed to `enemy.constructAi` should be a simple
+        // array of integers
+        const unsafePieceId = selectNewPiece(nextWellState.core)
+        pieceId = getValidatedPieceId(unsafePieceId)
+      } catch (error) {
+        console.error(error)
+        this.setState({
+          error: {
+            interpretation: 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.',
+            real: error.message
+          }
+        })
+        return
+      }
+
+      nextWellState.piece = rotationSystem.placeNewPiece(wellWidth, pieceId)
     }
 
     this.setState({
@@ -627,6 +691,44 @@ class Game extends React.Component<GameProps, GameState> {
     })
   }
 
+  handleClickCustomEnemy = () => {
+    const string = window.prompt('Enter JavaScript code...')
+
+    if (string === null) {
+      return
+    }
+
+    let constructAi: EnemyAiConstructor
+    try {
+      // eslint-disable-next-line no-new-func
+      constructAi = Function(`
+        "use strict"
+        return (${string})
+      `)()
+    } catch (error) {
+      console.error(error)
+      this.setState({
+        error: {
+          interpretation: 'Caught this exception while trying to evaluate your custom AI JavaScript.',
+          real: error.message
+        }
+      })
+      return
+    }
+
+    this.handleClickEnemy({
+      shortDescription: 'custom',
+      buttonDescription: 'this is never actually used',
+      constructAi
+    })
+  }
+
+  handleClickDismissError = () => {
+    this.setState({
+      error: null
+    })
+  }
+
   render () {
     const {
       bar,
@@ -638,6 +740,7 @@ class Game extends React.Component<GameProps, GameState> {
     const {
       displayEnemy,
       enemy,
+      error,
       mode,
       replay,
       replayCopiedTimeoutId,
@@ -648,6 +751,37 @@ class Game extends React.Component<GameProps, GameState> {
     const wellState = wellStateId === -1 ? null : wellStates[wellStateId]
 
     const score = wellState && wellState.core.score
+
+    if (error !== null) {
+      return (
+        <div className='game'>
+          <h2 style={{ fontWeight: 'bold', fontSize: '150%' }}>Error</h2>
+          <p>
+            <code style={{ fontFamily: 'monospace' }}>{error.real}</code>
+          </p>
+          <p>
+            {error.interpretation}
+          </p>
+
+          <h3 style={{ fontWeight: 'bold' }}>To fix this</h3>
+          <p>
+            Check your browser console for more information.
+            Use this information to fix your AI code and submit it again.
+            Or, use one of the preset AIs instead.
+          </p>
+
+          <p>
+            <button
+              className='game__button e2e__dismiss-error'
+              type='button'
+              onClick={this.handleClickDismissError}
+            >
+              OK
+            </button>
+          </p>
+        </div>
+      )
+    }
 
     return (
       <div className='game'>
@@ -668,7 +802,7 @@ class Game extends React.Component<GameProps, GameState> {
 
             {displayEnemy && (
               <p className='game__paragraph e2e__enemy-short'>
-                AI: {enemy.short}
+                AI: {enemy.shortDescription}
               </p>
             )}
 
@@ -739,14 +873,29 @@ class Game extends React.Component<GameProps, GameState> {
               enemies.map(enemy => (
                 <button
                   className='game__button e2e__enemy'
-                  key={enemy.short}
+                  key={enemy.shortDescription}
                   type='button'
                   onClick={() => this.handleClickEnemy(enemy)}
                 >
-                  {enemy.description}
+                  {enemy.buttonDescription}
                 </button>
               ))
             }
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                className='game__button e2e__custom-enemy'
+                type='button'
+                onClick={this.handleClickCustomEnemy}
+              >
+                use custom AI
+              </button>
+              <p>
+                <a href="https://github.com/qntm/hatetris#ai">
+                  how to write a custom AI
+                </a>
+              </p>
+            </div>
           </div>
         )}
 

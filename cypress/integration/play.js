@@ -50,6 +50,38 @@ describe('HATETRIS', () => {
     // no replay
   })
 
+  it('plays with a custom AI', () => {
+    cy.visit('http://localhost:3000/hatetris.html', {
+      onBeforeLoad: window => {
+        cy.stub(window, 'prompt').returns('() => () => \'O\'')
+      }
+    })
+
+    cy.get('button').contains('select AI').click()
+    cy.get('button').contains('use custom AI').click()
+    cy.get('button').contains('start new game').click()
+
+    for (let i = -4; i <= 4; i += 2) {
+      // Move to correct column
+      if (i < 0) {
+        for (let j = 0; j > i; j--) {
+          cy.get('.e2e__left').click()
+        }
+      } else {
+        for (let j = 0; j < i; j++) {
+          cy.get('.e2e__right').click()
+        }
+      }
+
+      // Drop
+      for (let j = 0; j < 18; j++) {
+        cy.get('.e2e__down').click()
+      }
+    }
+
+    cy.get('.e2e__score').contains('2')
+  })
+
   it('plays a Base2048 replay', () => {
     const replay = 'ϥقໂɝƐඖДݹஶʈງƷ௨ೲໃܤѢقҾחࢲටฅڗ௨ΡІݪ௨ళȣݹࢴටງ໒௨ஶໃܥ௨റІݮ௨ఴІݥذඡଈݹƍق๓অஒॴแђञඖЅи௨sǶɔۑడПݷޠقԩݹࠉൿຟɓతණງஈশ੬෪অࠑථධٽଫ൝ଆࡨশ૫СܭߜయլݚɶऋഭܭرɤธӃస൯'
 
