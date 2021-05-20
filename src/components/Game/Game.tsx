@@ -700,8 +700,11 @@ class Game extends React.Component<GameProps, GameState> {
 
     let constructAi: EnemyAiConstructor
     try {
-      // eslint-disable-next-line no-eval
-      constructAi = eval(string)
+      // eslint-disable-next-line no-new-func
+      constructAi = Function(`
+        "use strict"
+        return (${string})
+      `)()
     } catch (error) {
       console.error(error)
       this.setState({
@@ -878,18 +881,21 @@ class Game extends React.Component<GameProps, GameState> {
                 </button>
               ))
             }
-            <button
-              className='game__button e2e__custom-enemy'
-              type='button'
-              onClick={this.handleClickCustomEnemy}
-            >
-              use custom AI
-            </button>
-            <p style={{ textAlign: 'right' }}>
-              <a href="https://github.com/qntm/hatetris#ai">
-                how to write a custom AI
-              </a>
-            </p>
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                className='game__button e2e__custom-enemy'
+                type='button'
+                onClick={this.handleClickCustomEnemy}
+              >
+                use custom AI
+              </button>
+              <p>
+                <a href="https://github.com/qntm/hatetris#ai">
+                  how to write a custom AI
+                </a>
+              </p>
+            </div>
           </div>
         )}
 
