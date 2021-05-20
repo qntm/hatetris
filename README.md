@@ -54,7 +54,7 @@ const iForever = () => () => 'I'
 const sz = () => () => ['S', 'Z'][Math.floor(Math.rand() * 2)]
 ```
 
-More advanced AIs might analyse the well to statically determine the best piece to send next.
+More advanced AIs might analyse the well to statically determine the best piece to send next:
 
 ```js
 const oneIOnly = () =>
