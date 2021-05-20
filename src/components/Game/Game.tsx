@@ -885,6 +885,11 @@ class Game extends React.Component<GameProps, GameState> {
             >
               use custom AI
             </button>
+            <p style={{ textAlign: 'right' }}>
+              <a href="https://github.com/qntm/hatetris#ai">
+                how to write a custom AI
+              </a>
+            </p>
           </div>
         )}
 
