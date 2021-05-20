@@ -2,7 +2,7 @@
 
 This is the source code for [HATETRIS](https://qntm.org/hatetris).
 
-##Writing a custom AI
+## Writing a custom AI
 
 A custom AI for HATETRIS should be a **JavaScript [function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)** (or [arrow function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)), looking something like this:
 
