@@ -8,20 +8,23 @@ A custom AI for HATETRIS should be a **JavaScript function expression** (or arro
 
 ```js
 // Constructor function.
-// The game calls this once only and keeps the returned AI function.
+// Called at the start of a every new game.
 getNextStates => {
-  // You can initialise some local variables here
+  // You can initialise some local variables and state here
   const badPieces = ['O', 'S', 'Z']
+  let badPieceId = 0
 
   // AI function.
   // Called every time the game needs to spawn a new piece to provide to the player.
   // In this example, we return a constant stream of 4x1s, unless the well is all set
-  // up for a Tetris, in which case we return something unhelpful.
+  // up for a Tetris, in which case we return something unhelpful
   return currentState => {
     const nextStates = getNextStates('I', currentState)
     for (const nextState of nextStates) {
       if (nextState.score === currentState.score + 4) {
-        return badPieces[Math.floor(Math.random() * badPieces.length)]
+        const badPiece = badPieces[badPieceId]
+        badPieceId = (badPieceId + 1) % badPieces.length
+        return badPiece
       }
     }
 
