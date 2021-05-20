@@ -47,6 +47,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -67,6 +68,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -84,6 +86,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -96,6 +99,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
@@ -114,6 +118,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 1,
       wellStates: [{
@@ -138,6 +143,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 2,
       wellStates: [{
@@ -168,6 +174,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
@@ -204,6 +211,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
@@ -246,6 +254,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
@@ -288,6 +297,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
@@ -348,6 +358,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual(expect.objectContaining({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       replay: [],
       replayTimeoutId: undefined,
@@ -365,6 +376,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: false,
       enemy: hatetris,
+      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -392,6 +404,7 @@ describe('<Game>', () => {
     expect(game.state()).toEqual({
       displayEnemy: true,
       enemy: lovetris,
+      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{

@@ -1,44 +1,44 @@
 'use strict'
 
-import type { Core, EnemyAi } from '../components/Game/Game.jsx'
-
-// 1 = worst for the player, 7 = best
-const pieceRankings = { S: 1, Z: 2, O: 3, I: 4, L: 5, J: 6, T: 7 }
+import type { CoreState as State, EnemyAiConstructor, EnemyAi } from '../components/Game/Game.jsx'
 
 // Pick the worst piece that could be put into this well.
 // Rating is the row where the highest blue appears, or `wellDepth` if the well is empty.
 // For the player, higher is better because it indicates a lower stack.
 // For the AI, lower is better
-export const hatetrisAi: EnemyAi = (
-  now: Core,
-  getPossibleFutures: (pieceId: string, core: Core) => Core[]
-): string => {
-  const highestRatings = Object.entries(pieceRankings)
-    .map(([pieceId, pieceRanking]) => ({
-      pieceId,
-      pieceRanking,
-      highestRating: Math.max(
-        ...getPossibleFutures(pieceId, now)
-          .map(possibleFuture => {
-            const rating = possibleFuture.well.findIndex(row => row !== 0)
+export const HatetrisAi: EnemyAiConstructor = (getNextStates: (
+  pieceId: string,
+  state: State
+) => State[]): EnemyAi => {
+  // 1 = worst for the player, 7 = best
+  const pieceRankings = { S: 1, Z: 2, O: 3, I: 4, L: 5, J: 6, T: 7 }
 
-            return rating === -1
-              // Well is completely empty after placing this piece in this location
-              // (note: this is impossible in practice)
-              ? now.well.length
-              : rating
-          })
-      )
-    }))
+  return (state: State): string => {
+    const highestRatings = Object.entries(pieceRankings)
+      .map(([pieceId, pieceRanking]) => ({
+        pieceId,
+        pieceRanking,
+        highestRating: Math.max(
+          ...getNextStates(pieceId, state)
+            .map(nextState => {
+              const rating = nextState.well.findIndex((row: number) => row !== 0)
 
-  highestRatings.sort((a, b) =>
-    (a.highestRating - b.highestRating) ||
+              return rating === -1
+                // Well is completely empty after placing this piece in this location
+                // (note: this is impossible in practice)
+                ? state.well.length
+                : rating
+            })
+        )
+      }))
 
-    // Tie breaker is piece ID rating
-    (a.pieceRanking - b.pieceRanking)
-  )
+    highestRatings.sort((a, b) =>
+      (a.highestRating - b.highestRating) ||
 
-  return highestRatings[0].pieceId
+      // Tie breaker is piece ID rating
+      (a.pieceRanking - b.pieceRanking)
+    )
+
+    return highestRatings[0].pieceId
+  }
 }
-
-export const lovetrisAi: EnemyAi = () => 'I'
