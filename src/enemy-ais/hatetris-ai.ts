@@ -42,3 +42,6 @@ export const HatetrisAi: EnemyAiConstructor = (getNextStates: (
     return highestRatings[0].pieceId
   }
 }
+
+// golfed:
+// g=>c=>[...'SZOILJT'].map((p,s)=>({p,s,h:Math.max(...g(p,c).map(n=>[...n.well,1].findIndex(r=>r)))})).sort((a,b)=>a.h-b.h||a.s-b.s)[0].p
