@@ -45,6 +45,7 @@ describe('<Game>', () => {
   it('ignores all keystrokes before the game has begun', () => {
     const game = getGame()
     expect(game.state()).toEqual({
+      customAiCode: '',
       displayEnemy: false,
       enemy: hatetris,
       error: null,
@@ -67,6 +68,7 @@ describe('<Game>', () => {
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(6)
     expect(game.state()).toEqual({
+      customAiCode: '',
       displayEnemy: false,
       enemy: hatetris,
       error: null,
@@ -85,25 +87,15 @@ describe('<Game>', () => {
 
   it('lets you play a few moves', () => {
     const game = getGame()
-    expect(game.state()).toEqual({
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
+    expect(game.state()).toEqual(expect.objectContaining({
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
-      replay: [],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: []
+    }))
 
     game.find('.e2e__start-button').simulate('click')
-    expect(game.state()).toEqual({
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
+    expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
@@ -113,17 +105,11 @@ describe('<Game>', () => {
         },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }],
-      replay: [],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: []
+    }))
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
-    expect(game.state()).toEqual({
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
+    expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 1,
       wellStates: [{
@@ -139,17 +125,11 @@ describe('<Game>', () => {
         },
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }],
-      replay: ['L'],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: ['L']
+    }))
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
-    expect(game.state()).toEqual({
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
+    expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 2,
       wellStates: [{
@@ -171,17 +151,11 @@ describe('<Game>', () => {
         },
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }],
-      replay: ['L', 'R'],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: ['L', 'R']
+    }))
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
-    expect(game.state()).toEqual({
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
+    expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
@@ -209,17 +183,11 @@ describe('<Game>', () => {
         },
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }],
-      replay: ['L', 'R', 'D'],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: ['L', 'R', 'D']
+    }))
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
-    expect(game.state()).toEqual({
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
+    expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
@@ -253,17 +221,11 @@ describe('<Game>', () => {
         },
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
-      replay: ['L', 'R', 'D', 'U'],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: ['L', 'R', 'D', 'U']
+    }))
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
-    expect(game.state()).toEqual({
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
+    expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 3,
       wellStates: [{
@@ -297,17 +259,11 @@ describe('<Game>', () => {
         },
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
-      replay: ['L', 'R', 'D', 'U'],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: ['L', 'R', 'D', 'U']
+    }))
 
     game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
-    expect(game.state()).toEqual({
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
+    expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 4,
       wellStates: [{
@@ -341,10 +297,8 @@ describe('<Game>', () => {
         },
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
-      replay: ['L', 'R', 'D', 'U'],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: ['L', 'R', 'D', 'U']
+    }))
 
     // Warn on attempted redo at end of history
     const warn = jest.spyOn(console, 'warn')
@@ -366,6 +320,7 @@ describe('<Game>', () => {
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
+      customAiCode: '',
       displayEnemy: false,
       enemy: hatetris,
       selectNewPiece: expect.any(Function),
@@ -384,6 +339,7 @@ describe('<Game>', () => {
   it('lets you select a different AI and play a full game with it and provides no replay', () => {
     const game = getGame()
     expect(game.state()).toEqual({
+      customAiCode: '',
       displayEnemy: false,
       enemy: hatetris,
       error: null,
@@ -412,11 +368,9 @@ describe('<Game>', () => {
 
     game.find('.e2e__start-button').simulate('click')
     expect(game.find('.e2e__enemy-short').text()).toBe('AI: ❤️')
-    expect(game.state()).toEqual({
+    expect(game.state()).toEqual(expect.objectContaining({
       displayEnemy: true,
       enemy: lovetris,
-      error: null,
-      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
@@ -426,10 +380,8 @@ describe('<Game>', () => {
         },
         piece: { id: 'I', o: 0, x: 3, y: 0 } // An I piece!
       }],
-      replay: [],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+      replay: []
+    }))
 
     for (let i = 0; i < 187; i++) {
       expect(game.state().mode).toBe('PLAYING')
@@ -451,15 +403,18 @@ describe('<Game>', () => {
     const game = getGame()
 
     game.find('.e2e__select-ai').simulate('click')
-
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('() => () => \'J\'')
     game.find('.e2e__custom-enemy').simulate('click')
-    prompt.mockRestore()
+    game.find('.e2e__ai-textarea').simulate('change', {
+      target: {
+        value: '() => () => \'J\''
+      }
+    })
+    game.find('.e2e__submit-custom-enemy').simulate('click')
     game.find('.e2e__start-button').simulate('click')
 
     expect(game.find('.e2e__enemy-short').text()).toBe('AI: custom')
     expect(game.state()).toEqual({
+      customAiCode: '() => () => \'J\'',
       displayEnemy: true,
       enemy: expect.objectContaining({
         shortDescription: 'custom'
@@ -485,27 +440,29 @@ describe('<Game>', () => {
     const game = getGame()
 
     game.find('.e2e__select-ai').simulate('click')
-
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce(null)
     game.find('.e2e__custom-enemy').simulate('click')
-    prompt.mockRestore()
-
-    expect(game.find('.e2e__custom-enemy').length).toBe(1)
+    game.find('.e2e__cancel-custom-enemy').simulate('click')
+    expect(game.state()).toEqual(expect.objectContaining({
+      customAiCode: '',
+      mode: 'SELECT_AI'
+    }))
   })
 
   it('errors out if your custom AI is invalid JavaScript, but you can dismiss it', () => {
     const game = getGame()
 
     game.find('.e2e__select-ai').simulate('click')
+    game.find('.e2e__custom-enemy').simulate('click')
+    game.find('.e2e__ai-textarea').simulate('change', {
+      target: {
+        value: '() =>'
+      }
+    })
 
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('() =>')
     const error = console.error
     console.error = jest.fn()
-    game.find('.e2e__custom-enemy').simulate('click')
+    game.find('.e2e__submit-custom-enemy').simulate('click')
     console.error = error
-    prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
       error: {
@@ -524,11 +481,13 @@ describe('<Game>', () => {
     const game = getGame()
 
     game.find('.e2e__select-ai').simulate('click')
-
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('() => { throw Error(\'CRUNCH\') }')
     game.find('.e2e__custom-enemy').simulate('click')
-    prompt.mockRestore()
+    game.find('.e2e__ai-textarea').simulate('change', {
+      target: {
+        value: '() => { throw Error(\'CRUNCH\') }'
+      }
+    })
+    game.find('.e2e__submit-custom-enemy').simulate('click')
 
     const error = console.error
     console.error = jest.fn()
@@ -547,11 +506,13 @@ describe('<Game>', () => {
     const game = getGame()
 
     game.find('.e2e__select-ai').simulate('click')
-
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('() => () => { throw Error(\'BANG\') }')
     game.find('.e2e__custom-enemy').simulate('click')
-    prompt.mockRestore()
+    game.find('.e2e__ai-textarea').simulate('change', {
+      target: {
+        value: '() => () => { throw Error(\'BANG\') }'
+      }
+    })
+    game.find('.e2e__submit-custom-enemy').simulate('click')
 
     const error = console.error
     console.error = jest.fn()
@@ -570,11 +531,13 @@ describe('<Game>', () => {
     const game = getGame()
 
     game.find('.e2e__select-ai').simulate('click')
-
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('() => () => \'K\'')
     game.find('.e2e__custom-enemy').simulate('click')
-    prompt.mockRestore()
+    game.find('.e2e__ai-textarea').simulate('change', {
+      target: {
+        value: '() => () => \'K\''
+      }
+    })
+    game.find('.e2e__submit-custom-enemy').simulate('click')
 
     const error = console.error
     console.error = jest.fn()
@@ -593,22 +556,24 @@ describe('<Game>', () => {
     const game = getGame()
 
     game.find('.e2e__select-ai').simulate('click')
-
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce(`
-      () => {
-        let first = true
-        return () => {
-          if (first) {
-            first = false
-            return 'I'
-          }
-          throw Error('FZAAPP')
-        }
-      }
-    `)
     game.find('.e2e__custom-enemy').simulate('click')
-    prompt.mockRestore()
+    game.find('.e2e__ai-textarea').simulate('change', {
+      target: {
+        value: `
+          () => {
+            let first = true
+            return () => {
+              if (first) {
+                first = false
+                return 'I'
+              }
+              throw Error('FZAAPP')
+            }
+          }
+        `
+      }
+    })
+    game.find('.e2e__submit-custom-enemy').simulate('click')
     game.find('.e2e__start-button').simulate('click')
 
     for (let i = 0; i < 18; i++) {
