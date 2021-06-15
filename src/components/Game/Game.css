@@ -44,7 +44,6 @@
 	line-height: normal;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	margin-bottom: 10px;
 }
 
 .game__button {
@@ -83,43 +82,7 @@
 
 .game__bottom {
 	flex: 1 1 auto;
-}
-
-.game__bottom--initial {
-	display: block;
-}
-
-.game__bottom--select-ai {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-}
-
-.game__bottom--playing {
-	display: flex;
-	gap: 10px;
-}
-
-.game__bottomleft {
-	flex: 0 1 50%;
-}
-
-.game__bottomright {
-	flex: 0 1 50%;
-}
-
-.game__control-col {
-	flex: 0 1 33%;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
-.game__game-over-buttons {
-	display: flex;
-	gap: 10px;
-}
-
-.game__button--game-over {
-	flex: 0 1 100%;
 }
