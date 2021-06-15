@@ -51,14 +51,12 @@ describe('HATETRIS', () => {
   })
 
   it('plays with a custom AI', () => {
-    cy.visit('http://localhost:3000/hatetris.html', {
-      onBeforeLoad: window => {
-        cy.stub(window, 'prompt').returns('() => () => \'O\'')
-      }
-    })
+    cy.visit('http://localhost:3000/hatetris.html')
 
     cy.get('button').contains('select AI').click()
     cy.get('button').contains('use custom AI').click()
+    cy.get('textarea').type('() => () => \'O\'')
+    cy.get('button').contains('go').click()
     cy.get('button').contains('start new game').click()
 
     for (let i = -4; i <= 4; i += 2) {
