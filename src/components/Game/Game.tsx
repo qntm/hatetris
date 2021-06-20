@@ -107,25 +107,6 @@ const enemies = [hatetris, lovetris]
 
 const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
 
-const validateAiResult = (
-  ai: EnemyAi,
-  coreState: CoreState,
-  aiState: any,
-  getNextCoreStates: GetNextCoreStates
-) => {
-  const aiResult: any = ai(coreState, aiState, getNextCoreStates)
-
-  const [unsafePieceId, nextAiState] = Array.isArray(aiResult)
-    ? aiResult
-    : [aiResult, aiState]
-
-  if (pieceIds.includes(unsafePieceId)) {
-    return [unsafePieceId, nextAiState]
-  }
-
-  throw Error(`Bad piece ID: ${unsafePieceId}`)
-}
-
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
     super(props)
@@ -163,6 +144,24 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
+  validateAiResult (coreState: CoreState, aiState: any) {
+    const {
+      enemy
+    } = this.state
+
+    const aiResult: any = enemy.ai(coreState, aiState, this.getNextCoreStates)
+
+    const [unsafePieceId, nextAiState] = Array.isArray(aiResult)
+      ? aiResult
+      : [aiResult, aiState]
+
+    if (pieceIds.includes(unsafePieceId)) {
+      return [unsafePieceId, nextAiState]
+    }
+
+    throw Error(`Bad piece ID: ${unsafePieceId}`)
+  }
+
   getFirstWellState (): WellState {
     const {
       rotationSystem,
@@ -170,21 +169,12 @@ class Game extends React.Component<GameProps, GameState> {
       wellWidth
     } = this.props
 
-    const {
-      enemy
-    } = this.state
-
     const firstCoreState = {
       well: Array(wellDepth).fill(0),
       score: 0
     }
 
-    const [firstPieceId, firstAiState] = validateAiResult(
-      enemy.ai,
-      firstCoreState,
-      undefined,
-      this.getNextCoreStates
-    )
+    const [firstPieceId, firstAiState] = this.validateAiResult(firstCoreState, undefined)
 
     return {
       core: firstCoreState,
@@ -506,7 +496,6 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
-      enemy,
       mode,
       replay,
       wellStateId,
@@ -552,12 +541,7 @@ class Game extends React.Component<GameProps, GameState> {
         // TODO: `nextWellState.core.well` should be more complex and contain colour
         // information, whereas the well passed to the AI should be a simple
         // array of integers
-        [pieceId, aiState] = validateAiResult(
-          enemy.ai,
-          nextWellState.core,
-          nextWellState.ai,
-          this.getNextCoreStates
-        )
+        [pieceId, aiState] = this.validateAiResult(nextWellState.core, nextWellState.ai)
       } catch (error) {
         console.error(error)
         this.setState({
