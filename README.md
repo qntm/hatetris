@@ -7,40 +7,29 @@ This is the source code for [HATETRIS](https://qntm.org/hatetris).
 A custom AI for HATETRIS should be a **JavaScript [function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)** (or [arrow function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)), looking something like this:
 
 ```js
-// Constructor function.
-// Called at the start of every new game
-getNextStates => {
-  // You can initialise some local variables and state here
-  const badPieces = ['O', 'S', 'Z']
-  let badPieceId = 0
-
-  // AI function.
-  // Called every time the game needs to spawn a new piece to provide to the player.
-  // In this example, we return a constant stream of 4x1s, unless the well is all set
-  // up for a Tetris, in which case we return one of a rotating selection of
-  // unhelpful pieces
-  return currentState => {
-    const nextStates = getNextStates('I', currentState)
-    for (const nextState of nextStates) {
-      if (nextState.score === currentState.score + 4) {
-        const badPiece = badPieces[badPieceId]
-        badPieceId = (badPieceId + 1) % badPieces.length
-        return badPiece
-      }
+// AI function.
+// Called every time the game needs to spawn a new piece to provide to the player.
+// In this example, we return a constant stream of 4x1s, unless the well is all set
+// up for a Tetris, in which case we return an S piece
+(currentState, getNextStates) => {
+  const nextStates = getNextStates(currentState, 'I')
+  for (const nextState of nextStates) {
+    if (nextState.score === currentState.score + 4) {
+      return 'S'
     }
-
-    return 'I'
   }
+
+  return 'I'
 }
 ```
 
-This function has the form `getNextStates => currentState => nextPieceId`, where:
+This function has the form `(currentState, getNextStates) => nextPieceId`, where:
 
-* `getNextStates` is a helper function `(pieceId, state) => nextStates`, where:
-  * `pieceId` can be any string indicating the name of a piece: "I", "J", "L", "O", "S", "T" or "Z"
-  * `state` can be any **well state object** (see below). You can pass `currentState` here, but you can also create and pass your own hypotheticals
-  * the returned `nextStates` is an array of all of the possible well state objects which could ensue, taking into account every possible location where the player could land this piece
 * `currentState` is the current well state object
+* `getNextStates` is a helper function `(state, pieceId) => nextStates`, where:
+  * `state` can be any **well state object** (see below). You can pass `currentState` here, but you can also create and pass your own hypotheticals
+  * `pieceId` can be any string indicating the name of a piece: "I", "J", "L", "O", "S", "T" or "Z"
+  * the returned `nextStates` is an array of all of the possible new well state objects which could ensue, taking into account every possible location where the player could land this piece
 * the returned `nextPieceId` is the name of the piece the game should spawn now
 
 A well state object has the form `{ well, score }`, where:
@@ -51,17 +40,17 @@ A well state object has the form `{ well, score }`, where:
 Very simple AIs might ignore both the current state of the well and the possible next states:
 
 ```js
-() => () => 'I'
+() => 'I'
 ```
 
 ```js
-() => () => ['S', 'Z'][Math.floor(Math.rand() * 2)]
+() => ['S', 'Z'][Math.floor(Math.rand() * 2)]
 ```
 
 More advanced AIs might analyse the current layout of the well to statically determine the best piece to send next:
 
 ```js
-() => currentState =>
+currentState =>
   currentState.well[currentState.well.length - 1] === 0
     ? 'I' // when the well is empty, send a 4x1
     : 'S' // otherwise S pieces forever

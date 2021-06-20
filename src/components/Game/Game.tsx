@@ -6,8 +6,8 @@
 
 import * as React from 'react'
 
-import { HatetrisAi } from '../../enemy-ais/hatetris-ai'
-import { LovetrisAi } from '../../enemy-ais/lovetris-ai'
+import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
+import { lovetrisAi } from '../../enemy-ais/lovetris-ai'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 import { Well } from '../Well/Well'
 import './Game.css'
@@ -50,16 +50,15 @@ type WellState = {
   piece: Piece
 }
 
-type EnemyAi = (now: CoreState)
-  => string
-
-type EnemyAiConstructor = (getNextCoreStates: (pieceId: string, core: CoreState) => CoreState[])
-  => EnemyAi
+type EnemyAi = (
+  now: CoreState,
+  getNextCoreStates: (core: CoreState, pieceId: string) => CoreState[]
+) => string
 
 type Enemy = {
   shortDescription: string,
   buttonDescription: string,
-  constructAi: EnemyAiConstructor
+  ai: EnemyAi
 }
 
 type GameProps = {
@@ -78,7 +77,6 @@ type GameState = {
   displayEnemy: boolean,
   enemy: Enemy,
   customAiCode: string,
-  selectNewPiece: EnemyAi,
   mode: string,
   wellStateId: number,
   wellStates: WellState[],
@@ -87,18 +85,18 @@ type GameState = {
   replayTimeoutId: ReturnType<typeof setTimeout>
 }
 
-export type { CoreState, WellState, GameProps, RotationSystem, EnemyAiConstructor, EnemyAi }
+export type { CoreState, WellState, GameProps, RotationSystem, EnemyAi }
 
 export const hatetris: Enemy = {
   shortDescription: 'HATETRIS',
   buttonDescription: 'HATETRIS, the original and worst',
-  constructAi: HatetrisAi
+  ai: hatetrisAi
 }
 
 export const lovetris: Enemy = {
   shortDescription: '❤️',
   buttonDescription: 'all 4x1 pieces, all the time',
-  constructAi: LovetrisAi
+  ai: lovetrisAi
 }
 
 const enemies = [hatetris, lovetris]
@@ -140,7 +138,6 @@ class Game extends React.Component<GameProps, GameState> {
       displayEnemy: false, // don't show it unless the user selects one manually
       enemy: hatetris,
       customAiCode: '',
-      selectNewPiece: hatetris.constructAi(this.getNextCoreStates),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -150,7 +147,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  getFirstWellState (selectNewPiece: EnemyAi): WellState {
+  getFirstWellState (enemyAi: EnemyAi): WellState {
     const {
       rotationSystem,
       wellDepth,
@@ -162,7 +159,7 @@ class Game extends React.Component<GameProps, GameState> {
       score: 0
     }
 
-    const unsafePieceId: any = selectNewPiece(firstCoreState)
+    const unsafePieceId: any = enemyAi(firstCoreState, this.getNextCoreStates)
     const pieceId: string = getValidatedPieceId(unsafePieceId)
 
     return {
@@ -186,7 +183,7 @@ class Game extends React.Component<GameProps, GameState> {
     will have `null` `piece` because the piece is landed; some will have
     a positive `score`.
   */
-  getNextCoreStates = (pieceId: string, core: CoreState): CoreState[] => {
+  getNextCoreStates = (core: CoreState, pieceId: string): CoreState[] => {
     const {
       rotationSystem,
       wellDepth,
@@ -356,23 +353,9 @@ class Game extends React.Component<GameProps, GameState> {
     clearTimeout(replayTimeoutId)
     clearTimeout(replayCopiedTimeoutId)
 
-    let selectNewPiece: EnemyAi
-    try {
-      selectNewPiece = enemy.constructAi(this.getNextCoreStates)
-    } catch (error) {
-      console.error(error)
-      this.setState({
-        error: {
-          interpretation: 'Caught this exception while trying to instantiate your custom enemy AI. Game abandoned.',
-          real: error.message
-        }
-      })
-      return
-    }
-
     let firstWellState: WellState
     try {
-      firstWellState = this.getFirstWellState(selectNewPiece)
+      firstWellState = this.getFirstWellState(enemy.ai)
     } catch (error) {
       console.error(error)
       this.setState({
@@ -386,7 +369,6 @@ class Game extends React.Component<GameProps, GameState> {
 
     // clear the field and get ready for a new game
     this.setState({
-      selectNewPiece,
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [firstWellState],
@@ -431,8 +413,6 @@ class Game extends React.Component<GameProps, GameState> {
       : undefined
     const mode = wellStateId in replay ? 'REPLAYING' : 'PLAYING'
 
-    const selectNewPiece = hatetris.constructAi(this.getNextCoreStates)
-
     // GO.
     this.setState({
       // Bug: selecting love mode, then playing a HATETRIS replay
@@ -440,7 +420,7 @@ class Game extends React.Component<GameProps, GameState> {
       enemy: hatetris,
       mode,
       wellStateId,
-      wellStates: [this.getFirstWellState(selectNewPiece)],
+      wellStates: [this.getFirstWellState(hatetris.ai)],
       replay,
       replayTimeoutId
     })
@@ -485,7 +465,7 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
-      selectNewPiece,
+      enemy,
       mode,
       replay,
       wellStateId,
@@ -528,9 +508,9 @@ class Game extends React.Component<GameProps, GameState> {
       let pieceId: string
       try {
         // TODO: `nextWellState.well` should be more complex and contain colour
-        // information, whereas the well passed to `enemy.constructAi` should be a simple
+        // information, whereas the well passed to the AI should be a simple
         // array of integers
-        const unsafePieceId = selectNewPiece(nextWellState.core)
+        const unsafePieceId = enemy.ai(nextWellState.core, this.getNextCoreStates)
         pieceId = getValidatedPieceId(unsafePieceId)
       } catch (error) {
         console.error(error)
@@ -716,10 +696,10 @@ class Game extends React.Component<GameProps, GameState> {
       customAiCode
     } = this.state
 
-    let constructAi: EnemyAiConstructor
+    let ai: EnemyAi
     try {
       // eslint-disable-next-line no-new-func
-      constructAi = Function(`
+      ai = Function(`
         "use strict"
         return (${customAiCode})
       `)()
@@ -737,7 +717,7 @@ class Game extends React.Component<GameProps, GameState> {
     this.handleClickEnemy({
       shortDescription: 'custom',
       buttonDescription: 'this is never actually used',
-      constructAi
+      ai
     })
   }
 

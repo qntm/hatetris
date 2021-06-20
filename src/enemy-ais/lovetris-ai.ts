@@ -1,5 +1,5 @@
 'use strict'
 
-import type { EnemyAiConstructor } from '../components/Game/Game.jsx'
+import type { EnemyAi } from '../components/Game/Game.jsx'
 
-export const LovetrisAi: EnemyAiConstructor = () => () => 'I'
+export const lovetrisAi: EnemyAi = () => 'I'
