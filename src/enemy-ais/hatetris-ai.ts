@@ -16,7 +16,6 @@ export const hatetrisAi: EnemyAi = (
     pieceId: string
   ) => State[]
 ): string => {
-
   const highestRatings = worstPieces
     .map((pieceId, pieceRanking) => ({
       pieceId,
