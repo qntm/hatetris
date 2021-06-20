@@ -362,7 +362,6 @@ class Game extends React.Component<GameProps, GameState> {
 
   handleClickStart = () => {
     const {
-      enemy,
       replayCopiedTimeoutId,
       replayTimeoutId
     } = this.state
@@ -409,7 +408,6 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     let {
-      enemy,
       replayTimeoutId
     } = this.state
 
