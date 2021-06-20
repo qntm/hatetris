@@ -433,7 +433,7 @@ describe('<Game>', () => {
     game.unmount()
   })
 
-  it('lets you select a different AI and play a full game with it and provides no replay', () => {
+  it('lets you select a different AI and play a full game with it and provides a replay', () => {
     const game = getGame()
     expect(game.state()).toEqual({
       customAiCode: '',
@@ -491,8 +491,7 @@ describe('<Game>', () => {
       wellStates: expect.any(Array)
     }))
 
-    expect(game.find('.e2e__replay-out').length).toBe(0)
-    expect(game.find('.e2e__copy-replay').length).toBe(0)
+    expect(game.find('.e2e__replay-out').text()).toBe('௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
   })
 
   it('lets you use a custom AI', () => {
@@ -606,9 +605,14 @@ describe('<Game>', () => {
     })
     game.find('.e2e__submit-custom-enemy').simulate('click')
 
+    // Start a replay instead of starting a new game (coverage)
+    // TODO: deduplicate that code
     const error = console.error
     console.error = jest.fn()
-    game.find('.e2e__start-button').simulate('click')
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce('')
+    game.find('.e2e__replay-button').simulate('click')
+    prompt.mockRestore()
     console.error = error
 
     expect(game.state()).toEqual(expect.objectContaining({

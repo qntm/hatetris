@@ -163,12 +163,16 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  getFirstWellState (enemyAi: EnemyAi): WellState {
+  getFirstWellState (): WellState {
     const {
       rotationSystem,
       wellDepth,
       wellWidth
     } = this.props
+
+    const {
+      enemy
+    } = this.state
 
     const firstCoreState = {
       well: Array(wellDepth).fill(0),
@@ -176,7 +180,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     const [firstPieceId, firstAiState] = validateAiResult(
-      enemyAi,
+      enemy.ai,
       firstCoreState,
       undefined,
       this.getNextCoreStates
@@ -380,7 +384,7 @@ class Game extends React.Component<GameProps, GameState> {
 
     let firstWellState: WellState
     try {
-      firstWellState = this.getFirstWellState(enemy.ai)
+      firstWellState = this.getFirstWellState()
     } catch (error) {
       console.error(error)
       this.setState({
@@ -415,6 +419,7 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     let {
+      enemy,
       replayTimeoutId
     } = this.state
 
@@ -432,6 +437,20 @@ class Game extends React.Component<GameProps, GameState> {
     const replay = hatetrisReplayCodec.decode(string)
     // TODO: what if the replay is bad?
 
+    let firstWellState: WellState
+    try {
+      firstWellState = this.getFirstWellState()
+    } catch (error) {
+      console.error(error)
+      this.setState({
+        error: {
+          interpretation: 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.',
+          real: error.message
+        }
+      })
+      return
+    }
+
     const wellStateId = 0
     replayTimeoutId = wellStateId in replay
       ? setTimeout(this.handleReplayTimeout, replayTimeout)
@@ -440,12 +459,9 @@ class Game extends React.Component<GameProps, GameState> {
 
     // GO.
     this.setState({
-      // Bug: selecting love mode, then playing a HATETRIS replay
-      // resulted in nonsense (probably)
-      enemy: hatetris,
       mode,
       wellStateId,
-      wellStates: [this.getFirstWellState(hatetris.ai)],
+      wellStates: [firstWellState],
       replay,
       replayTimeoutId
     })
