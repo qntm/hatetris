@@ -6,7 +6,7 @@ import { shallow } from 'enzyme'
 import * as React from 'react'
 
 import Game from '../components/Game/Game'
-import { LovetrisAi } from './lovetris-ai'
+import { lovetrisAi } from './lovetris-ai'
 import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
 
 // Note: well bits are flipped compared to what you would see on the screen.
@@ -26,8 +26,6 @@ const game = shallow<Game>(
 const getNextCoreStates = game.instance().getNextCoreStates
 
 describe('LovetrisAi', () => {
-  const lovetrisAi = LovetrisAi(getNextCoreStates)
-
   it('generates I every time right now', () => {
     expect(lovetrisAi({
       score: 0,
@@ -41,6 +39,6 @@ describe('LovetrisAi', () => {
         0b0000000000,
         0b0000000000
       ]
-    })).toBe('I')
+    }, getNextCoreStates)).toBe('I')
   })
 })

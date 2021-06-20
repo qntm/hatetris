@@ -49,7 +49,6 @@ describe('<Game>', () => {
       displayEnemy: false,
       enemy: hatetris,
       error: null,
-      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -72,7 +71,6 @@ describe('<Game>', () => {
       displayEnemy: false,
       enemy: hatetris,
       error: null,
-      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -323,7 +321,6 @@ describe('<Game>', () => {
       customAiCode: '',
       displayEnemy: false,
       enemy: hatetris,
-      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       replay: [],
       replayTimeoutId: undefined,
@@ -343,7 +340,6 @@ describe('<Game>', () => {
       displayEnemy: false,
       enemy: hatetris,
       error: null,
-      selectNewPiece: expect.any(Function),
       mode: 'INITIAL',
       wellStateId: -1,
       wellStates: [],
@@ -406,7 +402,7 @@ describe('<Game>', () => {
     game.find('.e2e__custom-enemy').simulate('click')
     game.find('.e2e__ai-textarea').simulate('change', {
       target: {
-        value: '() => () => \'J\''
+        value: '() => \'J\''
       }
     })
     game.find('.e2e__submit-custom-enemy').simulate('click')
@@ -414,13 +410,12 @@ describe('<Game>', () => {
 
     expect(game.find('.e2e__enemy-short').text()).toBe('AI: custom')
     expect(game.state()).toEqual({
-      customAiCode: '() => () => \'J\'',
+      customAiCode: '() => \'J\'',
       displayEnemy: true,
       enemy: expect.objectContaining({
         shortDescription: 'custom'
       }),
       error: null,
-      selectNewPiece: expect.any(Function),
       mode: 'PLAYING',
       wellStateId: 0,
       wellStates: [{
@@ -477,31 +472,6 @@ describe('<Game>', () => {
     }))
   })
 
-  it('errors out if your custom AI throws an error on instantiation', () => {
-    const game = getGame()
-
-    game.find('.e2e__select-ai').simulate('click')
-    game.find('.e2e__custom-enemy').simulate('click')
-    game.find('.e2e__ai-textarea').simulate('change', {
-      target: {
-        value: '() => { throw Error(\'CRUNCH\') }'
-      }
-    })
-    game.find('.e2e__submit-custom-enemy').simulate('click')
-
-    const error = console.error
-    console.error = jest.fn()
-    game.find('.e2e__start-button').simulate('click')
-    console.error = error
-
-    expect(game.state()).toEqual(expect.objectContaining({
-      error: {
-        interpretation: 'Caught this exception while trying to instantiate your custom enemy AI. Game abandoned.',
-        real: 'CRUNCH'
-      }
-    }))
-  })
-
   it('errors out if your custom AI throws an error on the first piece', () => {
     const game = getGame()
 
@@ -509,7 +479,7 @@ describe('<Game>', () => {
     game.find('.e2e__custom-enemy').simulate('click')
     game.find('.e2e__ai-textarea').simulate('change', {
       target: {
-        value: '() => () => { throw Error(\'BANG\') }'
+        value: '() => { throw Error(\'BANG\') }'
       }
     })
     game.find('.e2e__submit-custom-enemy').simulate('click')
@@ -534,7 +504,7 @@ describe('<Game>', () => {
     game.find('.e2e__custom-enemy').simulate('click')
     game.find('.e2e__ai-textarea').simulate('change', {
       target: {
-        value: '() => () => \'K\''
+        value: '() => \'K\''
       }
     })
     game.find('.e2e__submit-custom-enemy').simulate('click')
@@ -560,7 +530,7 @@ describe('<Game>', () => {
     game.find('.e2e__ai-textarea').simulate('change', {
       target: {
         value: `
-          () => {
+          (() => {
             let first = true
             return () => {
               if (first) {
@@ -569,7 +539,7 @@ describe('<Game>', () => {
               }
               throw Error('FZAAPP')
             }
-          }
+          })()
         `
       }
     })
