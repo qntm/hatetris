@@ -1024,16 +1024,12 @@ class Game extends React.Component<GameProps, GameState> {
 
         {mode === 'GAME_OVER' && (
           <div className='game__bottom'>
-            {enemy === hatetris && (
-              <>
-                <div>
-                  replay of last game:
-                </div>
-                <div className='game__replay-out e2e__replay-out'>
-                  {hatetrisReplayCodec.encode(replay)}
-                </div>
-              </>
-            )}
+            <div>
+              replay of last game:
+            </div>
+            <div className='game__replay-out e2e__replay-out'>
+              {hatetrisReplayCodec.encode(replay)}
+            </div>
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
@@ -1044,15 +1040,13 @@ class Game extends React.Component<GameProps, GameState> {
                 undo last move
               </button>
 
-              {enemy === hatetris && (
-                <button
-                  className='game__button e2e__copy-replay'
-                  type='button'
-                  onClick={this.handleClickCopyReplay}
-                >
-                  {replayCopiedTimeoutId ? 'copied!' : 'copy replay'}
-                </button>
-              )}
+              <button
+                className='game__button e2e__copy-replay'
+                type='button'
+                onClick={this.handleClickCopyReplay}
+              >
+                {replayCopiedTimeoutId ? 'copied!' : 'copy replay'}
+              </button>
 
               <button
                 className='game__button e2e__done'

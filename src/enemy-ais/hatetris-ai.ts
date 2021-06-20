@@ -12,7 +12,7 @@ type HatetrisAiState = Array<Seen>
 // S = worst for the player, T = best
 const worstPieces = 'SZOILJT'.split('')
 
-// Pick the worst piece that could be put into this well.
+// Pick the worst piece which could be put into this well.
 // Rating is the row where the highest blue appears, or `wellDepth` if the well is empty.
 // For the player, higher is better because it indicates a lower stack.
 // For the AI, lower is better
