@@ -55,7 +55,7 @@ describe('HATETRIS', () => {
 
     cy.get('button').contains('select AI').click()
     cy.get('button').contains('use custom AI').click()
-    cy.get('textarea').type('() => () => \'O\'')
+    cy.get('textarea').type('() => \'O\'')
     cy.get('button').contains('go').click()
     cy.get('button').contains('start new game').click()
 
