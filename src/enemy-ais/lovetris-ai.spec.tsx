@@ -39,6 +39,6 @@ describe('LovetrisAi', () => {
         0b0000000000,
         0b0000000000
       ]
-    }, getNextCoreStates)).toBe('I')
+    }, undefined, getNextCoreStates)).toBe('I')
   })
 })

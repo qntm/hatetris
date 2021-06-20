@@ -1,6 +1,13 @@
 'use strict'
 
-import type { CoreState as State, EnemyAi } from '../components/Game/Game.jsx'
+import type { CoreState, EnemyAi } from '../components/Game/Game.jsx'
+
+type Seen = {
+  well: number[],
+  pieceIds: string[]
+}
+
+type HatetrisAiState = Array<Seen>
 
 // S = worst for the player, T = best
 const worstPieces = 'SZOILJT'.split('')
@@ -10,35 +17,55 @@ const worstPieces = 'SZOILJT'.split('')
 // For the player, higher is better because it indicates a lower stack.
 // For the AI, lower is better
 export const hatetrisAi: EnemyAi = (
-  currentState: State,
-  getNextStates: (
-    state: State,
+  currentCoreState: CoreState,
+  currentAiState: undefined | HatetrisAiState,
+  getNextCoreStates: (
+    coreState: CoreState,
     pieceId: string
-  ) => State[]
-): string => {
-  const highestRatings = worstPieces
+  ) => CoreState[]
+): [string, HatetrisAiState] => {
+  if (currentAiState === undefined) {
+    currentAiState = []
+  }
+
+  const prevIndex = currentAiState
+    .findIndex(({ well }) =>
+      well.every((row: number, y) => row === currentCoreState.well[y])
+    )
+
+  const pastPieceIds = prevIndex === -1
+    ? []
+    : currentAiState[prevIndex].pieceIds
+
+  const evaluations = worstPieces
     .map((pieceId, pieceRanking) => ({
       pieceId,
-      pieceRanking,
-      highestRating: Math.max(
-        ...getNextStates(currentState, pieceId)
-          .map(nextState => {
-            const rating = nextState.well.findIndex((row: number) => row !== 0)
+      alreadyGenerated: pastPieceIds.includes(pieceId) ? 1 : 0,
+      highestPeak: Math.max(
+        ...getNextCoreStates(currentCoreState, pieceId)
+          .map(nextCoreState => {
+            const rating = nextCoreState.well.findIndex((row: number) => row !== 0)
 
             return rating === -1
               // Well is completely empty after placing this piece in this location
-              ? nextState.well.length
+              ? nextCoreState.well.length
               : rating
           })
-      )
+      ),
+      pieceRanking
     }))
 
-  highestRatings.sort((a, b) =>
-    (a.highestRating - b.highestRating) ||
+  evaluations.sort((a, b) =>
+    // Always prefer a piece which has never been generated before for this well over a piece
+    // which has already been generated for this well.
+    (a.alreadyGenerated - b.alreadyGenerated) ||
+
+    // Otherwise, whichever piece gives the highest peak (lower number = higher peak)
+    (a.highestPeak - b.highestPeak) ||
 
     // Tie breaker is piece ID rating
     (a.pieceRanking - b.pieceRanking)
   )
 
-  return highestRatings[0].pieceId
+  return [evaluations[0].pieceId, undefined]
 }

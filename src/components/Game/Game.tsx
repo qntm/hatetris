@@ -51,9 +51,10 @@ type WellState = {
 }
 
 type EnemyAi = (
-  now: CoreState,
+  currentCoreState: CoreState,
+  currentAiState: any,
   getNextCoreStates: (core: CoreState, pieceId: string) => CoreState[]
-) => string
+) => (string | [string, any])
 
 type Enemy = {
   shortDescription: string,
@@ -103,10 +104,15 @@ const enemies = [hatetris, lovetris]
 
 const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
 
-const getValidatedPieceId = (unsafePieceId: any) => {
+const validateAiResult = (aiResult: any) => {
+  const [unsafePieceId, aiState] = Array.isArray(aiResult)
+    ? aiResult
+    : [aiResult, undefined]
+
   if (pieceIds.includes(unsafePieceId)) {
-    return unsafePieceId
+    return [unsafePieceId, aiState]
   }
+
   throw Error(`Bad piece ID: ${unsafePieceId}`)
 }
 
@@ -159,8 +165,9 @@ class Game extends React.Component<GameProps, GameState> {
       score: 0
     }
 
-    const unsafePieceId: any = enemyAi(firstCoreState, this.getNextCoreStates)
-    const pieceId: string = getValidatedPieceId(unsafePieceId)
+    const [pieceId, aiState] = validateAiResult(
+      enemyAi(firstCoreState, undefined, this.getNextCoreStates)
+    )
 
     return {
       core: firstCoreState,
@@ -506,12 +513,14 @@ class Game extends React.Component<GameProps, GameState> {
     // suited to the new world, of course
     if (nextWellState.piece === null && nextMode !== 'GAME_OVER') {
       let pieceId: string
+      let aiState: any
       try {
-        // TODO: `nextWellState.well` should be more complex and contain colour
+        // TODO: `nextWellState.core.well` should be more complex and contain colour
         // information, whereas the well passed to the AI should be a simple
         // array of integers
-        const unsafePieceId = enemy.ai(nextWellState.core, this.getNextCoreStates)
-        pieceId = getValidatedPieceId(unsafePieceId)
+        [pieceId, aiState] = validateAiResult(
+          enemy.ai(nextWellState.core, undefined, this.getNextCoreStates)
+        )
       } catch (error) {
         console.error(error)
         this.setState({

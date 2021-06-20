@@ -39,7 +39,7 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000000
       ]
-    }, getNextCoreStates)).toBe('S')
+    }, undefined, getNextCoreStates)).toBe('S')
   })
 
   it('generates a Z when an S would result in a lower stack', () => {
@@ -55,7 +55,7 @@ describe('hatetrisAi', () => {
         0b0001000000,
         0b1111011111
       ]
-    }, getNextCoreStates)).toBe('Z')
+    }, undefined, getNextCoreStates)).toBe('Z')
   })
 
   it('generates an O when an S or Z would result in a lower stack', () => {
@@ -71,7 +71,7 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b1111101111
       ]
-    }, getNextCoreStates)).toBe('O')
+    }, undefined, getNextCoreStates)).toBe('O')
   })
 
   it('generates an I when an S, Z or O would result in a lower stack', () => {
@@ -87,7 +87,7 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b1111001111
       ]
-    }, getNextCoreStates)).toBe('I')
+    }, undefined, getNextCoreStates)).toBe('I')
   })
 
   it('generates an L when an S, Z, O or I would result in a lower stack', () => {
@@ -103,7 +103,7 @@ describe('hatetrisAi', () => {
         0b1011100111,
         0b1111110111
       ]
-    }, getNextCoreStates)).toBe('L')
+    }, undefined, getNextCoreStates)).toBe('L')
   })
 
   it('generates a J when an S, Z, O, I or L would result in a lower stack', () => {
@@ -119,7 +119,7 @@ describe('hatetrisAi', () => {
         0b1011100111,
         0b1111101111
       ]
-    }, getNextCoreStates)).toBe('J')
+    }, undefined, getNextCoreStates)).toBe('J')
   })
 
   it('generates a T when an S, Z, O, I, L or J would result in a lower stack', () => {
@@ -135,7 +135,7 @@ describe('hatetrisAi', () => {
         0b1111000011,
         0b1111100111
       ]
-    }, getNextCoreStates)).toBe('T')
+    }, undefined, getNextCoreStates)).toBe('T')
   })
 
   // Only while writing these unit tests did I discover this subtle piece of
@@ -156,7 +156,7 @@ describe('hatetrisAi', () => {
         0b1111000011,
         0b1111100111
       ]
-    }, getNextCoreStates)).toBe('L')
+    }, undefined, getNextCoreStates)).toBe('L')
   })
 
   // Coverage...
@@ -173,6 +173,64 @@ describe('hatetrisAi', () => {
         0b1111111110,
         0b1111111110
       ]
-    }, getNextCoreStates)).toBe('S')
+    }, undefined, getNextCoreStates)).toBe('S')
   })
+
+  // Loop avoidance
+  it('generates a Z if it already generated an S once', () => {
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000
+      ]
+    }, [{
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000
+      ],
+      pieceIds: ['S']
+    }], getNextCoreStates)).toBe('Z')
+  })
+
+  it('gives up and generates an S if it already generated EVERY piece', () => {
+    expect(hatetrisAi({
+      score: 0,
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000
+      ]
+    }, [{
+      well: [
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000
+      ],
+      pieceIds: ['S', 'Z', 'O', 'I', 'L', 'J', 'T']
+    }], getNextCoreStates)).toBe('S')
+  })
+
 })
