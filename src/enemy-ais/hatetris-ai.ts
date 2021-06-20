@@ -28,19 +28,23 @@ export const hatetrisAi: EnemyAi = (
     currentAiState = []
   }
 
+  // Has this well been seen before? -1 => no
   const prevIndex = currentAiState
     .findIndex(({ well }) =>
       well.every((row: number, y) => row === currentCoreState.well[y])
     )
 
-  const pastPieceIds = prevIndex === -1
-    ? []
-    : currentAiState[prevIndex].pieceIds
-
   const evaluations = worstPieces
     .map((pieceId, pieceRanking) => ({
       pieceId,
-      alreadyGenerated: pastPieceIds.includes(pieceId) ? 1 : 0,
+
+      // Has this piece been generated before for this well? 0 => no
+      alreadyGenerated: prevIndex === -1
+        ? 0
+        : currentAiState[prevIndex].pieceIds.includes(pieceId)
+          ? 1
+          : 0,
+
       highestPeak: Math.max(
         ...getNextCoreStates(currentCoreState, pieceId)
           .map(nextCoreState => {
@@ -67,5 +71,32 @@ export const hatetrisAi: EnemyAi = (
     (a.pieceRanking - b.pieceRanking)
   )
 
-  return [evaluations[0].pieceId, undefined]
+  const pieceId = evaluations[0].pieceId
+
+  return [
+    pieceId,
+    prevIndex === -1
+      ? [
+        ...currentAiState,
+        {
+          well: currentCoreState.well,
+          pieceIds: [pieceId]
+        }
+      ]
+      : currentAiState[prevIndex].pieceIds.includes(pieceId)
+        // No duplicates. Approximately 0% probability of this ever happening with this
+        // AI, but as a general technique it's worth having this on the books
+        ? currentAiState
+        : [
+          ...currentAiState.slice(0, prevIndex),
+          {
+            ...currentAiState[prevIndex],
+            pieceIds: [
+              ...currentAiState[prevIndex].pieceIds,
+              pieceId
+            ]
+          },
+          ...currentAiState.slice(prevIndex + 1)
+        ]
+  ]
 }
