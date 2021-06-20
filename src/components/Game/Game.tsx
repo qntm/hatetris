@@ -107,25 +107,6 @@ const enemies = [hatetris, lovetris]
 
 const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
 
-const validateAiResult = (
-  ai: EnemyAi,
-  coreState: CoreState,
-  aiState: any,
-  getNextCoreStates: GetNextCoreStates
-) => {
-  const aiResult: any = ai(coreState, aiState, getNextCoreStates)
-
-  const [unsafePieceId, nextAiState] = Array.isArray(aiResult)
-    ? aiResult
-    : [aiResult, aiState]
-
-  if (pieceIds.includes(unsafePieceId)) {
-    return [unsafePieceId, nextAiState]
-  }
-
-  throw Error(`Bad piece ID: ${unsafePieceId}`)
-}
-
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
     super(props)
@@ -163,7 +144,25 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  getFirstWellState (enemyAi: EnemyAi): WellState {
+  validateAiResult (coreState: CoreState, aiState: any) {
+    const {
+      enemy
+    } = this.state
+
+    const aiResult: any = enemy.ai(coreState, aiState, this.getNextCoreStates)
+
+    const [unsafePieceId, nextAiState] = Array.isArray(aiResult)
+      ? aiResult
+      : [aiResult, aiState]
+
+    if (pieceIds.includes(unsafePieceId)) {
+      return [unsafePieceId, nextAiState]
+    }
+
+    throw Error(`Bad piece ID: ${unsafePieceId}`)
+  }
+
+  getFirstWellState (): WellState {
     const {
       rotationSystem,
       wellDepth,
@@ -175,12 +174,7 @@ class Game extends React.Component<GameProps, GameState> {
       score: 0
     }
 
-    const [firstPieceId, firstAiState] = validateAiResult(
-      enemyAi,
-      firstCoreState,
-      undefined,
-      this.getNextCoreStates
-    )
+    const [firstPieceId, firstAiState] = this.validateAiResult(firstCoreState, undefined)
 
     return {
       core: firstCoreState,
@@ -368,7 +362,6 @@ class Game extends React.Component<GameProps, GameState> {
 
   handleClickStart = () => {
     const {
-      enemy,
       replayCopiedTimeoutId,
       replayTimeoutId
     } = this.state
@@ -380,7 +373,7 @@ class Game extends React.Component<GameProps, GameState> {
 
     let firstWellState: WellState
     try {
-      firstWellState = this.getFirstWellState(enemy.ai)
+      firstWellState = this.getFirstWellState()
     } catch (error) {
       console.error(error)
       this.setState({
@@ -432,6 +425,20 @@ class Game extends React.Component<GameProps, GameState> {
     const replay = hatetrisReplayCodec.decode(string)
     // TODO: what if the replay is bad?
 
+    let firstWellState: WellState
+    try {
+      firstWellState = this.getFirstWellState()
+    } catch (error) {
+      console.error(error)
+      this.setState({
+        error: {
+          interpretation: 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.',
+          real: error.message
+        }
+      })
+      return
+    }
+
     const wellStateId = 0
     replayTimeoutId = wellStateId in replay
       ? setTimeout(this.handleReplayTimeout, replayTimeout)
@@ -440,12 +447,9 @@ class Game extends React.Component<GameProps, GameState> {
 
     // GO.
     this.setState({
-      // Bug: selecting love mode, then playing a HATETRIS replay
-      // resulted in nonsense (probably)
-      enemy: hatetris,
       mode,
       wellStateId,
-      wellStates: [this.getFirstWellState(hatetris.ai)],
+      wellStates: [firstWellState],
       replay,
       replayTimeoutId
     })
@@ -490,7 +494,6 @@ class Game extends React.Component<GameProps, GameState> {
     } = this.props
 
     const {
-      enemy,
       mode,
       replay,
       wellStateId,
@@ -536,12 +539,7 @@ class Game extends React.Component<GameProps, GameState> {
         // TODO: `nextWellState.core.well` should be more complex and contain colour
         // information, whereas the well passed to the AI should be a simple
         // array of integers
-        [pieceId, aiState] = validateAiResult(
-          enemy.ai,
-          nextWellState.core,
-          nextWellState.ai,
-          this.getNextCoreStates
-        )
+        [pieceId, aiState] = this.validateAiResult(nextWellState.core, nextWellState.ai)
       } catch (error) {
         console.error(error)
         this.setState({
@@ -1024,16 +1022,12 @@ class Game extends React.Component<GameProps, GameState> {
 
         {mode === 'GAME_OVER' && (
           <div className='game__bottom'>
-            {enemy === hatetris && (
-              <>
-                <div>
-                  replay of last game:
-                </div>
-                <div className='game__replay-out e2e__replay-out'>
-                  {hatetrisReplayCodec.encode(replay)}
-                </div>
-              </>
-            )}
+            <div>
+              replay of last game:
+            </div>
+            <div className='game__replay-out e2e__replay-out'>
+              {hatetrisReplayCodec.encode(replay)}
+            </div>
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
@@ -1044,15 +1038,13 @@ class Game extends React.Component<GameProps, GameState> {
                 undo last move
               </button>
 
-              {enemy === hatetris && (
-                <button
-                  className='game__button e2e__copy-replay'
-                  type='button'
-                  onClick={this.handleClickCopyReplay}
-                >
-                  {replayCopiedTimeoutId ? 'copied!' : 'copy replay'}
-                </button>
-              )}
+              <button
+                className='game__button e2e__copy-replay'
+                type='button'
+                onClick={this.handleClickCopyReplay}
+              >
+                {replayCopiedTimeoutId ? 'copied!' : 'copy replay'}
+              </button>
 
               <button
                 className='game__button e2e__done'
