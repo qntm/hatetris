@@ -77,26 +77,26 @@ export const hatetrisAi: EnemyAi = (
     pieceId,
     prevIndex === -1
       ? [
-        ...currentAiState,
-        {
-          well: currentCoreState.well,
-          pieceIds: [pieceId]
-        }
-      ]
+          ...currentAiState,
+          {
+            well: currentCoreState.well,
+            pieceIds: [pieceId]
+          }
+        ]
       : currentAiState[prevIndex].pieceIds.includes(pieceId)
         // No duplicates. Approximately 0% probability of this ever happening with this
         // AI, but as a general technique it's worth having this on the books
         ? currentAiState
         : [
-          ...currentAiState.slice(0, prevIndex),
-          {
-            ...currentAiState[prevIndex],
-            pieceIds: [
-              ...currentAiState[prevIndex].pieceIds,
-              pieceId
-            ]
-          },
-          ...currentAiState.slice(prevIndex + 1)
-        ]
+            ...currentAiState.slice(0, prevIndex),
+            {
+              ...currentAiState[prevIndex],
+              pieceIds: [
+                ...currentAiState[prevIndex].pieceIds,
+                pieceId
+              ]
+            },
+            ...currentAiState.slice(prevIndex + 1)
+          ]
   ]
 }
