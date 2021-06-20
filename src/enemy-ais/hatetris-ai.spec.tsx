@@ -364,5 +364,4 @@ describe('hatetrisAi', () => {
       pieceIds: ['S', 'Z', 'O', 'I', 'L', 'J', 'T'] // unchanged
     }]])
   })
-
 })

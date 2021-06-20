@@ -47,13 +47,16 @@ type CoreState = {
 
 type WellState = {
   core: CoreState,
+  ai: any,
   piece: Piece
 }
+
+type GetNextCoreStates = (core: CoreState, pieceId: string) => CoreState[]
 
 type EnemyAi = (
   currentCoreState: CoreState,
   currentAiState: any,
-  getNextCoreStates: (core: CoreState, pieceId: string) => CoreState[]
+  getNextCoreStates: GetNextCoreStates
 ) => (string | [string, any])
 
 type Enemy = {
@@ -104,13 +107,20 @@ const enemies = [hatetris, lovetris]
 
 const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
 
-const validateAiResult = (aiResult: any) => {
-  const [unsafePieceId, aiState] = Array.isArray(aiResult)
+const validateAiResult = (
+  ai: EnemyAi,
+  coreState: CoreState,
+  aiState: any,
+  getNextCoreStates: GetNextCoreStates
+) => {
+  const aiResult: any = ai(coreState, aiState, getNextCoreStates)
+
+  const [unsafePieceId, nextAiState] = Array.isArray(aiResult)
     ? aiResult
-    : [aiResult, undefined]
+    : [aiResult, aiState]
 
   if (pieceIds.includes(unsafePieceId)) {
-    return [unsafePieceId, aiState]
+    return [unsafePieceId, nextAiState]
   }
 
   throw Error(`Bad piece ID: ${unsafePieceId}`)
@@ -165,13 +175,17 @@ class Game extends React.Component<GameProps, GameState> {
       score: 0
     }
 
-    const [pieceId, aiState] = validateAiResult(
-      enemyAi(firstCoreState, undefined, this.getNextCoreStates)
+    const [firstPieceId, firstAiState] = validateAiResult(
+      enemyAi,
+      firstCoreState,
+      undefined,
+      this.getNextCoreStates
     )
 
     return {
       core: firstCoreState,
-      piece: rotationSystem.placeNewPiece(wellWidth, pieceId)
+      ai: firstAiState,
+      piece: rotationSystem.placeNewPiece(wellWidth, firstPieceId)
     }
   }
 
@@ -190,7 +204,7 @@ class Game extends React.Component<GameProps, GameState> {
     will have `null` `piece` because the piece is landed; some will have
     a positive `score`.
   */
-  getNextCoreStates = (core: CoreState, pieceId: string): CoreState[] => {
+  getNextCoreStates: GetNextCoreStates = (core: CoreState, pieceId: string): CoreState[] => {
     const {
       rotationSystem,
       wellDepth,
@@ -208,6 +222,7 @@ class Game extends React.Component<GameProps, GameState> {
     ) {
       piece = this.getNextState({
         core,
+        ai: undefined,
         piece
       }, 'D').piece
     }
@@ -228,6 +243,7 @@ class Game extends React.Component<GameProps, GameState> {
       moves.forEach(move => {
         const nextState = this.getNextState({
           core,
+          ai: undefined,
           piece
         }, move)
         const newPiece = nextState.piece
@@ -268,6 +284,7 @@ class Game extends React.Component<GameProps, GameState> {
 
     let nextWell = wellState.core.well
     let nextScore = wellState.core.score
+    const nextAiState = wellState.ai
     let nextPiece = { ...wellState.piece }
 
     // apply transform
@@ -344,6 +361,7 @@ class Game extends React.Component<GameProps, GameState> {
         well: nextWell,
         score: nextScore
       },
+      ai: nextAiState,
       piece: nextPiece
     }
   }
@@ -519,7 +537,10 @@ class Game extends React.Component<GameProps, GameState> {
         // information, whereas the well passed to the AI should be a simple
         // array of integers
         [pieceId, aiState] = validateAiResult(
-          enemy.ai(nextWellState.core, undefined, this.getNextCoreStates)
+          enemy.ai,
+          nextWellState.core,
+          nextWellState.ai,
+          this.getNextCoreStates
         )
       } catch (error) {
         console.error(error)
@@ -532,6 +553,7 @@ class Game extends React.Component<GameProps, GameState> {
         return
       }
 
+      nextWellState.ai = aiState
       nextWellState.piece = rotationSystem.placeNewPiece(wellWidth, pieceId)
     }
 
@@ -903,6 +925,7 @@ class Game extends React.Component<GameProps, GameState> {
             <p>Enter custom code:</p>
             <div>
               <textarea
+                autoFocus
                 style={{ width: '100%' }}
                 onChange={this.handleCustomAiChange}
                 className='e2e__ai-textarea'

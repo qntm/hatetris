@@ -101,6 +101,10 @@ describe('<Game>', () => {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }],
       replay: []
@@ -115,12 +119,20 @@ describe('<Game>', () => {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }],
       replay: ['L']
@@ -135,18 +147,30 @@ describe('<Game>', () => {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }],
       replay: ['L', 'R']
@@ -161,24 +185,40 @@ describe('<Game>', () => {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D']
@@ -193,30 +233,50 @@ describe('<Game>', () => {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U']
@@ -231,30 +291,50 @@ describe('<Game>', () => {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U']
@@ -269,30 +349,50 @@ describe('<Game>', () => {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 2, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 0 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 0, x: 3, y: 1 }
       }, {
         core: {
           well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           score: 0
         },
+        ai: [{
+          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          pieceIds: ['S']
+        }],
         piece: { id: 'S', o: 1, x: 3, y: 1 }
       }],
       replay: ['L', 'R', 'D', 'U']
@@ -429,6 +529,28 @@ describe('<Game>', () => {
       replayCopiedTimeoutId: undefined,
       replayTimeoutId: undefined
     })
+  })
+
+  it('supports a custom AI with state', () => {
+    const game = getGame()
+
+    game.find('.e2e__select-ai').simulate('click')
+    game.find('.e2e__custom-enemy').simulate('click')
+    game.find('.e2e__ai-textarea').simulate('change', {
+      target: {
+        // AI state is last piece sent
+        // (_, aiState) => aiState === 'S' ? ['Z', 'Z'] : ['S', 'S']
+        value: '(_, aiState) => aiState === \'S\' ? [\'Z\', \'Z\'] : [\'S\', \'S\']'
+      }
+    })
+    game.find('.e2e__submit-custom-enemy').simulate('click')
+    game.find('.e2e__start-button').simulate('click')
+
+    expect(game.state().wellStates[game.state().wellStateId].piece.id).toBe('S')
+    for (let i = 0; i < 18; i++) {
+      game.instance().handleDown()
+    }
+    expect(game.state().wellStates[game.state().wellStateId].piece.id).toBe('Z')
   })
 
   it('lets you decide NOT to use a custom AI', () => {

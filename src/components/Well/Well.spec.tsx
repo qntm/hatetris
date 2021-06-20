@@ -58,6 +58,7 @@ describe('<Well>', () => {
           ],
           score: 31
         },
+        ai: undefined,
         piece: { id: 'S', x: 3, y: 0, o: 0 }
       }
     })).toMatchSnapshot()
@@ -91,6 +92,7 @@ describe('<Well>', () => {
           ],
           score: 31
         },
+        ai: undefined,
         piece: null
       }
     })).toMatchSnapshot()
