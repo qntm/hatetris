@@ -8,6 +8,7 @@ import * as React from 'react'
 
 import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
 import { lovetrisAi } from '../../enemy-ais/lovetris-ai'
+import { brzAi } from '../../enemy-ais/brzustowski'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 import { Well } from '../Well/Well'
 import './Game.css'
@@ -103,7 +104,13 @@ export const lovetris: Enemy = {
   ai: lovetrisAi
 }
 
-const enemies = [hatetris, lovetris]
+export const brz: Enemy = {
+  shortDescription: 'Brzustowski',
+  buttonDescription: 'Brzustowski (1992)',
+  ai: brzAi
+}
+
+const enemies = [hatetris, lovetris, brz]
 
 const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
 
