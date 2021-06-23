@@ -941,4 +941,31 @@ describe('<Game>', () => {
       })
     })
   })
+
+  describe('Brzustowski algorithm', () => {
+    it('works?', () => {
+      const replay = 'ౚටฅٽ௨෨ଈݚСචƘݷౚ೯ບߢ௨චÐݺɷගÐݚɷ౾ܖࠆಛقຽঅ௩قଭݪ௧ڠଭɟ௨ගɑݸ౻ටПݹ౻ඪܖࢭࢶටະऔ௨ชІݶಒටତݹ௮੬ໃए௨ඩషݹࢳΟໃঅ௩Ϻසݶ౻ටลɒƐปໄஈб೯ܘމலڄໃѣҳబຽࢭ௧پܖࠇமقܬݶసطДݺஶϺ༠ɖɷڠПݚݫට༨অ௩Ѳໃףذචʃݹ୦Ѹໃɠ௨ಀІݪɷలฅהԥೱ൧ݺذගІܭϟقܯஈলටݕݺɷඪ൧ރ௧ڠໞݶಏكɑקযඤʃܭدڠЖܭИටКђ௬ට༠ݹଛʈໄຍ௩Ϻໄຍஶشܙਨ௩ѸແࡨߛࡆІܭЬقଚԓஶѮໄຍ४ΟฦݶƖقФ୬௧ٴະࡆذ౾ಊݪСඦബঅࢴඥܨІةɤໃקਙชІࢭরइໄЅЗࡄฅݹઽඨƞݷసقʃࢭࠒΟฆݹߝɈฅђߝԚໄŦ௬ॴ༠הభ൝Іࢭஜу༨ঀಇΘuঅఴуଞݺد෪ງڝࢶ੬ПܭɷٯฦݚСಀഫɟஜضÐɝɴฃ༥މభ෨ܐঔਆ'
+      const expectedScore = 55
+
+      const warn = console.warn
+      console.warn = jest.fn()
+
+      const game = getGame()
+
+      game.find('.e2e__select-ai').simulate('click')
+      game.find('.e2e__enemy').at(2).simulate('click')
+
+      const prompt = jest.spyOn(window, 'prompt')
+      prompt.mockReturnValueOnce(replay)
+      game.find('.e2e__replay-button').simulate('click')
+      prompt.mockRestore()
+
+      jest.runAllTimers()
+
+      const state = game.state()
+      expect(state.mode).toBe('GAME_OVER')
+      expect(state.wellStates[state.wellStateId].core.score).toBe(expectedScore)
+      console.warn = warn
+    })
+  })
 })
