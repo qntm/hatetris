@@ -5,6 +5,7 @@
 'use strict'
 
 import * as React from 'react'
+import type { ReactElement } from 'react'
 
 import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
 import { lovetrisAi } from '../../enemy-ais/lovetris-ai'
@@ -61,7 +62,7 @@ type EnemyAi = (
 ) => (string | [string, any])
 
 type Enemy = {
-  shortDescription: string,
+  shortDescription: string | ReactElement,
   buttonDescription: string,
   ai: EnemyAi
 }
@@ -105,7 +106,13 @@ export const lovetris: Enemy = {
 }
 
 export const brz: Enemy = {
-  shortDescription: 'Brzustowski',
+  shortDescription: (
+    <a
+      href='https://open.library.ubc.ca/media/download/pdf/831/1.0079748/1'
+    >
+      Brzustowski
+    </a>
+  ),
   buttonDescription: 'Brzustowski (1992)',
   ai: brzAi
 }
@@ -906,7 +913,7 @@ class Game extends React.Component<GameProps, GameState> {
               enemies.map(enemy => (
                 <button
                   className='game__button e2e__enemy'
-                  key={enemy.shortDescription}
+                  key={enemy.buttonDescription}
                   type='button'
                   onClick={() => this.handleClickEnemy(enemy)}
                 >
