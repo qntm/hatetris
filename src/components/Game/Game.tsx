@@ -10,6 +10,7 @@ import type { ReactElement } from 'react'
 import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
 import { lovetrisAi } from '../../enemy-ais/lovetris-ai'
 import { brzAi } from '../../enemy-ais/brzustowski'
+import { burgAi } from '../../enemy-ais/burgiel'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 import { Well } from '../Well/Well'
 import './Game.css'
@@ -117,7 +118,19 @@ export const brz: Enemy = {
   ai: brzAi
 }
 
-const enemies = [hatetris, lovetris, brz]
+const burg: Enemy = {
+  shortDescription: (
+    <a
+      href='https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.55.8562&rep=rep1&type=pdf'
+    >
+      Burgiel
+    </a>
+  ),
+  buttonDescription: 'Burgiel (1997)',
+  ai: burgAi
+}
+
+const enemies = [hatetris, lovetris, brz, burg]
 
 const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
 
