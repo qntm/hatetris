@@ -25,12 +25,12 @@ A custom AI for HATETRIS should be a **JavaScript [function expression](https://
 
 This function **must be deterministic**, otherwise replays cease to work. In particular, do not use `Math.random` or refer to the current date.
 
-`currentWellState` is the current **well state object**. This has the form `{ well, score }`, where:
+`currentWellState` is the current *well state object*. This has the form `{ well, score }`, where:
 
 * `well` is an array of 20 binary numbers, one representing each row in the well from top to bottom. Each bit in each number represents a cell in that row: 0 if the cell is currently clear, and 1 if it is currently obstructed. (Note: the least significant bit represents the first cell, so if the value is `0b0000000011`, the leftmost two cells in the row are occupied.)
 * `score` is the current score, a non-negative integer.
 
-`currentAiState` is the current **AI state value**. When spawning the very first piece, this value is `undefined`. For later piece spawns, this value is whatever AI state value you returned last time. **This value should be considered deeply immutable,** as mutations break the behaviour of undo and redo, which in turn breaks replays. If the value is an object or array and you need to make changes to it, such as adding a new property to the object or splicing some content out of the array, you will need to clone the value first.
+`currentAiState` is the current *AI state value*. When spawning the very first piece, this value is `undefined`. For later piece spawns, this value is whatever AI state value you returned last time. **This value should be considered deeply immutable,** as mutations break the behaviour of undo and redo, which in turn breaks replays. If the value is an object or array and you need to make changes to it, such as adding a new property to the object or splicing some content out of the array, you will need to clone the value first.
 
 `getNextStates` is a helper function `(wellState, pieceId) => nextWellStates`, where:
 
@@ -38,7 +38,7 @@ This function **must be deterministic**, otherwise replays cease to work. In par
 * `pieceId` can be any string indicating the name of a piece: "I", "J", "L", "O", "S", "T" or "Z".
 * The returned `nextWellStates` is an array of all of the possible new well state objects which could ensue, taking into account every possible location where the player could land this piece.
 
-The return value from this function should normally be another piece ID, indicating which piece which the game should spawn now.
+The return value from the overall AI function should normally be another piece ID, indicating which piece which the game should spawn now.
 
 Alternatively, the return value can be an array `[nextPieceId, nextAiState]`, where:
 
