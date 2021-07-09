@@ -17,7 +17,7 @@
     "pretest": "npm run eslint",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",
-    "test": "npm run jest"
+    "test": "npm run jest && npm run build && npm run cypress-built"
   },
   "keywords": [
     "tetris"
