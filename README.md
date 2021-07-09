@@ -38,7 +38,7 @@ This function **must be deterministic**, otherwise replays cease to work. In par
 * `pieceId` can be any string indicating the name of a piece: "I", "J", "L", "O", "S", "T" or "Z".
 * The returned `nextWellStates` is an array of all of the possible new well state objects which could ensue, taking into account every possible location where the player could land this piece.
 
-The return value from this function should normally be another piece ID, indicating which piece which the game should spawn now.
+The return value from the overall AI function should normally be another piece ID, indicating which piece which the game should spawn now.
 
 Alternatively, the return value can be an array `[nextPieceId, nextAiState]`, where:
 
