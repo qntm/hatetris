@@ -63,7 +63,7 @@
     "react": "^16.13.1",
     "react-dev-utils": "^11.0.4",
     "react-dom": "^16.13.1",
-    "start-server-and-test": "^1.11.3",
+    "start-server-and-test": "^1.12.6",
     "ts-loader": "^9.1.1",
     "typescript": "^4.3.5",
     "webpack": "^5.2.0",
