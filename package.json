@@ -57,7 +57,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "express": "^4.17.1",
     "html-loader": "^2.1.2",
-    "html-webpack-plugin": "^5.3.1",
+    "html-webpack-plugin": "^5.3.2",
     "jest": "^27.0.3",
     "mini-css-extract-plugin": "^2.0.0",
     "react": "^16.13.1",
