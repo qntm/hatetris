@@ -883,6 +883,14 @@ describe('<Game>', () => {
         Base65536: '𤅫邹𣺻𤅬𤞹𤆻傌𢦻𤇋𤶸𤂻㿃𢊻𤄻𤆬𡒻𤅋𤆼𡲻𤆻𤅫𤆦ꊹ𡊻𤂻𤇀𠦻𤇋悬𢊻𤄰㾼𣊻𤆁熺𤆻𢊻𣺻逨𣊻𤅋𤆆𠊹𣺻𤇀邺傻𢊻𤅻𤇫𠦌𣾻𤄛𠆜𤆻点𢊻𤄛𤅛𥆆為炻𥆺𤶻𡲻𣿋𤇄炾𥮺𣊻𤄋𤆓肬𤚺𣺻𣽛𤄛𤃫𤣈𢦻𣿋𤇄𤆖𥆧𤚹𤊻𤄰𤆁𥆣𣾻𣻋逨𤪺𠲻𡶻𣻋𤇀𤆥𣼛𤇇𣻫烈傹𤶹𤆻𤆓傜𤆵𥆆𤆣𣈻𤶻ꎹ𤪹𦦻𥮺𤚺𡦻𤪺𤚺𠮻悹𠆬𣾎燈傹邬𥆃𠨋𠆜𣺀ꉈ鴋𠜫炸𤆃㾌𢊜𡉛𢑻𠈻𤚸𤺹𣿀𡉫炸𣺆𣻀𣻁ᗊ',
         Base2048: 'ۑටדݹࡌقลђ௧ٴໃԄ௨ගʑݸసقลݹஶقະಠ௨ปໃϳ௨୮ເ൫நقฆݹવقຯމ௨ټໃџƐඩІݪߤටऒݹ௨ೲໃmذඤȣݶۑඞ༱ݶతටॽݯ௨ೱໃ߂௧ڒໃݏ௨ೱໃݹணටลђ୭ටɳݸѻൿແঅ௮ටجݷ౫ඨऐݫذ൜Іݑ௨ڄແߢ௧Ϻฐݹຕ൞Иݸҋචȣݔ௨Ҙຽߢ௩ɜຯђਬقຽঅࠀϺງঅࡋඞ༱ܭƐപຜݷಒපະज௧इลཧ௧৩ลђذౘЂݹѻڠ༩ݔಲ෮໓ݸ൙൜ІδષؾVܦணؾʑʅষʌฐݪدʌషŒಒడෆƞƎҰවܤஒටДݚলගʑҁஎضVѤతರฆܤகضVɛஜכ'
       }
+    }, {
+      name: 'knewjade (4)',
+      expectedScore: 66,
+      replays: {
+        hex: '56AA AAAA AA96 AAAA AAAA D56A AAAA AA02 AAAA AAAA 802A AAAA AAAC 00AA AAAA ABF0 2AAA AAAA D56A AAAA AD56 AAAA B0AA AAAA ABAA AAAA AA9A AAAA AAAA AAAA AAA5 B002 AAAA AAC0 2AAA AAA0 3AAA AAAA AAAA AA96 FEAA AAAA AEAA AAAA 580A AAAA AEAA AAAA 2A00 EAAA AA2A AAAA AFC2 AAAA ABD5 6AAA AAA6 AAAA AAD5 6AAA AA80 3AAA AA8A AAAA A82A AAAA 803A AAAA DAAA AAAA CA56 AAAA AA6A AAAA AD56 AAAA AEAA AAAA 03AA AAAA D56A AAAB 002A AAAA C2AA AAAB F5AA AAAA B9AA AAAA A02A AAAA B0AA AAA8 02AA AAF5 6AAA AABA AAAA AAED 56AA AA2A AAAB F5AA AAA8 ABB0 AAAA AD6A AAAA 22AF D6AA AAAE C0AA AAA8 03AA AAAA AAAA AD56 AAAA AFD6 AAAA AE0A AAAA AAAA AAAD 56AA AA80 2AAA AAAA AAA9 682A AAAA B55A AAAD AAAA AABA F00A AAAA ACAA AAAA 55FA AA80 2AAA AB6A AAAA AEFD 6AAA AAAE 02AA AAA2 AAAA AFD6 AAAA B803 AAAA AC0A AAAF DAAA AAAB B0AA AABA AAAA CB6A AAAA B002 AAAA 96AA AAA9 AAAA AA00 AAAA AD56 AAAA AC0A AAAB D6AA AAAE AAAA AA0A AAAB F00A AAA5 7AAA AAD5 6AAA A6AA AA2A AAAF C0AA AABF 0AAA AF55 AAAA 9AAA A803 AAAB 55AA AA2A AAA0 AAAA 00EA AB6A AAAB 295A AAA9 AAAA B55A AABA AAAB 55AA AC00 AAAB 00AA A03A AAAC 2AAA BF5A AAAB 9AAA AA00 AABD 5AAA AD56 ABAA AAAE FDAA AAAE AAA8 080A AAAA A5BA AAED AAAA 2ACA AADA AAB8 02AA AB55 AAAB 0AAB F5AA ABB6 AAAA E957 EAAA FC2A AF00 AAAB B00A AAC0 2AB6 AAAA E56A A9AA AC2A AEAA B9AA A895 AAAB 5AAA AAD5 6AAB 002A AB00 AAAB 5AAA A95E AAA8 02AA 0AAB 6AAA CA56 AA9A AAD6 ABFA AB95 EAAB 55AA B002 AA5A AFAA B02A A659 DAC0 AAA6 5AEA AC0A AA9A B02A AABF 0AAA B95A AAAF 55AA A00E AAA0 AAAB 55AA AAAA 6AA8 02AA A56A A6AA 00EA A0AA A803 AAAA BD56 AB0A A95A A2A9 5B2A AEA8 02AA 0AAB AA',
+        Base65536: '𤅫邹𣺻𤇇悺𣾻𤄻𤦸𤄋悮𣊻𤅻𠆌𤞹𤂻𤇋肸𤆻𣮻斌𣺻𤇃憸𤆻𢮻𤆎𥆺𠮻𤆂𤆼㺸𤄼𤆠𦞸𤎻𤅻𤆄𤶸𣦻𤃋𤄋𤆁𥆳𤪹𣾻𡳀𣺻𤅋𠆌𥆺𠢻𤇋𤇇斜𣊻𤄛𤇥𤺸𤅋𤆒傼為𥲸𤊻𣾻𤷈𠚻𢒻𤁛𤸊𤇁邜㲺𦬊𣊻悌熺𤆻𤶹𣒻𤁛僈𤆻𠆼点𤆻𡞕𤊻𤉻𤅋𢎌𤄻𤇀𦆷𤆣肜𡊻邎𡊻𤆂𤆠邮𤺹𤄼悜肾𡊻傌𥆸𤚹肌𤦻𣼋𤅛𤅋𣼻𤇇悬𥮸𣊻𣺻𣸛𤇣𤅬𠆜肸㾸𦢸𡒻𤌛𣹻𣹋𤀼𤇇𣸋𣤛𢋋𣽋𡳀𠪻𡊻𣉻𡊻𢉻𤀰𣿃𤄬𤇁𤇥𠪌𡦻𥲸𤶻𤆼𡒜𣽋𣣋𤆂𡊵𤺹𤇄𤘊𤪹𤺺𤈻𣉻𡐛𣉛肌𤾸𤁽𣻡𤃓𤧈𤦹肼𤺸𡩫𤞹𥆸𠪜㲺𣉫𣽛𣿇㿃炜邬ꎸ炻𣺁𤃄𡳀肹邜𡋫𥆆𠆜斌邸𡋛𠨫𠪅𢋄𡨫𢊅𤢸羺𤇂𤃡ꋈ𠆽𥆓𤂡𤇇𣾴𢰻肸𥆃𤂁𤄼𠆍𣻁㽫𤙨𥆸𠜻𥂸',
+        Base2048: 'ۑටדݹࢶටเݹணටະࡆ௨൨ଈݪޛගʑݚɷඤІݶԥටໃیసقฅݹஒڠໃݸףقຈݹࡂɈ໐ݹߜʌເɕஞƣ໑ཧஓقฅཧଶقࠃݶɷඅІѠ௨೯ΞݹࠑටУݸಳඖଭݺޛ೯షݪɷඳܘܭࠑටԟݺɷഢະ૨௩قฦɡ௧sษஈਐڕÐݚذഖTಱஶӶଈԄ௨ටݍݸบඤʝݹ௨ซາݹ௨ಬӿݺޛ෮ໃɣറඨVݵඓʈลঅஜԁܘܭࠁඡІظ௧ญ༱ݚϢ༬ໃɢభගІљࢴق༠ɕॳඦІڭமҔງחࢽටଭݶɷಋໂർமҔෆݶƐಋଈɻ௩ఋෆݶҋ൝ໂɕߤඅϿࡨமjଈŦஜҔଭܭޚ෨ЄࡑरكÐޣ௧ړІδऄكʑঅষݐຽঅκق൝ॿಛΟవߢলؾʡݺޛٴฉஇಛΟฆАஷƣмݪࢳචƬࡨஜӀถݚɶڠݎঀıؾɑݚޚ෨ϿࡑષටɳݱஐගȣלॻಧลஎஜӃϿऔࢳࡄɑஅవలɊঐরظʥѧࢳؼϝח෩൞ɱޕணปࡍף௨੬ՀԴࠑయϼяҋග٠ࠇࡋࡃਥɒಯඖܒॵ'
+      }
     }]
 
     runs.forEach(run => {
