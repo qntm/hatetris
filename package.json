@@ -40,7 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.28.3",
     "babel-loader": "^8.0.6",
-    "base2048": "^1.0.4",
+    "base2048": "^2.0.1",
     "base65536": "^3.0.3",
     "classnames": "^2.2.6",
     "css-loader": "^6.2.0",
