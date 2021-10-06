@@ -7,6 +7,7 @@ module.exports = {
   moduleNameMapper: {
     '\\.css$': '<rootDir>/__mocks__/styleMock.js'
   },
+  transformIgnorePatterns: ['<rootDir>/node_modules/(?!(base2048)/)'],
   coverageThreshold: {
     global: {
       branches: 100,
