@@ -41,7 +41,7 @@
     "@typescript-eslint/parser": "^4.28.3",
     "babel-loader": "^8.0.6",
     "base2048": "^2.0.1",
-    "base65536": "^3.0.3",
+    "base65536": "^4.0.2",
     "classnames": "^2.2.6",
     "css-loader": "^6.2.0",
     "cypress": "^8.3.1",
