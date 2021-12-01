@@ -44,7 +44,7 @@
     "base65536": "^4.0.2",
     "classnames": "^2.2.6",
     "css-loader": "^6.2.0",
-    "cypress": "^8.3.1",
+    "cypress": "^9.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.4",
     "enzyme-to-json": "^3.5.0",
