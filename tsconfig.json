@@ -11,7 +11,8 @@
     ],
     "target": "es5",
     "jsx": "react",
-    "allowJs": true
+    "allowJs": true,
+    "downlevelIteration": true
   },
   "include": ["src/**/*"]
 }

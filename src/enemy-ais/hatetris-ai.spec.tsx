@@ -27,199 +27,136 @@ const getNextCoreStates = game.instance().getNextCoreStates
 
 describe('hatetrisAi', () => {
   it('generates an S by default', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['S', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000
-      ],
-      pieceIds: ['S']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['S', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   it('generates a Z when an S would result in a lower stack', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0001000000,
+      0b1111011111
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0001000000,
-        0b1111011111
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['Z', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0001000000,
-        0b1111011111
-      ],
-      pieceIds: ['Z']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['Z', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   it('generates an O when an S or Z would result in a lower stack', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b1111101111
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111101111
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['O', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111101111
-      ],
-      pieceIds: ['O']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['O', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   it('generates an I when an S, Z or O would result in a lower stack', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b1111001111
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111001111
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['I', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111001111
-      ],
-      pieceIds: ['I']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['I', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   it('generates an L when an S, Z, O or I would result in a lower stack', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b1111100111,
+      0b1011100111,
+      0b1111110111
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111100111,
-        0b1011100111,
-        0b1111110111
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['L', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111100111,
-        0b1011100111,
-        0b1111110111
-      ],
-      pieceIds: ['L']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['L', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   it('generates a J when an S, Z, O, I or L would result in a lower stack', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b1111100111,
+      0b1011100111,
+      0b1111101111
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111100111,
-        0b1011100111,
-        0b1111101111
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['J', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111100111,
-        0b1011100111,
-        0b1111101111
-      ],
-      pieceIds: ['J']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['J', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   it('generates a T when an S, Z, O, I, L or J would result in a lower stack', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b1000000000,
+      0b1111000011,
+      0b1111100111
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1000000000,
-        0b1111000011,
-        0b1111100111
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['T', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1000000000,
-        0b1111000011,
-        0b1111100111
-      ],
-      pieceIds: ['T']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['T', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   // Only while writing these unit tests did I discover this subtle piece of
@@ -228,107 +165,101 @@ describe('hatetrisAi', () => {
   // reaching y = 6. L comes first so it is selected. This happens even though
   // L and J *give you a line* while T would not.
   it('just gives you a line sometimes!', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b1111000011,
+      0b1111100111
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111000011,
-        0b1111100111
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['L', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111000011,
-        0b1111100111
-      ],
-      pieceIds: ['L']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['L', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   // Coverage...
   it('generates an S when say an I would clear the board', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b1111111110,
+      0b1111111110,
+      0b1111111110,
+      0b1111111110
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111111110,
-        0b1111111110,
-        0b1111111110,
-        0b1111111110
-      ]
-    }, undefined, getNextCoreStates)).toEqual(['S', [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b1111111110,
-        0b1111111110,
-        0b1111111110,
-        0b1111111110
-      ],
-      pieceIds: ['S']
-    }]])
+      well
+    }, undefined, getNextCoreStates)).toEqual(['S', new Set([
+      JSON.stringify(well)
+    ])])
   })
 
   // Loop avoidance
   it('generates a Z if it already generated an S once', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0001000000,
+      0b0011100000
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
+      well
+    }, new Set([
+      JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
-        0b0000000000,
-        0b0000000000
-      ]
-    }, [{
-      well: [
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000,
-        0b0000000000
-      ],
-      pieceIds: ['S']
-    }], getNextCoreStates)).toEqual(['Z', [{
-      well: [
+        0b0001000110, // an S was landed here
+        0b0011100011
+      ])
+    ]), getNextCoreStates)).toEqual(['Z', new Set([
+      JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
-        0b0000000000,
-        0b0000000000
-      ],
-      pieceIds: ['S', 'Z']
-    }]])
+        0b0001000110,
+        0b0011100011
+      ]),
+      JSON.stringify(well)
+    ])])
   })
 
-  it('gives up and generates an S if it already generated EVERY piece', () => {
+  it('gives up and generates an S if EVERY piece leads into a cycle', () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000
+    ]
     expect(hatetrisAi({
       score: 0,
-      well: [
+      well
+    }, new Set([
+      JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -336,10 +267,70 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000000,
         0b0000000000,
-        0b0000000000
-      ]
-    }, [{
-      well: [
+        0b0000001111 // an I was landed
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000011,
+        0b0000000011 // an O was landed
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000111 // a J was landed
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000001,
+        0b0000000011 // an L was landed
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000011,
+        0b0000000010 // an S was landed
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000011,
+        0b0000000110 // a Z was landed
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000010,
+        0b0000000111 // a T was landed
+      ])
+    ]), getNextCoreStates)).toEqual(['S', new Set([
+      JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -347,21 +338,69 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000000,
         0b0000000000,
-        0b0000000000
-      ],
-      pieceIds: ['S', 'Z', 'O', 'I', 'L', 'J', 'T']
-    }], getNextCoreStates)).toEqual(['S', [{
-      well: [
+        0b0000001111
+      ]),
+      JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
         0b0000000000,
+        0b0000000011,
+        0b0000000011
+      ]),
+      JSON.stringify([
         0b0000000000,
-        0b0000000000
-      ],
-      pieceIds: ['S', 'Z', 'O', 'I', 'L', 'J', 'T'] // unchanged
-    }]])
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000111
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000001,
+        0b0000000011
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000011,
+        0b0000000010
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000011,
+        0b0000000110
+      ]),
+      JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000010,
+        0b0000000111
+      ]),
+      JSON.stringify(well)
+    ])])
   })
 })
