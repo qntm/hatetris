@@ -14,10 +14,9 @@
     "cypress-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/hatetris.html \"cypress run\"",
     "eslint": "eslint . --ext .js,.ts,.tsx",
     "jest": "jest",
-    "pretest": "npm run eslint",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",
-    "test": "npm run jest && npm run build && npm run cypress-built"
+    "test": "npm run eslint && npm run jest && npm run build && npm run cypress-built"
   },
   "keywords": [
     "tetris"
@@ -33,7 +32,9 @@
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.14.5",
-    "@types/enzyme": "^3.10.9",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^27.0.1",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
@@ -45,9 +46,6 @@
     "classnames": "^2.2.6",
     "css-loader": "^6.2.0",
     "cypress": "^10.3.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.4",
-    "enzyme-to-json": "^3.5.0",
     "eslint": "^8.16.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.24.2",

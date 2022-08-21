@@ -2,21 +2,27 @@
 
 'use strict'
 
-import { shallow } from 'enzyme'
+import userEvent from '@testing-library/user-event'
+import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 
-import Game, { hatetris, lovetris } from './Game'
+import Game from './Game'
 import type { GameProps } from './Game'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 jest.useFakeTimers()
 
+// BOY do I need to figure out a faster way to run these unit tests
+jest.setTimeout(60000)
+
+const replayTimeout = 180
+
 describe('<Game>', () => {
-  const getGame = (props: Partial<GameProps> = {}) => {
-    return shallow<Game>(
+  const renderGame = (props: Partial<GameProps> = {}) => {
+    render(
       <Game
         bar={4}
-        replayTimeout={0}
+        replayTimeout={replayTimeout}
         rotationSystem={hatetrisRotationSystem}
         wellDepth={20}
         wellWidth={10}
@@ -25,560 +31,195 @@ describe('<Game>', () => {
     )
   }
 
+  let user: ReturnType<typeof userEvent.setup>
+
+  beforeEach(() => {
+    // RTL's keyboard activity simulation involves asynchronous delays.
+    // We need to advance time so that those delayed things actually happen
+    user = userEvent.setup({
+      advanceTimers: number => {
+        jest.advanceTimersByTime(number)
+      }
+    })
+  })
+
   it('rejects a rotation system with no pieces', () => {
-    expect(() => getGame({
+    renderGame({
       rotationSystem: {
         placeNewPiece: () => ({ id: '', o: NaN, x: NaN, y: NaN }),
         rotations: {}
       }
-    })).toThrowError()
+    })
+    expect(screen.getByTestId('error-real')).toHaveTextContent('Have to have at least one piece!')
+    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to start HATETRIS. Application halted.')
   })
 
   it('rejects a well depth below the bar', () => {
-    expect(() => getGame({ bar: 4, wellDepth: 3 })).toThrowError()
+    renderGame({ bar: 4, wellDepth: 3 })
+    expect(screen.getByTestId('error-real')).toHaveTextContent('Can\'t have well with depth 3 less than bar at 4')
+    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to start HATETRIS. Application halted.')
   })
 
   it('rejects a well width less than 4', () => {
-    expect(() => getGame({ wellWidth: 3 })).toThrowError()
+    renderGame({ wellWidth: 3 })
+    expect(screen.getByTestId('error-real')).toHaveTextContent('Can\'t have well with width 3 less than 4')
+    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to start HATETRIS. Application halted.')
   })
 
-  it('ignores all keystrokes before the game has begun', () => {
-    const game = getGame()
-    expect(game.state()).toEqual({
-      customAiCode: '',
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      mode: 'INITIAL',
-      wellStateId: -1,
-      wellStates: [],
-      replay: [],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+  it('ignores all keystrokes before the game has begun', async () => {
+    const originalWarn = console.warn
+    console.warn = jest.fn()
 
-    const warn = jest.spyOn(console, 'warn')
-    warn.mockImplementation(() => {})
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Left' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Right' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Down' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Up' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
-    expect(warn).toHaveBeenCalledTimes(6)
-    expect(game.state()).toEqual({
-      customAiCode: '',
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      mode: 'INITIAL',
-      wellStateId: -1,
-      wellStates: [],
-      replay: [],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+    renderGame()
+    expect(screen.getByTestId('start-button')).toHaveTextContent('start new game')
 
-    warn.mockRestore()
-    game.unmount()
+    await user.keyboard('{Left}')
+    await user.keyboard('{Right}')
+    await user.keyboard('{Down}')
+    await user.keyboard('{Up}')
+    await user.keyboard('{Control>}z{/Control}')
+    await user.keyboard('{Control>}y{/Control}')
+
+    expect(console.warn).toHaveBeenCalledTimes(6)
+    expect(screen.getByTestId('start-button')).toHaveTextContent('start new game')
+
+    console.warn = originalWarn
   })
 
-  it('lets you play a few moves', () => {
-    const game = getGame()
-    expect(game.state()).toEqual(expect.objectContaining({
-      mode: 'INITIAL',
-      wellStateId: -1,
-      wellStates: [],
-      replay: []
-    }))
+  it('lets you play a few moves', async () => {
+    const originalWarn = console.warn
+    console.warn = jest.fn()
 
-    game.find('.e2e__start-button').simulate('click')
-    expect(game.state()).toEqual(expect.objectContaining({
-      mode: 'PLAYING',
-      wellStateId: 0,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }],
-      replay: []
-    }))
+    renderGame()
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
-    expect(game.state()).toEqual(expect.objectContaining({
-      mode: 'PLAYING',
-      wellStateId: 1,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 2, y: 0 }
-      }],
-      replay: ['L']
-    }))
+    await user.click(screen.getByTestId('start-button'))
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
-    expect(game.state()).toEqual(expect.objectContaining({
-      mode: 'PLAYING',
-      wellStateId: 2,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 2, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }],
-      replay: ['L', 'R']
-    }))
+    await user.keyboard('{Left}')
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
-    expect(game.state()).toEqual(expect.objectContaining({
-      mode: 'PLAYING',
-      wellStateId: 3,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 2, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 1 }
-      }],
-      replay: ['L', 'R', 'D']
-    }))
+    await user.keyboard('{Right}')
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
-    expect(game.state()).toEqual(expect.objectContaining({
-      mode: 'PLAYING',
-      wellStateId: 4,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 2, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 1 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 1, x: 3, y: 1 }
-      }],
-      replay: ['L', 'R', 'D', 'U']
-    }))
+    await user.keyboard('{Down}')
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
-    expect(game.state()).toEqual(expect.objectContaining({
-      mode: 'PLAYING',
-      wellStateId: 3,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 2, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 1 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 1, x: 3, y: 1 }
-      }],
-      replay: ['L', 'R', 'D', 'U']
-    }))
+    // Rotate, puts part of the piece in contact with the bar below
+    await user.keyboard('{Up}')
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(3)
+    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live')).toHaveLength(1)
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
-    expect(game.state()).toEqual(expect.objectContaining({
-      mode: 'PLAYING',
-      wellStateId: 4,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 2, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 0 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 0, x: 3, y: 1 }
-      }, {
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        ai: new Set([
-          JSON.stringify([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        ]),
-        piece: { id: 'S', o: 1, x: 3, y: 1 }
-      }],
-      replay: ['L', 'R', 'D', 'U']
-    }))
+    // Undo
+    await user.keyboard('{Control>}z{/Control}')
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
+
+    // Redo
+    await user.keyboard('{Control>}y{/Control}')
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(3)
+    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live')).toHaveLength(1)
 
     // Warn on attempted redo at end of history
-    const warn = jest.spyOn(console, 'warn')
-    warn.mockImplementation(() => {})
+    await user.keyboard('{Control>}y{/Control}')
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(3)
+    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live')).toHaveLength(1)
+    expect(console.warn).toHaveBeenCalledTimes(1)
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
-    expect(warn).toHaveBeenCalledTimes(1)
-
-    warn.mockRestore()
-    game.unmount()
+    console.warn = originalWarn
   })
 
-  it('just lets you play if you enter an empty replay', () => {
-    const game = getGame()
+  it('just lets you play if you enter an empty replay', async () => {
+    renderGame()
 
     const prompt = jest.spyOn(window, 'prompt')
     prompt.mockReturnValueOnce('')
-    game.find('.e2e__replay-button').simulate('click')
+    await user.click(screen.getByTestId('replay-button'))
+    expect(prompt.mock.calls).toEqual([
+      ['Paste replay string...']
+    ])
     prompt.mockRestore()
 
-    expect(game.state()).toEqual(expect.objectContaining({
-      customAiCode: '',
-      displayEnemy: false,
-      enemy: hatetris,
-      mode: 'PLAYING',
-      replay: [],
-      replayTimeoutId: undefined,
-      wellStates: [
-        expect.anything()
-      ],
-      wellStateId: 0
-    }))
-
-    game.unmount()
+    expect(screen.queryAllByTestId('down')).toHaveLength(1)
   })
 
-  it('lets you select a different AI and play a full game with it and provides a replay', () => {
-    const game = getGame()
-    expect(game.state()).toEqual({
-      customAiCode: '',
-      displayEnemy: false,
-      enemy: hatetris,
-      error: null,
-      mode: 'INITIAL',
-      wellStateId: -1,
-      wellStates: [],
-      replay: [],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+  it('lets you select a different AI and play a full game with it and provides a replay', async () => {
+    renderGame()
 
-    game.find('.e2e__select-ai').simulate('click')
-    expect(game.state()).toEqual(expect.objectContaining({
-      displayEnemy: false,
-      enemy: hatetris,
-      mode: 'SELECT_AI'
-    }))
-
-    game.find('.e2e__enemy').at(1).simulate('click')
-    expect(game.state()).toEqual(expect.objectContaining({
-      displayEnemy: true,
-      enemy: lovetris,
-      mode: 'INITIAL'
-    }))
-
-    game.find('.e2e__start-button').simulate('click')
-    expect(game.find('.e2e__enemy-short').text()).toBe('AI: ❤️')
-    expect(game.state()).toEqual(expect.objectContaining({
-      displayEnemy: true,
-      enemy: lovetris,
-      mode: 'PLAYING',
-      wellStateId: 0,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        piece: { id: 'I', o: 0, x: 3, y: 0 } // An I piece!
-      }],
-      replay: []
-    }))
+    await user.click(screen.getByTestId('select-ai'))
+    await user.click(screen.queryAllByTestId('enemy').at(1))
+    await user.click(screen.getByTestId('start-button'))
+    expect(screen.getByTestId('enemy-short')).toHaveTextContent('AI: ❤️')
 
     for (let i = 0; i < 187; i++) {
-      expect(game.state().mode).toBe('PLAYING')
-      game.instance().handleDown()
+      await user.keyboard('{Down}')
     }
 
-    expect(game.state()).toEqual(expect.objectContaining({
-      enemy: lovetris,
-      mode: 'GAME_OVER',
-      wellStateId: 187,
-      wellStates: expect.any(Array)
-    }))
-
-    expect(game.find('.e2e__replay-out').text()).toBe('௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
+    expect(screen.getByTestId('replay-out')).toHaveTextContent('௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
   })
 
-  it('lets you use a custom AI', () => {
-    const game = getGame()
+  it('lets you use a custom AI', async () => {
+    renderGame()
 
-    game.find('.e2e__select-ai').simulate('click')
-    game.find('.e2e__custom-enemy').simulate('click')
-    game.find('.e2e__ai-textarea').simulate('change', {
-      target: {
-        value: '() => \'J\''
-      }
-    })
-    game.find('.e2e__submit-custom-enemy').simulate('click')
-    game.find('.e2e__start-button').simulate('click')
+    await user.click(screen.getByTestId('select-ai'))
+    await user.click(screen.getByTestId('custom-enemy'))
+    await user.type(screen.getByTestId('ai-textarea'), '() => \'J\'')
+    await user.click(screen.getByTestId('submit-custom-enemy'))
+    await user.click(screen.getByTestId('start-button'))
 
-    expect(game.find('.e2e__enemy-short').text()).toBe('AI: custom')
-    expect(game.state()).toEqual({
-      customAiCode: '() => \'J\'',
-      displayEnemy: true,
-      enemy: expect.objectContaining({
-        shortDescription: 'custom'
-      }),
-      error: null,
-      mode: 'PLAYING',
-      wellStateId: 0,
-      wellStates: [{
-        core: {
-          well: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          score: 0
-        },
-        piece: { id: 'J', o: 0, x: 3, y: 0 } // A J piece!
-      }],
-      replay: [],
-      replayCopiedTimeoutId: undefined,
-      replayTimeoutId: undefined
-    })
+    expect(screen.getByTestId('enemy-short')).toHaveTextContent('AI: custom')
+
+    // current piece is a J... assertion TODO
   })
 
-  it('supports a custom AI with state', () => {
-    const game = getGame()
+  it('supports a custom AI with state', async () => {
+    renderGame()
 
-    game.find('.e2e__select-ai').simulate('click')
-    game.find('.e2e__custom-enemy').simulate('click')
-    game.find('.e2e__ai-textarea').simulate('change', {
-      target: {
-        // AI state is last piece sent
-        // (_, aiState) => aiState === 'S' ? ['Z', 'Z'] : ['S', 'S']
-        value: '(_, aiState) => aiState === \'S\' ? [\'Z\', \'Z\'] : [\'S\', \'S\']'
-      }
-    })
-    game.find('.e2e__submit-custom-enemy').simulate('click')
-    game.find('.e2e__start-button').simulate('click')
+    await user.click(screen.getByTestId('select-ai'))
+    await user.click(screen.getByTestId('custom-enemy'))
 
-    expect(game.state().wellStates[game.state().wellStateId].piece.id).toBe('S')
-    for (let i = 0; i < 18; i++) {
-      game.instance().handleDown()
-    }
-    expect(game.state().wellStates[game.state().wellStateId].piece.id).toBe('Z')
+    // AI state is last piece sent
+    // (_, aiState) => aiState === 'S' ? ['Z', 'Z'] : ['S', 'S']
+    await user.type(screen.getByTestId('ai-textarea'), '(_, aiState) => aiState === \'S\' ? [[\'Z\', \'Z\'] : [[\'S\', \'S\']')
+    await user.click(screen.getByTestId('submit-custom-enemy'))
+    await user.click(screen.getByTestId('start-button'))
+
+    // first piece is an S... assertion TODO
+    // second piece is a Z... assertion TODO
   })
 
-  it('lets you decide NOT to use a custom AI', () => {
-    const game = getGame()
+  it('lets you decide NOT to use a custom AI', async () => {
+    renderGame()
 
-    game.find('.e2e__select-ai').simulate('click')
-    game.find('.e2e__custom-enemy').simulate('click')
-    game.find('.e2e__cancel-custom-enemy').simulate('click')
-    expect(game.state()).toEqual(expect.objectContaining({
-      customAiCode: '',
-      mode: 'SELECT_AI'
-    }))
+    await user.click(screen.getByTestId('select-ai'))
+    await user.click(screen.getByTestId('custom-enemy'))
+    await user.click(screen.getByTestId('cancel-custom-enemy'))
+
+    expect(screen.queryAllByTestId('enemy')).toHaveLength(4)
   })
 
-  it('errors out if your custom AI is invalid JavaScript, but you can dismiss it', () => {
-    const game = getGame()
+  it('errors out if your custom AI is invalid JavaScript, but you can dismiss it', async () => {
+    renderGame()
 
-    game.find('.e2e__select-ai').simulate('click')
-    game.find('.e2e__custom-enemy').simulate('click')
-    game.find('.e2e__ai-textarea').simulate('change', {
-      target: {
-        value: '() =>'
-      }
-    })
+    await user.click(screen.getByTestId('select-ai'))
+    await user.click(screen.getByTestId('custom-enemy'))
+    await user.type(screen.getByTestId('ai-textarea'), '() =>')
 
     const error = console.error
     console.error = jest.fn()
-    game.find('.e2e__submit-custom-enemy').simulate('click')
+    await user.click(screen.getByTestId('submit-custom-enemy'))
     console.error = error
 
-    expect(game.state()).toEqual(expect.objectContaining({
-      error: {
-        interpretation: 'Caught this exception while trying to evaluate your custom AI JavaScript.',
-        real: expect.any(String)
-      }
-    }))
+    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to evaluate your custom AI JavaScript.')
 
-    game.find('.e2e__dismiss-error').simulate('click')
-    expect(game.state()).toEqual(expect.objectContaining({
-      error: null
-    }))
+    await user.click(screen.getByTestId('dismiss-error'))
   })
 
-  it('errors out if your custom AI throws an error on the first piece', () => {
-    const game = getGame()
+  it('errors out if your custom AI throws an error on the first piece', async () => {
+    renderGame()
 
-    game.find('.e2e__select-ai').simulate('click')
-    game.find('.e2e__custom-enemy').simulate('click')
-    game.find('.e2e__ai-textarea').simulate('change', {
-      target: {
-        value: '() => { throw Error(\'BANG\') }'
-      }
-    })
-    game.find('.e2e__submit-custom-enemy').simulate('click')
+    await user.click(screen.getByTestId('select-ai'))
+    await user.click(screen.getByTestId('custom-enemy'))
+    await user.type(screen.getByTestId('ai-textarea'), '() => {{ throw Error(\'BANG\') }')
+    await user.click(screen.getByTestId('submit-custom-enemy'))
 
     // Start a replay instead of starting a new game (coverage)
     // TODO: deduplicate that code
@@ -586,190 +227,102 @@ describe('<Game>', () => {
     console.error = jest.fn()
     const prompt = jest.spyOn(window, 'prompt')
     prompt.mockReturnValueOnce('')
-    game.find('.e2e__replay-button').simulate('click')
+    await user.click(screen.getByTestId('replay-button'))
+    expect(prompt.mock.calls).toEqual([
+      ['Paste replay string...']
+    ])
     prompt.mockRestore()
     console.error = error
 
-    expect(game.state()).toEqual(expect.objectContaining({
-      error: {
-        interpretation: 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.',
-        real: 'BANG'
-      }
-    }))
+    expect(screen.getByTestId('error-real')).toHaveTextContent('BANG')
+    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.')
   })
 
-  it('errors out if your custom AI returns a bad piece', () => {
-    const game = getGame()
+  it('errors out if your custom AI returns a bad piece', async () => {
+    renderGame()
 
-    game.find('.e2e__select-ai').simulate('click')
-    game.find('.e2e__custom-enemy').simulate('click')
-    game.find('.e2e__ai-textarea').simulate('change', {
-      target: {
-        value: '() => \'K\''
-      }
-    })
-    game.find('.e2e__submit-custom-enemy').simulate('click')
+    await user.click(screen.getByTestId('select-ai'))
+    await user.click(screen.getByTestId('custom-enemy'))
+    await user.type(screen.getByTestId('ai-textarea'), '() => \'K\'')
+    await user.click(screen.getByTestId('submit-custom-enemy'))
 
     const error = console.error
     console.error = jest.fn()
-    game.find('.e2e__start-button').simulate('click')
+    await user.click(screen.getByTestId('start-button'))
     console.error = error
 
-    expect(game.state()).toEqual(expect.objectContaining({
-      error: {
-        interpretation: 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.',
-        real: 'Bad piece ID: K'
-      }
-    }))
+    expect(screen.getByTestId('error-real')).toHaveTextContent('Bad piece ID: K')
+    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.')
   })
 
-  it('errors out if your custom AI throws an error on a later piece', () => {
-    const game = getGame()
+  it('errors out if your custom AI throws an error on a later piece', async () => {
+    renderGame()
 
-    game.find('.e2e__select-ai').simulate('click')
-    game.find('.e2e__custom-enemy').simulate('click')
-    game.find('.e2e__ai-textarea').simulate('change', {
-      target: {
-        value: `
-          (() => {
-            let first = true
-            return () => {
-              if (first) {
-                first = false
-                return 'I'
-              }
-              throw Error('FZAAPP')
-            }
-          })()
-        `
-      }
-    })
-    game.find('.e2e__submit-custom-enemy').simulate('click')
-    game.find('.e2e__start-button').simulate('click')
+    await user.click(screen.getByTestId('select-ai'))
+    await user.click(screen.getByTestId('custom-enemy'))
+    await user.type(screen.getByTestId('ai-textarea'), `
+      (() => {{
+        let first = true
+        return () => {{
+          if (first) {{
+            first = false
+            return 'I'
+          }
+          throw Error('FZAAPP')
+        }
+      })()
+    `)
+    await user.click(screen.getByTestId('submit-custom-enemy'))
+    await user.click(screen.getByTestId('start-button'))
 
     for (let i = 0; i < 18; i++) {
-      expect(game.state().error).toBeNull()
-      game.instance().handleDown()
+      await user.click(screen.getByTestId('down'))
     }
 
     const error = console.error
     console.error = jest.fn()
-    expect(game.state().error).toBeNull()
-    game.instance().handleDown()
+    await user.click(screen.getByTestId('down'))
     console.error = error
 
-    expect(game.state()).toEqual(expect.objectContaining({
-      error: {
-        interpretation: 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.',
-        real: 'FZAAPP'
-      }
-    }))
+    expect(screen.getByTestId('error-real')).toHaveTextContent('FZAAPP')
+    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to generate a new piece using your custom AI. Game halted.')
   })
 
-  it('lets you decide not to replay anything', () => {
-    const game = getGame()
+  it('lets you decide not to replay anything', async () => {
+    renderGame()
 
     const prompt = jest.spyOn(window, 'prompt')
     prompt.mockReturnValueOnce(null)
-    game.find('.e2e__replay-button').simulate('click')
+    await user.click(screen.getByTestId('replay-button'))
+    expect(prompt.mock.calls).toEqual([
+      ['Paste replay string...']
+    ])
     prompt.mockRestore()
-
-    expect(game.state()).toEqual(expect.objectContaining({
-      enemy: hatetris,
-      mode: 'INITIAL',
-      replay: [],
-      replayTimeoutId: undefined,
-      wellStates: [],
-      wellStateId: -1
-    }))
-
-    game.unmount()
   })
 
   describe('when a replay is in progress', () => {
-    let game: ReturnType<typeof getGame>
-
-    beforeEach(() => {
-      game = getGame()
+    beforeEach(async () => {
+      renderGame()
 
       const prompt = jest.spyOn(window, 'prompt')
       prompt.mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2')
-      game.find('.e2e__replay-button').simulate('click')
+      await user.click(screen.getByTestId('replay-button'))
+      expect(prompt.mock.calls).toEqual([
+        ['Paste replay string...']
+      ])
       prompt.mockRestore()
 
-      // Play a little of the replay
-      jest.runOnlyPendingTimers()
-      jest.runOnlyPendingTimers()
-      jest.runOnlyPendingTimers()
-
-      expect(game.state()).toEqual(expect.objectContaining({
-        enemy: hatetris,
-        mode: 'REPLAYING',
-        wellStates: [
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-          expect.anything()
-        ],
-        wellStateId: 3,
-        replayTimeoutId: expect.any(Number)
-      }))
+      // Play three moves of the replay
+      jest.advanceTimersByTime(replayTimeout * 3.5)
     })
 
-    afterEach(() => {
-      game.unmount()
-    })
-
-    it('lets you start a new game', () => {
-      // TODO: this is no longer provided in the UI...
-      game.instance().handleClickStart()
-      expect(game.state()).toEqual(expect.objectContaining({
-        enemy: hatetris,
-        mode: 'PLAYING',
-        wellStates: [
-          expect.anything()
-        ],
-        wellStateId: 0,
-        replayTimeoutId: undefined // trashed
-      }))
-    })
-
-    it('lets you start a new replay', () => {
-      // TODO: this is no longer provided in the UI...
-      const prompt = jest.spyOn(window, 'prompt')
-      prompt.mockReturnValueOnce('AAAA 1234 BCDE 2345 CDEF 3456')
-      game.instance().handleClickReplay()
-      prompt.mockRestore()
-
-      expect(game.state()).toEqual(expect.objectContaining({
-        enemy: hatetris,
-        mode: 'REPLAYING',
-        wellStates: [
-          expect.anything()
-        ],
-        wellStateId: 0,
-        replayTimeoutId: expect.any(Number)
-      }))
-    })
-
-    it('lets you undo and stops replaying if you do so', () => {
-      game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
-      expect(game.state()).toEqual(expect.objectContaining({
-        enemy: hatetris,
-        mode: 'PLAYING', // no longer replaying
-        wellStates: [
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-          expect.anything() // well state ID 3 still exists
-        ],
-        wellStateId: 2, // down from 3
-        replayTimeoutId: undefined
-      }))
+    it('lets you undo and stops replaying if you do so', async () => {
+      await user.keyboard('{Control>}z{/Control}')
+      // TODO: assert that `wellStateId` is now 2, down from 3
     })
   })
 
-  describe('check known replays', () => {
+  describe('check known replays', function () {
     const runs = [{
       name: 'qntm',
       expectedScore: 0,
@@ -879,54 +432,51 @@ describe('<Game>', () => {
     runs.forEach(run => {
       describe(run.name, () => {
         Object.entries(run.replays).forEach(([encoding, string]) => {
-          it(encoding, () => {
+          it(encoding, async () => {
             const warn = console.warn
             console.warn = jest.fn()
 
-            const game = getGame()
+            renderGame()
 
             const prompt = jest.spyOn(window, 'prompt')
             prompt.mockReturnValueOnce(string)
-            game.find('.e2e__replay-button').simulate('click')
+            await user.click(screen.getByTestId('replay-button'))
+            expect(prompt.mock.calls).toEqual([
+              ['Paste replay string...']
+            ])
             prompt.mockRestore()
 
             jest.runAllTimers()
 
-            const state = game.state()
-            expect(state.mode).toBe('GAME_OVER')
-            expect(state.wellStates[state.wellStateId].core.score).toBe(run.expectedScore)
+            expect(screen.getByTestId('score')).toHaveTextContent(String(run.expectedScore))
             if (encoding === 'Base2048') {
-              expect(game.find('.e2e__replay-out').text()).toBe(string)
+              expect(screen.getByTestId('replay-out')).toHaveTextContent(string)
             } else {
               // Other encodings have differing amounts of padding so result in slightly
               // different output Base2048
             }
 
             // Copy the replay
-            return game.instance().handleClickCopyReplay()
-              .then(() => navigator.clipboard.readText())
-              .then(contents => {
-                if (encoding === 'Base2048') {
-                  expect(contents).toBe(string)
-                } else {
-                  // Other encodings have differing amounts of padding so result in slightly
-                  // different output Base2048
-                }
+            await user.click(screen.getByTestId('copy-replay'))
+            const contents = await navigator.clipboard.readText()
+            if (encoding === 'Base2048') {
+              expect(contents).toBe(string)
+            } else {
+              // Other encodings have differing amounts of padding so result in slightly
+              // different output Base2048
+            }
 
-                // "copied!" disappears after a while
-                expect(game.state().replayCopiedTimeoutId).toEqual(expect.any(Number))
-                expect(game.find('.e2e__copy-replay').text()).toBe('copied!')
+            // "copied!" disappears after a while
+            expect(screen.getByTestId('copy-replay')).toHaveTextContent('copied!')
 
-                jest.runAllTimers()
-                expect(game.state().replayCopiedTimeoutId).toBeUndefined()
+            jest.runAllTimers()
 
-                game.find('.e2e__done').simulate('click')
-                expect(game.state().mode).toBe('INITIAL')
-                game.unmount()
+            expect(screen.getByTestId('copy-replay')).toHaveTextContent('copy replay')
 
-                // TODO: maybe some assertions about how many trailing moves were ignored
-                console.warn = warn
-              })
+            await user.click(screen.getByTestId('done'))
+
+            // TODO: maybe some assertions about how many trailing moves were ignored
+            console.warn = warn
           })
         })
       })
@@ -934,28 +484,30 @@ describe('<Game>', () => {
   })
 
   describe('Brzustowski algorithm', () => {
-    it('works?', () => {
+    it('works?', async () => {
       const replay = 'ౚටฅٽ௨෨ଈݚСචƘݷౚ೯ບߢ௨චÐݺɷගÐݚɷ౾ܖࠆಛقຽঅ௩قଭݪ௧ڠଭɟ௨ගɑݸ౻ටПݹ౻ඪܖࢭࢶටະऔ௨ชІݶಒටତݹ௮੬ໃए௨ඩషݹࢳΟໃঅ௩Ϻසݶ౻ටลɒƐปໄஈб೯ܘމலڄໃѣҳబຽࢭ௧پܖࠇமقܬݶసطДݺஶϺ༠ɖɷڠПݚݫට༨অ௩Ѳໃףذචʃݹ୦Ѹໃɠ௨ಀІݪɷలฅהԥೱ൧ݺذගІܭϟقܯஈলටݕݺɷඪ൧ރ௧ڠໞݶಏكɑקযඤʃܭدڠЖܭИටКђ௬ට༠ݹଛʈໄຍ௩Ϻໄຍஶشܙਨ௩ѸແࡨߛࡆІܭЬقଚԓஶѮໄຍ४ΟฦݶƖقФ୬௧ٴະࡆذ౾ಊݪСඦബঅࢴඥܨІةɤໃקਙชІࢭরइໄЅЗࡄฅݹઽඨƞݷసقʃࢭࠒΟฆݹߝɈฅђߝԚໄŦ௬ॴ༠הభ൝Іࢭஜу༨ঀಇΘuঅఴуଞݺد෪ງڝࢶ੬ПܭɷٯฦݚСಀഫɟஜضÐɝɴฃ༥މభ෨ܐঔਆ'
       const expectedScore = 55
 
       const warn = console.warn
       console.warn = jest.fn()
 
-      const game = getGame()
+      renderGame()
 
-      game.find('.e2e__select-ai').simulate('click')
-      game.find('.e2e__enemy').at(2).simulate('click')
+      await user.click(screen.getByTestId('select-ai'))
+      await user.click(screen.queryAllByTestId('enemy').at(2))
 
       const prompt = jest.spyOn(window, 'prompt')
       prompt.mockReturnValueOnce(replay)
-      game.find('.e2e__replay-button').simulate('click')
+      await user.click(screen.getByTestId('replay-button'))
+      expect(prompt.mock.calls).toEqual([
+        ['Paste replay string...']
+      ])
       prompt.mockRestore()
 
-      jest.runAllTimers()
+      // Replay is about 2400 moves long
+      jest.advanceTimersByTime(replayTimeout * 10000)
 
-      const state = game.state()
-      expect(state.mode).toBe('GAME_OVER')
-      expect(state.wellStates[state.wellStateId].core.score).toBe(expectedScore)
+      expect(screen.getByTestId('score')).toHaveTextContent(String(expectedScore))
       console.warn = warn
     })
   })

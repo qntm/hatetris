@@ -2,7 +2,7 @@
 
 'use strict'
 
-import { shallow } from 'enzyme'
+import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 
 import { Well } from './Well'
@@ -14,7 +14,7 @@ const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
 
 describe('<Well>', () => {
-  const getWell = (props: Partial<WellProps> = {}) => shallow(
+  const renderWell = (props: Partial<WellProps> = {}) => render(
     <Well
       bar={bar}
       rotationSystem={hatetrisRotationSystem}
@@ -26,12 +26,13 @@ describe('<Well>', () => {
   )
 
   it('null well state', () => {
-    const well = getWell()
-    expect(well).toMatchSnapshot()
+    renderWell()
+    expect(screen.queryAllByTestId('well__cell')).toHaveLength(190)
+    expect(screen.queryAllByTestId('well__cell well__cell--bar')).toHaveLength(10)
   })
 
   it('initial well state', () => {
-    expect(getWell({
+    renderWell({
       wellState: {
         core: {
           well: [
@@ -61,11 +62,12 @@ describe('<Well>', () => {
         ai: undefined,
         piece: { id: 'S', x: 3, y: 0, o: 0 }
       }
-    })).toMatchSnapshot()
+    })
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
   })
 
   it('game over well state', () => {
-    expect(getWell({
+    renderWell({
       wellState: {
         core: {
           well: [
@@ -95,6 +97,8 @@ describe('<Well>', () => {
         ai: undefined,
         piece: null
       }
-    })).toMatchSnapshot()
+    })
+    expect(screen.queryAllByTestId('well__cell well__cell--landed')).toHaveLength(112)
+    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--landed')).toHaveLength(2)
   })
 })

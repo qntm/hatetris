@@ -1,21 +1,21 @@
 .well__cell {
-	width: 20px;
-	height: 20px;
-	color: white;
-	background-color: black;
-	padding: 0;
-	text-align: center;
-	vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  color: white;
+  background-color: black;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .well__cell--bar {
-	border-top: 1px solid red;
+  border-top: 1px solid red;
 }
 
 .well__cell--landed {
-	background-color: rgb(0,162,232);
+  background-color: rgb(0,162,232);
 }
 
 .well__cell--live {
-	background-color: red;
+  background-color: red;
 }

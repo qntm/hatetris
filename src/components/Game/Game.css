@@ -1,88 +1,88 @@
 .game {
-	box-sizing: border-box;
-	width: 100vw;
-	max-width: 360px;
-	margin: 0 auto;
-	font-family: arial;
-	padding: 10px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: 360px;
+  margin: 0 auto;
+  font-family: arial;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .game__top {
-	flex: 0 0 auto;
-	display: flex;
-	gap: 10px;
-	flex-direction: row;
+  flex: 0 0 auto;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
 }
 
 .game__topleft {
-	flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 
 .game__topright {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .game__paragraph {
-	/* in a flex column, vertical margins do not collapse! */
-	margin-bottom: 10px;
-	flex: 0 0 auto;
+  /* in a flex column, vertical margins do not collapse! */
+  margin-bottom: 10px;
+  flex: 0 0 auto;
 }
 
 .game__paragraph:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .game__replay-out {
-	background-color: rgba(189, 189, 189, .3);
-	width: 100%;
-	padding: 8px;
-	line-height: normal;
-	overflow: hidden;
-	text-overflow: ellipsis;
+  background-color: rgba(189, 189, 189, .3);
+  width: 100%;
+  padding: 8px;
+  line-height: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .game__button {
-	border: 0;
-	height: 48px;
-	width: 100%;
-	font-size: 1em; /* avoid shrinkage */
-	font-family: inherit;
-	padding: .5rem .75rem;
-	background-color: rgb(16, 82, 225);
-	color: white;
-	cursor: pointer;
-	line-height: 1rem;
+  border: 0;
+  height: 48px;
+  width: 100%;
+  font-size: 1em; /* avoid shrinkage */
+  font-family: inherit;
+  padding: .5rem .75rem;
+  background-color: rgb(16, 82, 225);
+  color: white;
+  cursor: pointer;
+  line-height: 1rem;
 }
 
 .game__button:hover {
-	background-color: rgb(5, 52, 185);
+  background-color: rgb(5, 52, 185);
 }
 
 .game__button:active {
-	background-color: red;
+  background-color: red;
 }
 
 .game__button[disabled] {
-	background-color: grey;
-	cursor: default;
+  background-color: grey;
+  cursor: default;
 }
 
 :focus {
-	outline: 2px solid black;
+  outline: 2px solid black;
 }
 
 .game__spacer {
-	flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .game__bottom {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
