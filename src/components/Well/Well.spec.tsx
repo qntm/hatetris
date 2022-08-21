@@ -2,7 +2,7 @@
 
 'use strict'
 
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import * as React from 'react'
 
 import { Well } from './Well'
@@ -14,7 +14,7 @@ const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
 
 describe('<Well>', () => {
-  const getWell = (props: Partial<WellProps> = {}) => shallow(
+  const getWell = (props: Partial<WellProps> = {}) => mount(
     <Well
       bar={bar}
       rotationSystem={hatetrisRotationSystem}
@@ -27,11 +27,11 @@ describe('<Well>', () => {
 
   it('null well state', () => {
     const well = getWell()
-    expect(well).toMatchSnapshot()
+    expect(well.find('.well__cell')).toHaveLength(200)
   })
 
   it('initial well state', () => {
-    expect(getWell({
+    const well = getWell({
       wellState: {
         core: {
           well: [
@@ -61,11 +61,12 @@ describe('<Well>', () => {
         ai: undefined,
         piece: { id: 'S', x: 3, y: 0, o: 0 }
       }
-    })).toMatchSnapshot()
+    })
+    expect(well.find('.well__cell--live')).toHaveLength(4)
   })
 
   it('game over well state', () => {
-    expect(getWell({
+    const well = getWell({
       wellState: {
         core: {
           well: [
@@ -95,6 +96,7 @@ describe('<Well>', () => {
         ai: undefined,
         piece: null
       }
-    })).toMatchSnapshot()
+    })
+    expect(well.find('.well__cell--landed')).toHaveLength(114)
   })
 })
