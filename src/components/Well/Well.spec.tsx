@@ -2,6 +2,7 @@
 
 'use strict'
 
+import { render, screen } from '@testing-library/react'
 import { mount } from 'enzyme'
 import * as React from 'react'
 
@@ -14,7 +15,7 @@ const wellDepth = 20 // min = bar
 const wellWidth = 10 // min = 4
 
 describe('<Well>', () => {
-  const getWell = (props: Partial<WellProps> = {}) => mount(
+  const renderWell = (props: Partial<WellProps> = {}) => render(
     <Well
       bar={bar}
       rotationSystem={hatetrisRotationSystem}
@@ -26,12 +27,13 @@ describe('<Well>', () => {
   )
 
   it('null well state', () => {
-    const well = getWell()
-    expect(well.find('.well__cell')).toHaveLength(200)
+    renderWell()
+    expect(screen.queryAllByTestId('well__cell')).toHaveLength(190)
+    expect(screen.queryAllByTestId('well__cell well__cell--bar')).toHaveLength(10)
   })
 
   it('initial well state', () => {
-    const well = getWell({
+    renderWell({
       wellState: {
         core: {
           well: [
@@ -62,11 +64,11 @@ describe('<Well>', () => {
         piece: { id: 'S', x: 3, y: 0, o: 0 }
       }
     })
-    expect(well.find('.well__cell--live')).toHaveLength(4)
+    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
   })
 
   it('game over well state', () => {
-    const well = getWell({
+    renderWell({
       wellState: {
         core: {
           well: [
@@ -97,6 +99,7 @@ describe('<Well>', () => {
         piece: null
       }
     })
-    expect(well.find('.well__cell--landed')).toHaveLength(114)
+    expect(screen.queryAllByTestId('well__cell well__cell--landed')).toHaveLength(112)
+    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--landed')).toHaveLength(2)
   })
 })

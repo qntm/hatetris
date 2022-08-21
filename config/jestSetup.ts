@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom'
+
 const Enzyme = require('enzyme')
 const EnzymeAdapterReact16 = require('enzyme-adapter-react-16')
 

@@ -1,6 +1,6 @@
 module.exports = {
   collectCoverage: true,
-  setupFilesAfterEnv: ['<rootDir>/config/jestSetup.js'],
+  setupFilesAfterEnv: ['<rootDir>/config/jestSetup.ts'],
   snapshotSerializers: [
     'enzyme-to-json/serializer'
   ],

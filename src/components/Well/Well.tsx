@@ -66,6 +66,12 @@ export const Well = (props: WellProps) => {
             {cells.map((cell, x) => (
               <td
                 key={x}
+                data-testid={classnames({
+                  well__cell: true,
+                  'well__cell--bar': y === bar,
+                  'well__cell--landed': cell.landed,
+                  'well__cell--live': cell.live
+                })}
                 className={classnames({
                   well__cell: true,
                   'well__cell--bar': y === bar,
