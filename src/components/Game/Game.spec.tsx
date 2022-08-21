@@ -4,7 +4,6 @@
 
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
-import { mount } from 'enzyme'
 import * as React from 'react'
 
 import Game, { hatetris, lovetris } from './Game'
@@ -16,19 +15,6 @@ jest.useFakeTimers()
 const replayTimeout = 180
 
 describe('<Game>', () => {
-  const getGame = (props: Partial<GameProps> = {}) => {
-    return mount<Game>(
-      <Game
-        bar={4}
-        replayTimeout={replayTimeout}
-        rotationSystem={hatetrisRotationSystem}
-        wellDepth={20}
-        wellWidth={10}
-        {...props}
-      />
-    )
-  }
-
   const renderGame = (props: Partial<GameProps> = {}) => {
     render(
       <Game
@@ -440,9 +426,9 @@ describe('<Game>', () => {
       }
     }]
 
-    runs.slice(0, 1).forEach(run => {
+    runs.forEach(run => {
       describe(run.name, () => {
-        Object.entries(run.replays).slice(0, 1).forEach(([encoding, string]) => {
+        Object.entries(run.replays).forEach(([encoding, string]) => {
           it(encoding, async () => {
             const warn = console.warn
             console.warn = jest.fn()
