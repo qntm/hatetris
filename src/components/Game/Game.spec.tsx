@@ -12,6 +12,9 @@ import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-sys
 
 jest.useFakeTimers()
 
+// BOY do I need to figure out a faster way to run these unit tests
+jest.setTimeout(60000)
+
 const replayTimeout = 180
 
 describe('<Game>', () => {
@@ -28,7 +31,7 @@ describe('<Game>', () => {
     )
   }
 
-  let user
+  let user: ReturnType<typeof userEvent.setup>
 
   beforeEach(() => {
     // RTL's keyboard activity simulation involves asynchronous delays.
@@ -319,7 +322,7 @@ describe('<Game>', () => {
     })
   })
 
-  describe('check known replays', () => {
+  describe('check known replays', function () {
     const runs = [{
       name: 'qntm',
       expectedScore: 0,

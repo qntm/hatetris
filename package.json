@@ -14,10 +14,9 @@
     "cypress-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/hatetris.html \"cypress run\"",
     "eslint": "eslint . --ext .js,.ts,.tsx",
     "jest": "jest",
-    "pretest": "npm run eslint",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",
-    "test": "npm run jest && npm run build && npm run cypress-built"
+    "test": "npm run eslint && npm run jest && npm run build && npm run cypress-built"
   },
   "keywords": [
     "tetris"
