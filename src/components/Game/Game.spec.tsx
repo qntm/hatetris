@@ -2,7 +2,7 @@
 
 'use strict'
 
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import * as React from 'react'
 
 import Game, { hatetris, lovetris } from './Game'
@@ -11,12 +11,14 @@ import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-sys
 
 jest.useFakeTimers()
 
+const replayTimeout = 180
+
 describe('<Game>', () => {
   const getGame = (props: Partial<GameProps> = {}) => {
-    return shallow<Game>(
+    return mount<Game>(
       <Game
         bar={4}
-        replayTimeout={0}
+        replayTimeout={replayTimeout}
         rotationSystem={hatetrisRotationSystem}
         wellDepth={20}
         wellWidth={10}
@@ -390,6 +392,9 @@ describe('<Game>', () => {
     const prompt = jest.spyOn(window, 'prompt')
     prompt.mockReturnValueOnce('')
     game.find('.e2e__replay-button').simulate('click')
+    expect(prompt.mock.calls).toEqual([
+      ['Paste replay string...']
+    ])
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
@@ -465,6 +470,7 @@ describe('<Game>', () => {
       wellStateId: 187,
       wellStates: expect.any(Array)
     }))
+    game.update()
 
     expect(game.find('.e2e__replay-out').text()).toBe('௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
   })
@@ -587,6 +593,9 @@ describe('<Game>', () => {
     const prompt = jest.spyOn(window, 'prompt')
     prompt.mockReturnValueOnce('')
     game.find('.e2e__replay-button').simulate('click')
+    expect(prompt.mock.calls).toEqual([
+      ['Paste replay string...']
+    ])
     prompt.mockRestore()
     console.error = error
 
@@ -672,6 +681,9 @@ describe('<Game>', () => {
     const prompt = jest.spyOn(window, 'prompt')
     prompt.mockReturnValueOnce(null)
     game.find('.e2e__replay-button').simulate('click')
+    expect(prompt.mock.calls).toEqual([
+      ['Paste replay string...']
+    ])
     prompt.mockRestore()
 
     expect(game.state()).toEqual(expect.objectContaining({
@@ -695,12 +707,13 @@ describe('<Game>', () => {
       const prompt = jest.spyOn(window, 'prompt')
       prompt.mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2')
       game.find('.e2e__replay-button').simulate('click')
+      expect(prompt.mock.calls).toEqual([
+        ['Paste replay string...']
+      ])
       prompt.mockRestore()
 
       // Play a little of the replay
-      jest.runOnlyPendingTimers()
-      jest.runOnlyPendingTimers()
-      jest.runOnlyPendingTimers()
+      jest.advanceTimersByTime(replayTimeout * 3.5)
 
       expect(game.state()).toEqual(expect.objectContaining({
         enemy: hatetris,
@@ -739,6 +752,9 @@ describe('<Game>', () => {
       const prompt = jest.spyOn(window, 'prompt')
       prompt.mockReturnValueOnce('AAAA 1234 BCDE 2345 CDEF 3456')
       game.instance().handleClickReplay()
+      expect(prompt.mock.calls).toEqual([
+        ['Paste replay string...']
+      ])
       prompt.mockRestore()
 
       expect(game.state()).toEqual(expect.objectContaining({
@@ -888,9 +904,13 @@ describe('<Game>', () => {
             const prompt = jest.spyOn(window, 'prompt')
             prompt.mockReturnValueOnce(string)
             game.find('.e2e__replay-button').simulate('click')
+            expect(prompt.mock.calls).toEqual([
+              ['Paste replay string...']
+            ])
             prompt.mockRestore()
 
             jest.runAllTimers()
+            game.update()
 
             const state = game.state()
             expect(state.mode).toBe('GAME_OVER')
@@ -904,6 +924,9 @@ describe('<Game>', () => {
 
             // Copy the replay
             return game.instance().handleClickCopyReplay()
+              .then(() => {
+                game.update()
+              })
               .then(() => navigator.clipboard.readText())
               .then(contents => {
                 if (encoding === 'Base2048') {
@@ -949,9 +972,13 @@ describe('<Game>', () => {
       const prompt = jest.spyOn(window, 'prompt')
       prompt.mockReturnValueOnce(replay)
       game.find('.e2e__replay-button').simulate('click')
+      expect(prompt.mock.calls).toEqual([
+        ['Paste replay string...']
+      ])
       prompt.mockRestore()
 
-      jest.runAllTimers()
+      // Replay is about 2400 moves long
+      jest.advanceTimersByTime(replayTimeout * 10000)
 
       const state = game.state()
       expect(state.mode).toBe('GAME_OVER')

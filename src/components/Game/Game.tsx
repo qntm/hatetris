@@ -954,9 +954,8 @@ class Game extends React.Component<GameProps, GameState> {
                 style={{ width: '100%' }}
                 onChange={this.handleCustomAiChange}
                 className='e2e__ai-textarea'
-              >
-                {customAiCode}
-              </textarea>
+                defaultValue={customAiCode}
+              />
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
               <p style={{ flex: '1 1 100%' }}>
@@ -1058,7 +1057,7 @@ class Game extends React.Component<GameProps, GameState> {
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
-                className='game__button e2e__replay-button'
+                className='game__button e2e__undo-button'
                 type='button'
                 onClick={this.handleUndo}
               >
