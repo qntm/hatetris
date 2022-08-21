@@ -843,7 +843,7 @@ class Game extends React.Component<GameProps, GameState> {
               <p>
                 <button
                   data-testid='dismiss-error'
-                  className='game__button e2e__dismiss-error'
+                  className='game__button'
                   type='button'
                   onClick={this.handleClickDismissError}
                 >
@@ -855,7 +855,7 @@ class Game extends React.Component<GameProps, GameState> {
 
           {!error.dismissable && (
             <>
-              <h3 style={{fontWeight: 'bold' }}>To fix this</h3>
+              <h3 style={{ fontWeight: 'bold' }}>To fix this</h3>
               <p>Report this problem to qntm.</p>
             </>
           )}
@@ -883,7 +883,7 @@ class Game extends React.Component<GameProps, GameState> {
             {displayEnemy && (
               <p
                 data-testid='enemy-short'
-                className='game__paragraph e2e__enemy-short'
+                className='game__paragraph'
               >
                 AI: {enemy.shortDescription}
               </p>
@@ -892,7 +892,7 @@ class Game extends React.Component<GameProps, GameState> {
             {score !== null && (
               <p
                 data-testid='score'
-                className='game__paragraph e2e__score'
+                className='game__paragraph'
               >
                 score: {score}
               </p>
@@ -922,7 +922,7 @@ class Game extends React.Component<GameProps, GameState> {
           <div className='game__bottom'>
             <button
               data-testid='start-button'
-              className='game__button e2e__start-button'
+              className='game__button'
               type='button'
               onClick={this.handleClickStart}
             >
@@ -932,7 +932,7 @@ class Game extends React.Component<GameProps, GameState> {
             <div className='game__paragraph' style={{ display: 'flex', gap: '10px' }}>
               <button
                 data-testid='replay-button'
-                className='game__button e2e__replay-button'
+                className='game__button'
                 type='button'
                 onClick={this.handleClickReplay}
               >
@@ -941,7 +941,7 @@ class Game extends React.Component<GameProps, GameState> {
 
               <button
                 data-testid='select-ai'
-                className='game__button e2e__select-ai'
+                className='game__button'
                 type='button'
                 onClick={this.handleClickSelectAi}
               >
@@ -960,7 +960,7 @@ class Game extends React.Component<GameProps, GameState> {
               enemies.map(enemy => (
                 <button
                   data-testid='enemy'
-                  className='game__button e2e__enemy'
+                  className='game__button'
                   key={enemy.buttonDescription}
                   type='button'
                   onClick={() => this.handleClickEnemy(enemy)}
@@ -972,7 +972,7 @@ class Game extends React.Component<GameProps, GameState> {
 
             <button
               data-testid='custom-enemy'
-              className='game__button e2e__custom-enemy'
+              className='game__button'
               type='button'
               onClick={this.handleClickCustomEnemy}
             >
@@ -990,7 +990,6 @@ class Game extends React.Component<GameProps, GameState> {
                 style={{ width: '100%' }}
                 onChange={this.handleCustomAiChange}
                 data-testid='ai-textarea'
-                className='e2e__ai-textarea'
                 defaultValue={customAiCode}
               />
             </div>
@@ -1002,7 +1001,7 @@ class Game extends React.Component<GameProps, GameState> {
               </p>
               <button
                 data-testid='cancel-custom-enemy'
-                className='game__button e2e__cancel-custom-enemy'
+                className='game__button'
                 type='button'
                 onClick={this.handleCancelCustomEnemy}
               >
@@ -1010,7 +1009,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
               <button
                 data-testid='submit-custom-enemy'
-                className='game__button e2e__submit-custom-enemy'
+                className='game__button'
                 type='button'
                 onClick={this.handleSubmitCustomEnemy}
               >
@@ -1033,7 +1032,7 @@ class Game extends React.Component<GameProps, GameState> {
                 ↶
               </button>
               <button
-                className='game__button e2e__up'
+                className='game__button'
                 type='button'
                 onClick={this.handleUp}
                 title='Press Up to rotate'
@@ -1052,7 +1051,7 @@ class Game extends React.Component<GameProps, GameState> {
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
-                className='game__button e2e__left'
+                className='game__button'
                 type='button'
                 onClick={this.handleLeft}
                 title='Press Left to move left'
@@ -1061,7 +1060,7 @@ class Game extends React.Component<GameProps, GameState> {
               </button>
               <button
                 data-testid='down'
-                className='game__button e2e__down'
+                className='game__button'
                 type='button'
                 onClick={this.handleDown}
                 title='Press Down to move down'
@@ -1069,7 +1068,7 @@ class Game extends React.Component<GameProps, GameState> {
                 ↓
               </button>
               <button
-                className='game__button e2e__right'
+                className='game__button'
                 type='button'
                 onClick={this.handleRight}
                 title='Press Right to move right'
@@ -1099,14 +1098,14 @@ class Game extends React.Component<GameProps, GameState> {
             </div>
             <div
               data-testid='replay-out'
-              className='game__replay-out e2e__replay-out'
+              className='game__replay-out'
             >
               {hatetrisReplayCodec.encode(replay)}
             </div>
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
-                className='game__button e2e__undo-button'
+                className='game__button'
                 type='button'
                 onClick={this.handleUndo}
               >
@@ -1115,7 +1114,7 @@ class Game extends React.Component<GameProps, GameState> {
 
               <button
                 data-testid='copy-replay'
-                className='game__button e2e__copy-replay'
+                className='game__button'
                 type='button'
                 onClick={this.handleClickCopyReplay}
               >
@@ -1124,7 +1123,7 @@ class Game extends React.Component<GameProps, GameState> {
 
               <button
                 data-testid='done'
-                className='game__button e2e__done'
+                className='game__button'
                 type='button'
                 onClick={this.handleClickDone}
               >

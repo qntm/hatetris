@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 
-import Game, { hatetris, lovetris } from './Game'
+import Game from './Game'
 import type { GameProps } from './Game'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
