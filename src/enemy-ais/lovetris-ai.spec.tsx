@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { getLogic } from '../components/Game/logic.ts'
+import { getLogic } from '../components/Game/logic'
 import { lovetrisAi } from './lovetris-ai'
 import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
 

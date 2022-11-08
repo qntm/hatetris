@@ -3,8 +3,9 @@
 // The logic for these tests is pretty ridiculous, but this is MINUTES more
 // efficient than plugging these replays into an actual <Game> instance.
 
-import { getLogic } from './logic.ts'
-import { hatetris, brz } from './Game.tsx'
+import { getLogic } from './logic'
+import type { GameState } from './logic'
+import { hatetris, brz } from './Game'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 
@@ -173,6 +174,22 @@ describe('logic', () => {
               it(encoding, async () => {
                 const replay = hatetrisReplayCodec.decode(string)
 
+                const firstState: GameState = {
+                  customAiCode: '',
+                  displayEnemy: false,
+                  enemy,
+                  error: null,
+                  mode: 'REPLAYING',
+                  wellStateId: -1,
+                  wellStates: [],
+                  replay,
+                  replayCopiedTimeoutId: undefined,
+                  replayTimeoutId: undefined
+                }
+
+                firstState.wellStates.push(logic.getFirstWellState(firstState))
+                firstState.wellStateId++
+
                 const finalState = replay.reduce(
                   (state, move) => ({
                     ...state,
@@ -182,15 +199,7 @@ describe('logic', () => {
                         : logic.handleMove(state, move)
                     )
                   }),
-                  {
-                    enemy,
-                    mode: 'REPLAYING',
-                    wellStateId: 0,
-                    wellStates: [logic.getFirstWellState({
-                      enemy
-                    })],
-                    replay
-                  }
+                  firstState
                 )
 
                 expect(finalState.wellStates[finalState.wellStateId].core.score)

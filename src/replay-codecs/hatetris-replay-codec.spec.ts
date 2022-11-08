@@ -127,8 +127,8 @@ describe('hatetrisReplayCodec', () => {
         Object.entries(run.replays).forEach(([codec, replay]) => {
           it(codec, () => {
             const actualDecoded = hatetrisReplayCodec.decode(replay).join('')
-              expect(hatetrisReplayCodec.decode(replay).join(''))
-                .toEqual(expect.stringMatching(run.expectedDecoded))
+            expect(actualDecoded)
+              .toEqual(expect.stringMatching(run.expectedDecoded))
           })
         })
       })

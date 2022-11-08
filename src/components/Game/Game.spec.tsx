@@ -168,7 +168,7 @@ describe('<Game>', () => {
     expect(screen.getByTestId('copy-replay')).toHaveTextContent('copy replay')
 
     await user.click(screen.getByTestId('done'))
- })
+  })
 
   it('lets you use a custom AI', async () => {
     renderGame()
@@ -316,7 +316,8 @@ describe('<Game>', () => {
 
   it('lets you replay a too-long replay', async () => {
     const originalWarn = console.warn
-    console.warn = jest.fn()
+    const mockWarn = jest.fn()
+    console.warn = mockWarn
 
     renderGame()
 
@@ -332,7 +333,7 @@ describe('<Game>', () => {
     // Play beyond the end of the supplied replay
     jest.advanceTimersByTime(replayTimeout * 150)
 
-    expect(console.warn.mock.calls).toEqual([
+    expect(mockWarn.mock.calls).toEqual([
       ['Ignoring input replay step because mode is', 'GAME_OVER']
     ])
 

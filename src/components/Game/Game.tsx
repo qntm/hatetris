@@ -13,85 +13,24 @@ import { brzAi } from '../../enemy-ais/brzustowski'
 import { burgAi } from '../../enemy-ais/burgiel'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 import { Well } from '../Well/Well'
-import { getLogic } from './logic.ts'
+import { getLogic } from './logic'
+import type {
+  CoreState,
+  Enemy,
+  EnemyAi,
+  GameProps,
+  GameState,
+  GetNextCoreStates,
+  Orientation,
+  Piece,
+  RotationSystem,
+  Rotations,
+  WellState
+} from './logic'
 
 const minWidth = 4
 
-type Piece = {
-  x: number,
-  y: number,
-  o: number,
-  id: string
-}
-
-type Orientation = {
-  yMin: number,
-  yDim: number,
-  xMin: number,
-  xDim: number,
-  rows: number[]
-}
-
-type Rotations = {
-  [pieceId: string]: Orientation[]
-}
-
-type RotationSystem = {
-  placeNewPiece: (wellWidth: number, pieceId: string) => Piece;
-  rotations: Rotations
-}
-
-type CoreState = {
-  score: number,
-  well: number[],
-}
-
-type WellState = {
-  core: CoreState,
-  ai: any,
-  piece: Piece
-}
-
-type GetNextCoreStates = (core: CoreState, pieceId: string) => CoreState[]
-
-type EnemyAi = (
-  currentCoreState: CoreState,
-  currentAiState: any,
-  getNextCoreStates: GetNextCoreStates
-) => (string | [string, any])
-
-type Enemy = {
-  shortDescription: string | ReactElement,
-  buttonDescription: string,
-  ai: EnemyAi
-}
-
-type GameProps = {
-  bar: number,
-  replayTimeout: number,
-  rotationSystem: RotationSystem,
-  wellDepth: number,
-  wellWidth: number
-}
-
-type GameState = {
-  error: {
-    interpretation: string,
-    real: string,
-    dismissable: boolean
-  },
-  displayEnemy: boolean,
-  enemy: Enemy,
-  customAiCode: string,
-  mode: string,
-  wellStateId: number,
-  wellStates: WellState[],
-  replay: any[],
-  replayCopiedTimeoutId: ReturnType<typeof setTimeout>,
-  replayTimeoutId: ReturnType<typeof setTimeout>
-}
-
-export type { CoreState, WellState, GameProps, RotationSystem, EnemyAi }
+export type { CoreState, WellState, GameProps, RotationSystem, EnemyAi, Piece }
 
 export const hatetris: Enemy = {
   shortDescription: 'HATETRIS',

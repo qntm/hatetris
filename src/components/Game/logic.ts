@@ -1,3 +1,79 @@
+import type { ReactElement } from 'react'
+
+export type Piece = {
+  x: number,
+  y: number,
+  o: number,
+  id: string
+}
+
+export type CoreState = {
+  score: number,
+  well: number[],
+}
+
+export type WellState = {
+  core: CoreState,
+  ai: any,
+  piece: Piece
+}
+
+export type Orientation = {
+  yMin: number,
+  yDim: number,
+  xMin: number,
+  xDim: number,
+  rows: number[]
+}
+
+export type Rotations = {
+  [pieceId: string]: Orientation[]
+}
+
+export type RotationSystem = {
+  placeNewPiece: (wellWidth: number, pieceId: string) => Piece;
+  rotations: Rotations
+}
+
+export type GetNextCoreStates = (core: CoreState, pieceId: string) => CoreState[]
+
+export type EnemyAi = (
+  currentCoreState: CoreState,
+  currentAiState: any,
+  getNextCoreStates: GetNextCoreStates
+) => (string | [string, any])
+
+export type GameProps = {
+  bar: number,
+  replayTimeout: number,
+  rotationSystem: RotationSystem,
+  wellDepth: number,
+  wellWidth: number
+}
+
+export type Enemy = {
+  shortDescription: string | ReactElement,
+  buttonDescription: string,
+  ai: EnemyAi
+}
+
+export type GameState = {
+  error: {
+    interpretation: string,
+    real: string,
+    dismissable: boolean
+  },
+  displayEnemy: boolean,
+  enemy: Enemy,
+  customAiCode: string,
+  mode: string,
+  wellStateId: number,
+  wellStates: WellState[],
+  replay: any[],
+  replayCopiedTimeoutId: ReturnType<typeof setTimeout>,
+  replayTimeoutId: ReturnType<typeof setTimeout>
+}
+
 const moves = ['L', 'R', 'D', 'U']
 const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
 
@@ -6,7 +82,7 @@ export const getLogic = ({
   rotationSystem,
   wellDepth,
   wellWidth
-}) => {
+}: GameProps) => {
   /**
     Generate a unique integer to describe the position and orientation of this piece.
     `x` varies between -3 and (`wellWidth` - 1) inclusive, so range = `wellWidth` + 3
@@ -171,7 +247,7 @@ export const getLogic = ({
     return possibleFutures
   }
 
-  const validateAiResult = (enemy, coreState: CoreState, aiState: any) => {
+  const validateAiResult = (enemy: Enemy, coreState: CoreState, aiState: any) => {
     const aiResult: any = enemy.ai(coreState, aiState, getNextCoreStates)
 
     const [unsafePieceId, nextAiState] = Array.isArray(aiResult)
@@ -185,7 +261,7 @@ export const getLogic = ({
     throw Error(`Bad piece ID: ${unsafePieceId}`)
   }
 
-  const getFirstWellState = ({ enemy }): WellState => {
+  const getFirstWellState = ({ enemy }: GameState): WellState => {
     const firstCoreState = {
       well: Array(wellDepth).fill(0),
       score: 0
@@ -203,10 +279,17 @@ export const getLogic = ({
   /**
     Accepts the input of a move and attempts to apply that
     transform to the live piece in the live well.
-    Returns the new state.
+    Returns the new state. Technically the new state could be partial but to
+    satisfy the compiler make it whole
   */
-  const handleMove = (state, move: string) => {
-    const { enemy, mode, replay, wellStateId, wellStates } = state
+  const handleMove = (state: GameState, move: string): GameState => {
+    const {
+      enemy,
+      mode,
+      replay,
+      wellStateId,
+      wellStates
+    } = state
     const nextWellStateId = wellStateId + 1
 
     let nextReplay
@@ -250,6 +333,7 @@ export const getLogic = ({
       } catch (error) {
         console.error(error)
         return {
+          ...state,
           error: {
             interpretation: 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.',
             real: error.message,
@@ -263,6 +347,7 @@ export const getLogic = ({
     }
 
     return {
+      ...state,
       mode: nextMode,
       wellStateId: nextWellStateId,
       wellStates: nextWellStates,
