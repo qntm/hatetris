@@ -15,7 +15,7 @@ jest.useFakeTimers()
 // BOY do I need to figure out a faster way to run these unit tests
 jest.setTimeout(60000)
 
-const replayTimeout = 180
+const replayTimeout = 2
 
 describe('<Game>', () => {
   const renderGame = (props: Partial<GameProps> = {}) => {
@@ -322,7 +322,7 @@ describe('<Game>', () => {
     })
   })
 
-  describe('check known replays', function () {
+  describe.skip('check known replays', function () {
     const runs = [{
       name: 'qntm',
       expectedScore: 0,
@@ -483,7 +483,7 @@ describe('<Game>', () => {
     })
   })
 
-  describe('Brzustowski algorithm', () => {
+  describe.skip('Brzustowski algorithm', () => {
     it('works?', async () => {
       const replay = 'ౚටฅٽ௨෨ଈݚСචƘݷౚ೯ບߢ௨චÐݺɷගÐݚɷ౾ܖࠆಛقຽঅ௩قଭݪ௧ڠଭɟ௨ගɑݸ౻ටПݹ౻ඪܖࢭࢶටະऔ௨ชІݶಒටତݹ௮੬ໃए௨ඩషݹࢳΟໃঅ௩Ϻසݶ౻ටลɒƐปໄஈб೯ܘމலڄໃѣҳబຽࢭ௧پܖࠇமقܬݶసطДݺஶϺ༠ɖɷڠПݚݫට༨অ௩Ѳໃףذචʃݹ୦Ѹໃɠ௨ಀІݪɷలฅהԥೱ൧ݺذගІܭϟقܯஈলටݕݺɷඪ൧ރ௧ڠໞݶಏكɑקযඤʃܭدڠЖܭИටКђ௬ට༠ݹଛʈໄຍ௩Ϻໄຍஶشܙਨ௩ѸແࡨߛࡆІܭЬقଚԓஶѮໄຍ४ΟฦݶƖقФ୬௧ٴະࡆذ౾ಊݪСඦബঅࢴඥܨІةɤໃקਙชІࢭরइໄЅЗࡄฅݹઽඨƞݷసقʃࢭࠒΟฆݹߝɈฅђߝԚໄŦ௬ॴ༠הభ൝Іࢭஜу༨ঀಇΘuঅఴуଞݺد෪ງڝࢶ੬ПܭɷٯฦݚСಀഫɟஜضÐɝɴฃ༥މభ෨ܐঔਆ'
       const expectedScore = 55

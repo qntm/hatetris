@@ -2,7 +2,7 @@
   HATETRIS instance builder
 */
 
-'use strict'
+import './Game.css'
 
 import * as React from 'react'
 import type { ReactElement } from 'react'
@@ -13,11 +13,9 @@ import { brzAi } from '../../enemy-ais/brzustowski'
 import { burgAi } from '../../enemy-ais/burgiel'
 import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
 import { Well } from '../Well/Well'
-import './Game.css'
+import { getLogic } from './logic.ts'
 
 const minWidth = 4
-
-const moves = ['L', 'R', 'D', 'U']
 
 type Piece = {
   x: number,
@@ -133,8 +131,6 @@ const burg: Enemy = {
 
 const enemies = [hatetris, lovetris, brz, burg]
 
-const pieceIds = ['I', 'J', 'L', 'O', 'S', 'T', 'Z']
-
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
     super(props)
@@ -180,220 +176,14 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  validateAiResult (coreState: CoreState, aiState: any) {
-    const {
-      enemy
-    } = this.state
+  logic = getLogic(this.props)
 
-    const aiResult: any = enemy.ai(coreState, aiState, this.getNextCoreStates)
-
-    const [unsafePieceId, nextAiState] = Array.isArray(aiResult)
-      ? aiResult
-      : [aiResult, aiState]
-
-    if (pieceIds.includes(unsafePieceId)) {
-      return [unsafePieceId, nextAiState]
-    }
-
-    throw Error(`Bad piece ID: ${unsafePieceId}`)
+  getFirstWellState () {
+    return this.logic.getFirstWellState(this.state)
   }
 
-  getFirstWellState (): WellState {
-    const {
-      rotationSystem,
-      wellDepth,
-      wellWidth
-    } = this.props
-
-    const firstCoreState = {
-      well: Array(wellDepth).fill(0),
-      score: 0
-    }
-
-    const [firstPieceId, firstAiState] = this.validateAiResult(firstCoreState, undefined)
-
-    return {
-      core: firstCoreState,
-      ai: firstAiState,
-      piece: rotationSystem.placeNewPiece(wellWidth, firstPieceId)
-    }
-  }
-
-  /**
-    Generate a unique integer to describe the position and orientation of this piece.
-    `x` varies between -3 and (`wellWidth` - 1) inclusive, so range = `wellWidth` + 3
-    `y` varies between 0 and (`wellDepth` + 2) inclusive, so range = `wellDepth` + 3
-    `o` varies between 0 and 3 inclusive, so range = 4
-  */
-  hashCode = (piece: Piece): number =>
-    (piece.x * (this.props.wellDepth + 3) + piece.y) * 4 + piece.o
-
-  /**
-    Given a well and a piece ID, find all possible places where it could land
-    and return the array of "possible future" states. All of these states
-    will have `null` `piece` because the piece is landed; some will have
-    a positive `score`.
-  */
-  getNextCoreStates: GetNextCoreStates = (core: CoreState, pieceId: string): CoreState[] => {
-    const {
-      rotationSystem,
-      wellDepth,
-      wellWidth
-    } = this.props
-
-    let piece = rotationSystem.placeNewPiece(wellWidth, pieceId)
-
-    // move the piece down to a lower position before we have to
-    // start pathfinding for it
-    // move through empty rows
-    while (
-      piece.y + 4 < wellDepth && // piece is above the bottom
-      core.well[piece.y + 4] === 0 // nothing immediately below it
-    ) {
-      piece = this.getNextState({
-        core,
-        ai: undefined,
-        piece
-      }, 'D').piece
-    }
-
-    const piecePositions = [piece]
-
-    const seen = new Set()
-    seen.add(this.hashCode(piece))
-
-    const possibleFutures: CoreState[] = []
-
-    // A simple `forEach` won't work here because we are appending to the list as we go
-    let i = 0
-    while (i < piecePositions.length) {
-      piece = piecePositions[i]
-
-      // apply all possible moves
-      moves.forEach(move => {
-        const nextState = this.getNextState({
-          core,
-          ai: undefined,
-          piece
-        }, move)
-        const newPiece = nextState.piece
-
-        if (newPiece === null) {
-          // piece locked? better add that to the list
-          // do NOT check locations, they aren't significant here
-          possibleFutures.push(nextState.core)
-        } else {
-          // transform succeeded?
-          // new location? append to list
-          // check locations, they are significant
-          const newHashCode = this.hashCode(newPiece)
-
-          if (!seen.has(newHashCode)) {
-            piecePositions.push(newPiece)
-            seen.add(newHashCode)
-          }
-        }
-      })
-      i++
-    }
-
-    return possibleFutures
-  }
-
-  /**
-    Input {wellState, piece} and a move, return
-    the new {wellState, piece}.
-  */
-  getNextState (wellState: WellState, move: string): WellState {
-    const {
-      rotationSystem,
-      bar,
-      wellDepth,
-      wellWidth
-    } = this.props
-
-    let nextWell = wellState.core.well
-    let nextScore = wellState.core.score
-    const nextAiState = wellState.ai
-    let nextPiece = { ...wellState.piece }
-
-    // apply transform
-    if (move === 'L') {
-      nextPiece.x--
-    }
-    if (move === 'R') {
-      nextPiece.x++
-    }
-    if (move === 'D') {
-      nextPiece.y++
-    }
-    if (move === 'U') {
-      nextPiece.o = (nextPiece.o + 1) % 4
-    }
-
-    const orientation = rotationSystem.rotations[nextPiece.id][nextPiece.o]
-    const xActual = nextPiece.x + orientation.xMin
-    const yActual = nextPiece.y + orientation.yMin
-
-    if (
-      xActual < 0 || // off left side
-      xActual + orientation.xDim > wellWidth || // off right side
-      yActual < 0 || // off top (??)
-      yActual + orientation.yDim > wellDepth || // off bottom
-      orientation.rows.some((row, y) =>
-        wellState.core.well[yActual + y] & (row << xActual)
-      ) // obstruction
-    ) {
-      if (move === 'D') {
-        // Lock piece
-        nextWell = wellState.core.well.slice()
-
-        const orientation = rotationSystem.rotations[wellState.piece.id][wellState.piece.o]
-
-        // this is the top left point in the bounding box of this orientation of this piece
-        const xActual = wellState.piece.x + orientation.xMin
-        const yActual = wellState.piece.y + orientation.yMin
-
-        // row by row bitwise line alteration
-        for (let row = 0; row < orientation.yDim; row++) {
-          // can't negative bit-shift, but alas X can be negative
-          nextWell[yActual + row] |= (orientation.rows[row] << xActual)
-        }
-
-        // check for complete lines now
-        // NOTE: completed lines don't count if you've lost
-        for (let row = 0; row < orientation.yDim; row++) {
-          if (
-            yActual >= bar &&
-            nextWell[yActual + row] === (1 << wellWidth) - 1
-          ) {
-            // move all lines above this point down
-            for (let k = yActual + row; k > 1; k--) {
-              nextWell[k] = nextWell[k - 1]
-            }
-
-            // insert a new blank line at the top
-            // though of course the top line will always be blank anyway
-            nextWell[0] = 0
-
-            nextScore++
-          }
-        }
-        nextPiece = null
-      } else {
-        // No move
-        nextPiece = wellState.piece
-      }
-    }
-
-    return {
-      core: {
-        well: nextWell,
-        score: nextScore
-      },
-      ai: nextAiState,
-      piece: nextPiece
-    }
+  handleMove (move: string) {
+    this.setState(this.logic.handleMove(this.state, move))
   }
 
   handleClickStart = () => {
@@ -518,87 +308,6 @@ class Game extends React.Component<GameProps, GameState> {
 
     this.setState({
       replayTimeoutId: nextReplayTimeoutId
-    })
-  }
-
-  // Accepts the input of a move and attempts to apply that
-  // transform to the live piece in the live well.
-  // Returns the new state.
-  handleMove (move: string) {
-    const {
-      bar,
-      rotationSystem,
-      wellWidth
-    } = this.props
-
-    const {
-      mode,
-      replay,
-      wellStateId,
-      wellStates
-    } = this.state
-
-    const nextWellStateId = wellStateId + 1
-
-    let nextReplay
-    let nextWellStates
-
-    if (wellStateId in replay && move === replay[wellStateId]) {
-      nextReplay = replay
-      nextWellStates = wellStates
-    } else {
-      // Push the new move
-      nextReplay = replay.slice(0, wellStateId).concat([move])
-
-      // And truncate the future
-      nextWellStates = wellStates.slice(0, wellStateId + 1)
-    }
-
-    if (!(nextWellStateId in nextWellStates)) {
-      const nextWellState = this.getNextState(nextWellStates[wellStateId], move)
-      nextWellStates = [...nextWellStates, nextWellState]
-    }
-
-    const nextWellState = nextWellStates[nextWellStateId]
-
-    // Is the game over?
-    // It is impossible to get bits at row (bar - 2) or higher without getting a bit at
-    // row (bar - 1), so there is only one line which we need to check.
-    const gameIsOver = nextWellState.core.well[bar - 1] !== 0
-
-    const nextMode = gameIsOver ? 'GAME_OVER' : mode
-
-    // no live piece? make a new one
-    // suited to the new world, of course
-    if (nextWellState.piece === null && nextMode !== 'GAME_OVER') {
-      let pieceId: string
-      let aiState: any
-      try {
-        // TODO: `nextWellState.core.well` should be more complex and contain colour
-        // information, whereas the well passed to the AI should be a simple
-        // array of integers
-        [pieceId, aiState] = this.validateAiResult(nextWellState.core, nextWellState.ai)
-      } catch (error) {
-        console.error(error)
-        this.setState({
-          error: {
-            interpretation: 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.',
-            real: error.message,
-            dismissable: true
-          }
-        })
-        return
-      }
-
-      nextWellState.ai = aiState
-      nextWellState.piece = rotationSystem.placeNewPiece(wellWidth, pieceId)
-    }
-
-    this.setState({
-      mode: nextMode,
-      wellStateId: nextWellStateId,
-      wellStates: nextWellStates,
-      replay: nextReplay
     })
   }
 
