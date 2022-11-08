@@ -1,8 +1,6 @@
 /* eslint-env jest */
 
-'use strict'
-
-import Game from '../components/Game/Game'
+import { getLogic } from '../components/Game/logic'
 import { lovetrisAi } from './lovetris-ai'
 import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
 
@@ -10,7 +8,7 @@ import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system
 // Least significant bit is rendered on the *left* on web, but appears to the
 // *right* of each binary numeric literal
 
-const game = new Game({
+const logic = getLogic({
   bar: 4,
   replayTimeout: 0,
   rotationSystem: hatetrisRotationSystem,
@@ -18,7 +16,7 @@ const game = new Game({
   wellWidth: 10
 })
 
-const getNextCoreStates = game.getNextCoreStates.bind(game)
+const getNextCoreStates = logic.getNextCoreStates
 
 describe('lovetrisAi', () => {
   it('generates I every time right now', () => {

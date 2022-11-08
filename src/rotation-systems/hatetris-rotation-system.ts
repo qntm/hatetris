@@ -2,8 +2,6 @@
   The HATETRIS rotation system
 */
 
-'use strict'
-
 const unmodified = {
   I: [
     [
