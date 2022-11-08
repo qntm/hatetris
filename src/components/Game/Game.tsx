@@ -5,7 +5,6 @@
 import './Game.css'
 
 import * as React from 'react'
-import type { ReactElement } from 'react'
 
 import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
 import { lovetrisAi } from '../../enemy-ais/lovetris-ai'
@@ -20,11 +19,8 @@ import type {
   EnemyAi,
   GameProps,
   GameState,
-  GetNextCoreStates,
-  Orientation,
   Piece,
   RotationSystem,
-  Rotations,
   WellState
 } from './logic'
 
