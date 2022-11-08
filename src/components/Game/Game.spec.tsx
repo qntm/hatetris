@@ -314,25 +314,47 @@ describe('<Game>', () => {
     prompt.mockRestore()
   })
 
-  describe('when a replay is in progress', () => {
-    beforeEach(async () => {
-      renderGame()
+  it('lets you replay a too-long replay', async () => {
+    const originalWarn = console.warn
+    console.warn = jest.fn()
 
-      const prompt = jest.spyOn(window, 'prompt')
-      prompt.mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA A2')
-      await user.click(screen.getByTestId('replay-button'))
-      expect(prompt.mock.calls).toEqual([
-        ['Paste replay string...']
-      ])
-      prompt.mockRestore()
+    renderGame()
 
-      // Play three moves of the replay
-      jest.advanceTimersByTime(replayTimeout * 3.5)
-    })
+    // Replay keeps pressing Down after game over
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA')
+    await user.click(screen.getByTestId('replay-button'))
+    expect(prompt.mock.calls).toEqual([
+      ['Paste replay string...']
+    ])
+    prompt.mockRestore()
 
-    it('lets you undo and stops replaying if you do so', async () => {
-      await user.keyboard('{Control>}z{/Control}')
-      // TODO: assert that `wellStateId` is now 2, down from 3
-    })
+    // Play beyond the end of the supplied replay
+    jest.advanceTimersByTime(replayTimeout * 150)
+
+    expect(console.warn.mock.calls).toEqual([
+      ['Ignoring input replay step because mode is', 'GAME_OVER']
+    ])
+
+    console.warn = originalWarn
+  })
+
+  it('lets you undo and stops replaying when a replay is in progress', async () => {
+    renderGame()
+
+    // Replay is an incomplete game
+    const prompt = jest.spyOn(window, 'prompt')
+    prompt.mockReturnValueOnce('AAAA AAAA AAAA')
+    await user.click(screen.getByTestId('replay-button'))
+    expect(prompt.mock.calls).toEqual([
+      ['Paste replay string...']
+    ])
+    prompt.mockRestore()
+
+    // Play beyond the end of the supplied replay
+    jest.advanceTimersByTime(replayTimeout * 30)
+
+    await user.keyboard('{Control>}z{/Control}')
+    // TODO: assert that `wellStateId` is now decremented?
   })
 })
