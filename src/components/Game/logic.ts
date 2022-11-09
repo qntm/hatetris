@@ -41,7 +41,7 @@ export type EnemyAi = (
   currentCoreState: CoreState,
   currentAiState: any,
   getNextCoreStates: GetNextCoreStates
-) => (string | [string, any])
+) => (string | [string, any] | Promise<string> | Promise<[string, any]>)
 
 export type GameProps = {
   bar: number,
@@ -247,8 +247,8 @@ export const getLogic = ({
     return possibleFutures
   }
 
-  const validateAiResult = (enemy: Enemy, coreState: CoreState, aiState: any) => {
-    const aiResult: any = enemy.ai(coreState, aiState, getNextCoreStates)
+  const validateAiResult = async (enemy: Enemy, coreState: CoreState, aiState: any) => {
+    const aiResult: string | [string, any] = await enemy.ai(coreState, aiState, getNextCoreStates)
 
     const [unsafePieceId, nextAiState] = Array.isArray(aiResult)
       ? aiResult
@@ -261,13 +261,13 @@ export const getLogic = ({
     throw Error(`Bad piece ID: ${unsafePieceId}`)
   }
 
-  const getFirstWellState = ({ enemy }: GameState): WellState => {
+  const getFirstWellState = async ({ enemy }: GameState): Promise<WellState> => {
     const firstCoreState = {
       well: Array(wellDepth).fill(0),
       score: 0
     }
 
-    const [firstPieceId, firstAiState] = validateAiResult(enemy, firstCoreState, undefined)
+    const [firstPieceId, firstAiState] = await validateAiResult(enemy, firstCoreState, undefined)
 
     return {
       core: firstCoreState,
@@ -282,7 +282,7 @@ export const getLogic = ({
     Returns the new state. Technically the new state could be partial but to
     satisfy the compiler make it whole
   */
-  const handleMove = (state: GameState, move: string): GameState => {
+  const handleMove = async (state: GameState, move: string): Promise<GameState> => {
     const {
       enemy,
       mode,
@@ -329,7 +329,7 @@ export const getLogic = ({
         // TODO: `nextWellState.core.well` should be more complex and contain colour
         // information, whereas the well passed to the AI should be a simple
         // array of integers
-        [pieceId, aiState] = validateAiResult(enemy, nextWellState.core, nextWellState.ai)
+        [pieceId, aiState] = await validateAiResult(enemy, nextWellState.core, nextWellState.ai)
       } catch (error) {
         console.error(error)
         return {

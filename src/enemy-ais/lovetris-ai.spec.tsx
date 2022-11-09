@@ -19,8 +19,8 @@ const logic = getLogic({
 const getNextCoreStates = logic.getNextCoreStates
 
 describe('lovetrisAi', () => {
-  it('generates I every time right now', () => {
-    expect(lovetrisAi({
+  it('generates I every time right now', async () => {
+    expect(await lovetrisAi({
       score: 0,
       well: [
         0b0000000000,

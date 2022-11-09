@@ -1,5 +1,5 @@
-'use strict'
+// Just for the sake of example, make this async
 
 import type { EnemyAi } from '../components/Game/Game.jsx'
 
-export const lovetrisAi: EnemyAi = () => 'I'
+export const lovetrisAi: EnemyAi = async () => 'I'
