@@ -320,7 +320,7 @@ describe('<Game>', () => {
   // timeout won't be created. This means we can't just wait for any
   // amount of time... we need create another promise which will resolve
   // along with those other unresolved promises...
-  const advanceReplaySteps = async n => {
+  const advanceReplaySteps = async n: number => {
     for (let i = 0; i < n; i++) {
       const promise = new Promise(resolve => {
         setTimeout(resolve, 0)
