@@ -2,8 +2,6 @@
   Replay handling. This codec is a combination of three other codecs
 */
 
-'use strict'
-
 import hex from './hex'
 import * as base65536 from './base65536'
 import * as base2048 from './base2048'
@@ -19,6 +17,8 @@ const encode = (moves: string[]): string => base2048.encode(moves)
   Convert a string back into an array of moves
 */
 const decode = (string: string): string[] => {
+  string = string.trim()
+
   if (/^[0123456789ABCDEF# ]*$/.test(string)) {
     return hex.decode(string)
   }

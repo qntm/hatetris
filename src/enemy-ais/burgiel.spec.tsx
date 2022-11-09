@@ -12,8 +12,8 @@ import { burgAi } from './burgiel'
 describe('burgAi', () => {
   const getNextCoreStates = (): CoreState[] => []
 
-  it('generates an S at first', () => {
-    expect(burgAi({
+  it('generates an S at first', async () => {
+    expect(await burgAi({
       score: 0,
       well: [
         0b000000,
@@ -26,8 +26,8 @@ describe('burgAi', () => {
     }, undefined, getNextCoreStates)).toEqual(['S', 'Z'])
   })
 
-  it('generates a Z next', () => {
-    expect(burgAi({
+  it('generates a Z next', async () => {
+    expect(await burgAi({
       score: 0,
       well: [
         0b000000,
@@ -40,8 +40,8 @@ describe('burgAi', () => {
     }, 'Z', getNextCoreStates)).toEqual(['Z', 'S'])
   })
 
-  it('generates an S after that', () => {
-    expect(burgAi({
+  it('generates an S after that', async () => {
+    expect(await burgAi({
       score: 0,
       well: [
         0b000000,

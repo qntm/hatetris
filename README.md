@@ -4,7 +4,7 @@ This is the source code for [HATETRIS](https://qntm.org/hatetris).
 
 ## Writing a custom AI
 
-A custom AI for HATETRIS should be a **JavaScript [function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)** (or [arrow function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)), looking something like this:
+A custom AI for HATETRIS should be a possibly-[`async`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) **JavaScript [function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)** (or [arrow function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)), looking something like this:
 
 ```js
 // AI function.
@@ -76,6 +76,15 @@ You can use the AI state value to store state between function calls:
 
 More advanced AIs still will make use of `getNextStates`. This helper function is provided to make it possible to model future possibilities without laboriously reimplementing all of the game's movement code. For example, [the default HATETRIS algorithm](https://github.com/qntm/hatetris/blob/9b683713050a72d12c5bd6ba4657c9237030fa74/src/enemy-ais/hatetris-ai.ts) uses `getNextStates` to find all the possible outcomes for all possible pieces, rank those outcomes to find the best for each piece, and then select the piece with the worst best outcome. Other AIs could, for example, plug those possible futures back into `getNextStates` to explore further into the future, or use different heuristics to rank the wells and decide how to prune the search tree.
 
+An AI may also be asynchronous:
+
+```js
+async currentWellState => {
+  const result = await someLongerCalculationOrCall()
+  return result === true ? 'I' : 'S'
+}
+```
+
 ### Does this use `eval` internally? Isn't there a security risk from that?
 
-Yes, and yes. You are at mortal risk of attacking yourself. Do not paste code into HATETRIS unless you understand every line of it.
+Yes, and yes. You are at mortal risk of attacking yourself. Do not paste code into HATETRIS unless you trust it.

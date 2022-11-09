@@ -187,22 +187,22 @@ describe('logic', () => {
                   replayTimeoutId: undefined
                 }
 
-                firstState.wellStates.push(logic.getFirstWellState(firstState))
+                firstState.wellStates.push(await logic.getFirstWellState(firstState))
                 firstState.wellStateId++
 
-                const finalState = replay.reduce(
-                  (state, move) => ({
-                    ...state,
-                    ...(
-                      state.mode === 'GAME_OVER'
-                        ? undefined // ignore the remaining moves
-                        : logic.handleMove(state, move)
-                    )
-                  }),
-                  firstState
-                )
+                let state = firstState
+                for (const move of replay) {
+                  if (state.mode === 'GAME_OVER') {
+                    // ignore the remaining moves
+                  } else {
+                    state = {
+                      ...state,
+                      ...await logic.handleMove(state, move)
+                    }
+                  }
+                }
 
-                expect(finalState.wellStates[finalState.wellStateId].core.score)
+                expect(state.wellStates[state.wellStateId].core.score)
                   .toBe(expectedScore)
               })
             })

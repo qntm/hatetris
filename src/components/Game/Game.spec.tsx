@@ -1,7 +1,5 @@
 /* eslint-env jest */
 
-'use strict'
-
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
@@ -314,6 +312,26 @@ describe('<Game>', () => {
     prompt.mockRestore()
   })
 
+  // The act of initiating a replay causes a timeout to be created which
+  // will play one step of the replay. If we use Jest to wait for that
+  // timeout to trigger, then that'll play back one move... but it will
+  // still leave various promises unresolved. `handleMove` won't return,
+  // which means `handleRedo` won't return, which means the next replay
+  // timeout won't be created. This means we can't just wait for any
+  // amount of time... we need create another promise which will resolve
+  // along with those other unresolved promises...
+  const advanceReplaySteps = async (n: number) => {
+    for (let i = 0; i < n; i++) {
+      const promise = new Promise(resolve => {
+        setTimeout(resolve, 0)
+      })
+      await jest.advanceTimersByTime(replayTimeout)
+
+      // ...then `await` THAT
+      await promise
+    }
+  }
+
   it('lets you replay a too-long replay', async () => {
     const originalWarn = console.warn
     const mockWarn = jest.fn()
@@ -330,8 +348,8 @@ describe('<Game>', () => {
     ])
     prompt.mockRestore()
 
-    // Play beyond the end of the supplied replay
-    jest.advanceTimersByTime(replayTimeout * 150)
+    // Play beyond the end of the supplied replay.
+    await advanceReplaySteps(300)
 
     expect(mockWarn.mock.calls).toEqual([
       ['Ignoring input replay step because mode is', 'GAME_OVER']
@@ -353,7 +371,7 @@ describe('<Game>', () => {
     prompt.mockRestore()
 
     // Play beyond the end of the supplied replay
-    jest.advanceTimersByTime(replayTimeout * 30)
+    await advanceReplaySteps(60)
 
     await user.keyboard('{Control>}z{/Control}')
     // TODO: assert that `wellStateId` is now decremented?

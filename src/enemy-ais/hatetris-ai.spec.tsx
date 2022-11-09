@@ -19,7 +19,7 @@ const logic = getLogic({
 const getNextCoreStates = logic.getNextCoreStates
 
 describe('hatetrisAi', () => {
-  it('generates an S by default', () => {
+  it('generates an S by default', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -30,7 +30,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['S', new Set([
@@ -38,7 +38,7 @@ describe('hatetrisAi', () => {
     ])])
   })
 
-  it('generates a Z when an S would result in a lower stack', () => {
+  it('generates a Z when an S would result in a lower stack', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -49,7 +49,7 @@ describe('hatetrisAi', () => {
       0b0001000000,
       0b1111011111
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['Z', new Set([
@@ -57,7 +57,7 @@ describe('hatetrisAi', () => {
     ])])
   })
 
-  it('generates an O when an S or Z would result in a lower stack', () => {
+  it('generates an O when an S or Z would result in a lower stack', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -68,7 +68,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b1111101111
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['O', new Set([
@@ -76,7 +76,7 @@ describe('hatetrisAi', () => {
     ])])
   })
 
-  it('generates an I when an S, Z or O would result in a lower stack', () => {
+  it('generates an I when an S, Z or O would result in a lower stack', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -87,7 +87,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b1111001111
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['I', new Set([
@@ -95,7 +95,7 @@ describe('hatetrisAi', () => {
     ])])
   })
 
-  it('generates an L when an S, Z, O or I would result in a lower stack', () => {
+  it('generates an L when an S, Z, O or I would result in a lower stack', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -106,7 +106,7 @@ describe('hatetrisAi', () => {
       0b1011100111,
       0b1111110111
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['L', new Set([
@@ -114,7 +114,7 @@ describe('hatetrisAi', () => {
     ])])
   })
 
-  it('generates a J when an S, Z, O, I or L would result in a lower stack', () => {
+  it('generates a J when an S, Z, O, I or L would result in a lower stack', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -125,7 +125,7 @@ describe('hatetrisAi', () => {
       0b1011100111,
       0b1111101111
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['J', new Set([
@@ -133,7 +133,7 @@ describe('hatetrisAi', () => {
     ])])
   })
 
-  it('generates a T when an S, Z, O, I, L or J would result in a lower stack', () => {
+  it('generates a T when an S, Z, O, I, L or J would result in a lower stack', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -144,7 +144,7 @@ describe('hatetrisAi', () => {
       0b1111000011,
       0b1111100111
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['T', new Set([
@@ -157,7 +157,7 @@ describe('hatetrisAi', () => {
   // height*. In this situation, L, J and T would all result in a stack
   // reaching y = 6. L comes first so it is selected. This happens even though
   // L and J *give you a line* while T would not.
-  it('just gives you a line sometimes!', () => {
+  it('just gives you a line sometimes!', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -168,7 +168,7 @@ describe('hatetrisAi', () => {
       0b1111000011,
       0b1111100111
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['L', new Set([
@@ -177,7 +177,7 @@ describe('hatetrisAi', () => {
   })
 
   // Coverage...
-  it('generates an S when say an I would clear the board', () => {
+  it('generates an S when say an I would clear the board', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -188,7 +188,7 @@ describe('hatetrisAi', () => {
       0b1111111110,
       0b1111111110
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates)).toEqual(['S', new Set([
@@ -197,7 +197,7 @@ describe('hatetrisAi', () => {
   })
 
   // Loop avoidance
-  it('generates a Z if it already generated an S once', () => {
+  it('generates a Z if it already generated an S once', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -208,7 +208,7 @@ describe('hatetrisAi', () => {
       0b0001000000,
       0b0011100000
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, new Set([
@@ -237,7 +237,7 @@ describe('hatetrisAi', () => {
     ])])
   })
 
-  it('gives up and generates an S if EVERY piece leads into a cycle', () => {
+  it('gives up and generates an S if EVERY piece leads into a cycle', async () => {
     const well = [
       0b0000000000,
       0b0000000000,
@@ -248,7 +248,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    expect(hatetrisAi({
+    expect(await hatetrisAi({
       score: 0,
       well
     }, new Set([
