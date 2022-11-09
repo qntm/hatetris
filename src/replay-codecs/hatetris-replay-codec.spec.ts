@@ -13,6 +13,12 @@ describe('hatetrisReplayCodec', () => {
     expect(hatetrisReplayCodec.decode('ਹԇ')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
   })
 
+  it('decodes with spaces', () => {
+    expect(hatetrisReplayCodec.decode(' A9E')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
+    expect(hatetrisReplayCodec.decode('𤺤 ')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
+    expect(hatetrisReplayCodec.decode(' ਹԇ ')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
+  })
+
   // Due to padding, a replay (which always ends with a "D" instruction) sometimes has an
   // additional trailing "L" or "D"
   describe('known replays', () => {
