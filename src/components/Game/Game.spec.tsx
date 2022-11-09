@@ -349,7 +349,7 @@ describe('<Game>', () => {
     prompt.mockRestore()
 
     // Play beyond the end of the supplied replay.
-    await advanceReplaySteps(250)
+    await advanceReplaySteps(300)
 
     expect(mockWarn.mock.calls).toEqual([
       ['Ignoring input replay step because mode is', 'GAME_OVER']
@@ -371,7 +371,7 @@ describe('<Game>', () => {
     prompt.mockRestore()
 
     // Play beyond the end of the supplied replay
-    await advanceReplaySteps(30)
+    await advanceReplaySteps(60)
 
     await user.keyboard('{Control>}z{/Control}')
     // TODO: assert that `wellStateId` is now decremented?
