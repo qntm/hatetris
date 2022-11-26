@@ -13,7 +13,7 @@ ReactDOM.render(
   (
     <Game
       bar={4}
-      replayTimeout={50}
+      replayTimeout={0}
       rotationSystem={hatetrisRotationSystem}
       wellDepth={20}
       wellWidth={10}
