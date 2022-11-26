@@ -35,6 +35,18 @@ export const hatetris: Enemy = {
   ai: hatetrisAi
 }
 
+const hatetrisMild: Enemy = {
+  shortDescription: (
+    <a
+      href='https://github.com/qntm/hatetris#hatetris-mild'
+    >
+      HATETRIS Mild
+    </a>
+  ),
+  buttonDescription: 'HATETRIS without loop-prevention',
+  ai: hatetrisMildAi
+}
+
 export const lovetris: Enemy = {
   shortDescription: '❤️',
   buttonDescription: 'all 4x1 pieces, all the time',
@@ -63,18 +75,6 @@ const burg: Enemy = {
   ),
   buttonDescription: 'Burgiel (1997)',
   ai: burgAi
-}
-
-const hatetrisMild: Enemy = {
-  shortDescription: (
-    <a
-      href='https://github.com/qntm/hatetris#hatetris-mild'
-    >
-      HATETRIS Mild
-    </a>
-  ),
-  buttonDescription: 'HATETRIS without loop-prevention',
-  ai: hatetrisMildAi
 }
 
 const enemies = [hatetris, hatetrisMild, lovetris, brz, burg]

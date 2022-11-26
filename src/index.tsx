@@ -2,8 +2,6 @@
   HATETRIS
 */
 
-'use strict'
-
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
@@ -15,7 +13,7 @@ ReactDOM.render(
   (
     <Game
       bar={4}
-      replayTimeout={0}
+      replayTimeout={50}
       rotationSystem={hatetrisRotationSystem}
       wellDepth={20}
       wellWidth={10}

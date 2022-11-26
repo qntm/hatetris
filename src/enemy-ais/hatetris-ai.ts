@@ -39,9 +39,6 @@ export const hatetrisAi: EnemyAi = (
       const leadsIntoCycle = Number(nextCoreStates.some(nextCoreState =>
         nextAiState.has(JSON.stringify(nextCoreState.well))
       ))
-      if (leadsIntoCycle) {
-        throw Error('!')
-      }
 
       let highestPeak = -Infinity
       nextCoreStates.forEach(nextCoreState => {

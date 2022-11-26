@@ -12,7 +12,19 @@ The original and worst. Designed by me, qntm, in 2010, this was intended to be t
 
 This is a slightly simplified version of the HATETRIS algorithm which omits a piece of specialised logic intended to prevent wells from repeating and thereby prevent players from being able to catch the game in a loop and play forever.
 
-Due to this omission, it is in fact possible to play against HATETRIS Mild forever, and get an unbounded number of lines.
+Due to this omission, it is believed to be possible to play against HATETRIS Mild forever, and get an unbounded number of lines.
+
+### LOVETRIS
+
+Provides I pieces every time.
+
+### Brzustowski (1992)
+
+Implements the algorithm described in John Brzustowski's 1992 paper [Can you win at Tetris?](https://open.library.ubc.ca/media/download/pdf/831/1.0079748/1). The answer to the question is "No"; Brzustowski proved that it is impossible to play against this algorithm forever. He was the first to prove this result.
+
+### Burgiel (1997)
+
+Implements the algorithm described in Heidi Burgiel's 1997 paper [How to lose at Tetris](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.55.8562&rep=rep1&type=pdf). Burgiel provides a much simpler Tetris algorithm which pays no attention to the current state of the well when selecting the next piece, instead simply alternating S and Z pieces forever, and proves that this algorithm, too, is undefeatable.
 
 ## Writing a custom AI
 
