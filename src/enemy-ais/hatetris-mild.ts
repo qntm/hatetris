@@ -1,9 +1,6 @@
-'use strict'
+// HATETRIS as it was prior to June 2021 - without the loop prevention logic
 
 import type { CoreState, EnemyAi } from '../components/Game/Game.jsx'
-
-// Set containing stringified previously-seen wells
-type HatetrisAiState = Set<String>
 
 // S = worst for the player, T = best
 const worstPieces = 'SZOILJT'.split('')
@@ -12,36 +9,17 @@ const worstPieces = 'SZOILJT'.split('')
 // Rating is the row where the highest blue appears, or `wellDepth` if the well is empty.
 // For the player, higher is better because it indicates a lower stack.
 // For the AI, lower is better
-export const hatetrisAi: EnemyAi = (
+export const hatetrisMildAi: EnemyAi = (
   currentCoreState: CoreState,
-  currentAiState: undefined | HatetrisAiState,
+  currentAiState: undefined,
   getNextCoreStates: (
     coreState: CoreState,
     pieceId: string
   ) => CoreState[]
-): [string, HatetrisAiState] => {
-  if (currentAiState === undefined) {
-    currentAiState = new Set()
-  }
-
-  const nextAiState = new Set([
-    ...currentAiState,
-    JSON.stringify(currentCoreState.well)
-  ])
-
+): string => {
   const evaluations = worstPieces
     .map((pieceId, pieceRanking) => {
       const nextCoreStates = getNextCoreStates(currentCoreState, pieceId)
-
-      // Yes, test against `nextAiState` because what if the current width
-      // is 4 and the candidate piece is an I which, if placed, leads back into
-      // the current well?
-      const leadsIntoCycle = Number(nextCoreStates.some(nextCoreState =>
-        nextAiState.has(JSON.stringify(nextCoreState.well))
-      ))
-      if (leadsIntoCycle) {
-        throw Error('!')
-      }
 
       let highestPeak = -Infinity
       nextCoreStates.forEach(nextCoreState => {
@@ -58,28 +36,18 @@ export const hatetrisAi: EnemyAi = (
 
       return {
         pieceId,
-        leadsIntoCycle,
         highestPeak,
         pieceRanking
       }
     })
 
   evaluations.sort((a, b) =>
-    // Always prefer a piece which does NOT potentially lead into a previously
-    // seen well.
-    (a.leadsIntoCycle - b.leadsIntoCycle) ||
-
-    // Otherwise, whichever piece gives the highest peak (lower number = higher peak)
+    // Prefer whichever piece gives the highest peak (lower number = higher peak)
     (a.highestPeak - b.highestPeak) ||
 
     // Tie breaker is piece ID rating
     (a.pieceRanking - b.pieceRanking)
   )
 
-  const pieceId = evaluations[0].pieceId
-
-  return [
-    pieceId,
-    nextAiState
-  ]
+  return evaluations[0].pieceId
 }

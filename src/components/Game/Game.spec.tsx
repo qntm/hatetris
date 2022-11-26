@@ -143,7 +143,7 @@ describe('<Game>', () => {
     renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
-    await user.click(screen.queryAllByTestId('enemy').at(1))
+    await user.click(screen.queryAllByTestId('enemy').at(2))
     await user.click(screen.getByTestId('start-button'))
     expect(screen.getByTestId('enemy-short')).toHaveTextContent('AI: ❤️')
 
@@ -205,7 +205,7 @@ describe('<Game>', () => {
     await user.click(screen.getByTestId('custom-enemy'))
     await user.click(screen.getByTestId('cancel-custom-enemy'))
 
-    expect(screen.queryAllByTestId('enemy')).toHaveLength(4)
+    expect(screen.queryAllByTestId('enemy')).toHaveLength(5)
   })
 
   it('errors out if your custom AI is invalid JavaScript, but you can dismiss it', async () => {

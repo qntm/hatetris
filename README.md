@@ -2,6 +2,18 @@
 
 This is the source code for [HATETRIS](https://qntm.org/hatetris).
 
+## List of AIs
+
+### HATETRIS
+
+The original and worst. Designed by me, qntm, in 2010, this was intended to be the toughest Tetris piece selection AI ever.
+
+### HATETRIS Mild
+
+This is a slightly simplified version of the HATETRIS algorithm which omits a piece of specialised logic intended to prevent wells from repeating and thereby prevent players from being able to catch the game in a loop and play forever.
+
+Due to this omission, it is in fact possible to play against HATETRIS Mild forever, and get an unbounded number of lines.
+
 ## Writing a custom AI
 
 A custom AI for HATETRIS should be a possibly-[`async`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) **JavaScript [function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)** (or [arrow function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)), looking something like this:

@@ -7,6 +7,7 @@ import './Game.css'
 import * as React from 'react'
 
 import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
+import { hatetrisMildAi } from '../../enemy-ais/hatetris-mild'
 import { lovetrisAi } from '../../enemy-ais/lovetris-ai'
 import { brzAi } from '../../enemy-ais/brzustowski'
 import { burgAi } from '../../enemy-ais/burgiel'
@@ -64,7 +65,19 @@ const burg: Enemy = {
   ai: burgAi
 }
 
-const enemies = [hatetris, lovetris, brz, burg]
+const hatetrisMild: Enemy = {
+  shortDescription: (
+    <a
+      href='https://github.com/qntm/hatetris#hatetris-mild'
+    >
+      HATETRIS Mild
+    </a>
+  ),
+  buttonDescription: 'HATETRIS without loop-prevention',
+  ai: hatetrisMildAi
+}
+
+const enemies = [hatetris, hatetrisMild, lovetris, brz, burg]
 
 class Game extends React.Component<GameProps, GameState> {
   constructor (props: GameProps) {
