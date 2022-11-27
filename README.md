@@ -12,7 +12,7 @@ The original and worst. Designed by me, qntm, in 2010, this was intended to be t
 
 This is a slightly simplified version of the HATETRIS algorithm which omits a piece of specialised logic intended to prevent wells from repeating and thereby prevent players from being able to catch the game in a loop and play forever.
 
-Due to this omission, it is believed to be possible to play against HATETRIS Mild forever, and get an unbounded number of lines.
+Due to this omission, it [possible to play against HATETRIS Mild forever](https://github.com/qntm/hatetris/blob/c48c1d5f1064e75d941c3d83f0916bf85fedfe5a/src/components/Game/logic.spec.ts#L200-L238), and get an unbounded number of lines.
 
 ### LOVETRIS
 
