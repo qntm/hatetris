@@ -35,7 +35,7 @@ export const hatetris: Enemy = {
   ai: hatetrisAi
 }
 
-const hatetrisMild: Enemy = {
+export const hatetrisMild: Enemy = {
   shortDescription: (
     <a
       href='https://github.com/qntm/hatetris#hatetris-mild'
