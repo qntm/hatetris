@@ -10,6 +10,7 @@ import * as base2048 from './base2048'
 /**
   Convert an array of moves into a replay
 */
+// const encode = (moves: string[]): string => raw.encode(moves)
 // const encode = (moves: string[]): string => hex.encode(moves)
 // const encode = (moves: string[]): string => base65536.encode(moves)
 const encode = (moves: string[]): string => base2048.encode(moves)
