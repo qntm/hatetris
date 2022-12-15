@@ -480,7 +480,7 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000000,
         0b0000001100,
-        0b0000011000 // a Z was landed (different), 
+        0b0000011000 // a Z was landed (different)
       ])]: 5, // `maxLoops` for Z will be 5, not 3
       [JSON.stringify([
         0b0000000000,
@@ -562,7 +562,7 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000000,
         0b0000001100,
-        0b0000011000 // a Z was landed (different), 
+        0b0000011000 // a Z was landed (different)
       ])]: 5, // `maxLoops` for Z will be 5, not 3
       [JSON.stringify([
         0b0000000000,
