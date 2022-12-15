@@ -2,8 +2,10 @@
 
 import type { CoreState, EnemyAi } from '../components/Game/Game.jsx'
 
-// Set containing stringified previously-seen wells
-type HatetrisAiState = Set<String>
+// Maps seen wells to the number of times seen
+type HatetrisAiState = {
+  [key: string]: number
+}
 
 // S = worst for the player, T = best
 const worstPieces = 'SZOILJT'.split('')
@@ -21,13 +23,14 @@ export const hatetrisAi: EnemyAi = (
   ) => CoreState[]
 ): [string, HatetrisAiState] => {
   if (currentAiState === undefined) {
-    currentAiState = new Set()
+    currentAiState = {}
   }
 
-  const nextAiState = new Set([
+  const wellKey = JSON.stringify(currentCoreState.well)
+  const nextAiState = {
     ...currentAiState,
-    JSON.stringify(currentCoreState.well)
-  ])
+    [wellKey]: (wellKey in currentAiState ? currentAiState[wellKey] : 0) + 1
+  }
 
   const evaluations = worstPieces
     .map((pieceId, pieceRanking) => {
@@ -36,12 +39,16 @@ export const hatetrisAi: EnemyAi = (
       // Yes, test against `nextAiState` because what if the current width
       // is 4 and the candidate piece is an I which, if placed, leads back into
       // the current well?
-      const leadsIntoCycle = Number(nextCoreStates.some(nextCoreState =>
-        nextAiState.has(JSON.stringify(nextCoreState.well))
-      ))
 
+      let maxLoops = -Infinity
       let highestPeak = -Infinity
       nextCoreStates.forEach(nextCoreState => {
+        const wellKey = JSON.stringify(nextCoreState.well)
+        const loops = wellKey in nextAiState ? nextAiState[wellKey] : 0
+        if (loops > maxLoops) {
+          maxLoops = loops
+        }
+
         let rating = nextCoreState.well.findIndex((row: number) => row !== 0)
         if (rating === -1) {
           // Well is completely empty after placing this piece in this location
@@ -55,7 +62,7 @@ export const hatetrisAi: EnemyAi = (
 
       return {
         pieceId,
-        leadsIntoCycle,
+        maxLoops,
         highestPeak,
         pieceRanking
       }
@@ -63,8 +70,9 @@ export const hatetrisAi: EnemyAi = (
 
   evaluations.sort((a, b) =>
     // Always prefer a piece which does NOT potentially lead into a previously
-    // seen well.
-    (a.leadsIntoCycle - b.leadsIntoCycle) ||
+    // seen well. If all pieces lead into previously seen wells, choose the
+    // well which has been seen the fewest times.
+    (a.maxLoops - b.maxLoops) ||
 
     // Otherwise, whichever piece gives the highest peak (lower number = higher peak)
     (a.highestPeak - b.highestPeak) ||

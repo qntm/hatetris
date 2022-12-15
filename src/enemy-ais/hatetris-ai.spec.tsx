@@ -33,9 +33,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['S', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['S', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   it('generates a Z when an S would result in a lower stack', async () => {
@@ -52,9 +52,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['Z', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['Z', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   it('generates an O when an S or Z would result in a lower stack', async () => {
@@ -71,9 +71,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['O', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['O', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   it('generates an I when an S, Z or O would result in a lower stack', async () => {
@@ -90,9 +90,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['I', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['I', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   it('generates an L when an S, Z, O or I would result in a lower stack', async () => {
@@ -109,9 +109,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['L', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['L', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   it('generates a J when an S, Z, O, I or L would result in a lower stack', async () => {
@@ -128,9 +128,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['J', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['J', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   it('generates a T when an S, Z, O, I, L or J would result in a lower stack', async () => {
@@ -147,9 +147,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['T', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['T', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   // Only while writing these unit tests did I discover this subtle piece of
@@ -171,9 +171,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['L', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['L', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   // Coverage...
@@ -191,9 +191,9 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['S', new Set([
-      JSON.stringify(well)
-    ])])
+    }, undefined, getNextCoreStates)).toEqual(['S', {
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   // Loop avoidance
@@ -211,8 +211,8 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, new Set([
-      JSON.stringify([
+    }, {
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -221,9 +221,9 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0001000110, // an S was landed here
         0b0011100011
-      ])
-    ]), getNextCoreStates)).toEqual(['Z', new Set([
-      JSON.stringify([
+      ])]: 1
+    }, getNextCoreStates)).toEqual(['Z', {
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -232,9 +232,9 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0001000110,
         0b0011100011
-      ]),
-      JSON.stringify(well)
-    ])])
+      ])]: 1,
+      [JSON.stringify(well)]: 1
+    }])
   })
 
   it('gives up and generates an S if EVERY piece leads into a cycle', async () => {
@@ -251,8 +251,8 @@ describe('hatetrisAi', () => {
     expect(await hatetrisAi({
       score: 0,
       well
-    }, new Set([
-      JSON.stringify([
+    }, {
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -261,8 +261,8 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000000,
         0b0000001111 // an I was landed
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -271,8 +271,8 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000011,
         0b0000000011 // an O was landed
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -281,8 +281,8 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000001,
         0b0000000111 // a J was landed
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -291,8 +291,8 @@ describe('hatetrisAi', () => {
         0b0000000001,
         0b0000000001,
         0b0000000011 // an L was landed
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -301,8 +301,8 @@ describe('hatetrisAi', () => {
         0b0000000001,
         0b0000000011,
         0b0000000010 // an S was landed
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -311,8 +311,8 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000011,
         0b0000000110 // a Z was landed
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -321,9 +321,9 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000010,
         0b0000000111 // a T was landed
-      ])
-    ]), getNextCoreStates)).toEqual(['S', new Set([
-      JSON.stringify([
+      ])]: 1
+    }, getNextCoreStates)).toEqual(['S', {
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -332,8 +332,8 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000000,
         0b0000001111
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -342,8 +342,8 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000011,
         0b0000000011
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -352,8 +352,8 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000001,
         0b0000000111
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -362,8 +362,8 @@ describe('hatetrisAi', () => {
         0b0000000001,
         0b0000000001,
         0b0000000011
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -372,8 +372,8 @@ describe('hatetrisAi', () => {
         0b0000000001,
         0b0000000011,
         0b0000000010
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -382,8 +382,8 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000011,
         0b0000000110
-      ]),
-      JSON.stringify([
+      ])]: 1,
+      [JSON.stringify([
         0b0000000000,
         0b0000000000,
         0b0000000000,
@@ -392,8 +392,189 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000010,
         0b0000000111
-      ]),
-      JSON.stringify(well)
-    ])])
+      ])]: 1,
+      [JSON.stringify(well)]: 1
+    }])
+  })
+
+  it('spawns the piece which leads into the fewest cycles', async () => {
+    const well = [
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000,
+      0b0000000000
+    ]
+    expect(await hatetrisAi({
+      score: 0,
+      well
+    }, {
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000001111 // an I was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000011,
+        0b0000000011 // an O was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000111 // a J was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000001,
+        0b0000000011 // an L was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000011,
+        0b0000000010 // an S was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000011,
+        0b0000000110 // a Z was landed
+      ])]: 3,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000001100,
+        0b0000011000 // a Z was landed (different), 
+      ])]: 5, // `maxLoops` for Z will be 5, not 3
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000010,
+        0b0000000111 // a T was landed
+      ])]: 3,
+      [JSON.stringify(well)]: 1 // already seen this well once!
+    }, getNextCoreStates)).toEqual(['T', {
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000001111 // an I was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000011,
+        0b0000000011 // an O was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000111 // a J was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000001,
+        0b0000000011 // an L was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000001,
+        0b0000000011,
+        0b0000000010 // an S was landed
+      ])]: 5,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000011,
+        0b0000000110 // a Z was landed
+      ])]: 3,
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000001100,
+        0b0000011000 // a Z was landed (different), 
+      ])]: 5, // `maxLoops` for Z will be 5, not 3
+      [JSON.stringify([
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000000,
+        0b0000000010,
+        0b0000000111 // a T was landed
+      ])]: 3,
+      [JSON.stringify(well)]: 2
+    }])
   })
 })
