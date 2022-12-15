@@ -53,7 +53,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-standard": "^5.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "html-loader": "^4.0.0",
     "html-webpack-plugin": "^5.3.2",
     "jest": "^29.0.1",
