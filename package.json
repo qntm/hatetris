@@ -45,7 +45,7 @@
     "base65536": "^4.0.2",
     "classnames": "^2.2.6",
     "css-loader": "^6.2.0",
-    "cypress": "^11.2.0",
+    "cypress": "^12.2.0",
     "eslint": "^8.16.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.24.2",
