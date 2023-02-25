@@ -1,5 +1,3 @@
-'use strict'
-
 import classnames from 'classnames'
 import * as React from 'react'
 import type { WellState, RotationSystem } from '../Game/Game.jsx'

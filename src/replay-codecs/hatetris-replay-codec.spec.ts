@@ -1,22 +1,23 @@
 /* eslint-env jest */
 
+import assert from 'node:assert'
 import hatetrisReplayCodec from './hatetris-replay-codec'
 
 describe('hatetrisReplayCodec', () => {
   it('encodes', () => {
-    expect(hatetrisReplayCodec.encode(['D', 'D', 'D', 'R', 'U', 'D'])).toBe('ਹԇ')
+    assert.strictEqual(hatetrisReplayCodec.encode(['D', 'D', 'D', 'R', 'U', 'D']), 'ਹԇ')
   })
 
   it('decodes', () => {
-    expect(hatetrisReplayCodec.decode('A9E')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
-    expect(hatetrisReplayCodec.decode('𤺤')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
-    expect(hatetrisReplayCodec.decode('ਹԇ')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepStrictEqual(hatetrisReplayCodec.decode('A9E'), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepStrictEqual(hatetrisReplayCodec.decode('𤺤'), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepStrictEqual(hatetrisReplayCodec.decode('ਹԇ'), ['D', 'D', 'D', 'R', 'U', 'D'])
   })
 
   it('decodes with spaces', () => {
-    expect(hatetrisReplayCodec.decode(' A9E')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
-    expect(hatetrisReplayCodec.decode('𤺤 ')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
-    expect(hatetrisReplayCodec.decode(' ਹԇ ')).toEqual(['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepStrictEqual(hatetrisReplayCodec.decode(' A9E'), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepStrictEqual(hatetrisReplayCodec.decode('𤺤 '), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepStrictEqual(hatetrisReplayCodec.decode(' ਹԇ '), ['D', 'D', 'D', 'R', 'U', 'D'])
   })
 
   // Due to padding, a replay (which always ends with a "D" instruction) sometimes has an
@@ -133,8 +134,7 @@ describe('hatetrisReplayCodec', () => {
         Object.entries(run.replays).forEach(([codec, replay]) => {
           it(codec, () => {
             const actualDecoded = hatetrisReplayCodec.decode(replay).join('')
-            expect(actualDecoded)
-              .toEqual(expect.stringMatching(run.expectedDecoded))
+            assert.match(actualDecoded, run.expectedDecoded)
           })
         })
       })

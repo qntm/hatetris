@@ -1,12 +1,11 @@
 /* eslint-env jest */
 
-'use strict'
-
+import assert from 'node:assert'
 import hatetrisRotationSystem from './hatetris-rotation-system'
 
 describe('hatetrisRotationSystem', () => {
   it('has the right rotations', () => {
-    expect(hatetrisRotationSystem.rotations).toEqual({
+    assert.deepStrictEqual(hatetrisRotationSystem.rotations, {
       S: [
         { xMin: 1, yMin: 1, xDim: 3, yDim: 2, rows: [6, 3] },
         { xMin: 1, yMin: 1, xDim: 2, yDim: 3, rows: [1, 3, 2] },

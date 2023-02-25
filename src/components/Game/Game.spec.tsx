@@ -1,17 +1,16 @@
 /* eslint-env jest */
 
+import assert from 'node:assert'
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
+import sinon from 'sinon'
 
 import Game from './Game'
 import type { GameProps } from './Game'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
 jest.useFakeTimers()
-
-// BOY do I need to figure out a faster way to run these unit tests
-jest.setTimeout(60000)
 
 const replayTimeout = 2
 
@@ -48,28 +47,28 @@ describe('<Game>', () => {
         rotations: {}
       }
     })
-    expect(screen.getByTestId('error-real')).toHaveTextContent('Have to have at least one piece!')
-    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to start HATETRIS. Application halted.')
+    assert.strictEqual(screen.getByTestId('error-real').textContent, 'Have to have at least one piece!')
+    assert.strictEqual(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to start HATETRIS. Application halted.')
   })
 
   it('rejects a well depth below the bar', () => {
     renderGame({ bar: 4, wellDepth: 3 })
-    expect(screen.getByTestId('error-real')).toHaveTextContent('Can\'t have well with depth 3 less than bar at 4')
-    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to start HATETRIS. Application halted.')
+    assert.strictEqual(screen.getByTestId('error-real').textContent, 'Can\'t have well with depth 3 less than bar at 4')
+    assert.strictEqual(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to start HATETRIS. Application halted.')
   })
 
   it('rejects a well width less than 4', () => {
     renderGame({ wellWidth: 3 })
-    expect(screen.getByTestId('error-real')).toHaveTextContent('Can\'t have well with width 3 less than 4')
-    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to start HATETRIS. Application halted.')
+    assert.strictEqual(screen.getByTestId('error-real').textContent, 'Can\'t have well with width 3 less than 4')
+    assert.strictEqual(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to start HATETRIS. Application halted.')
   })
 
   it('ignores all keystrokes before the game has begun', async () => {
     const originalWarn = console.warn
-    console.warn = jest.fn()
+    console.warn = sinon.stub()
 
     renderGame()
-    expect(screen.getByTestId('start-button')).toHaveTextContent('start new game')
+    assert.strictEqual(screen.getByTestId('start-button').textContent, 'start new game')
 
     await user.keyboard('{Left}')
     await user.keyboard('{Right}')
@@ -78,49 +77,49 @@ describe('<Game>', () => {
     await user.keyboard('{Control>}z{/Control}')
     await user.keyboard('{Control>}y{/Control}')
 
-    expect(console.warn).toHaveBeenCalledTimes(6)
-    expect(screen.getByTestId('start-button')).toHaveTextContent('start new game')
+    assert.strictEqual(console.warn.getCalls().length, 6)
+    assert.strictEqual(screen.getByTestId('start-button').textContent, 'start new game')
 
     console.warn = originalWarn
   })
 
   it('lets you play a few moves', async () => {
     const originalWarn = console.warn
-    console.warn = jest.fn()
+    console.warn = sinon.stub()
 
     renderGame()
 
     await user.click(screen.getByTestId('start-button'))
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
 
     await user.keyboard('{Left}')
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
 
     await user.keyboard('{Right}')
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
 
     await user.keyboard('{Down}')
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
 
     // Rotate, puts part of the piece in contact with the bar below
     await user.keyboard('{Up}')
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(3)
-    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live')).toHaveLength(1)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 3)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live').length, 1)
 
     // Undo
     await user.keyboard('{Control>}z{/Control}')
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
 
     // Redo
     await user.keyboard('{Control>}y{/Control}')
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(3)
-    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live')).toHaveLength(1)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 3)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live').length, 1)
 
     // Warn on attempted redo at end of history
     await user.keyboard('{Control>}y{/Control}')
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(3)
-    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live')).toHaveLength(1)
-    expect(console.warn).toHaveBeenCalledTimes(1)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 3)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live').length, 1)
+    assert.strictEqual(console.warn.getCalls().length, 1)
 
     console.warn = originalWarn
   })
@@ -128,15 +127,15 @@ describe('<Game>', () => {
   it('just lets you play if you enter an empty replay', async () => {
     renderGame()
 
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('')
+    const prompt = sinon.stub(window, 'prompt')
+    prompt.returns('')
     await user.click(screen.getByTestId('replay-button'))
-    expect(prompt.mock.calls).toEqual([
+    assert.deepStrictEqual(prompt.getCalls().map(call => call.args), [
       ['Paste replay string...']
     ])
-    prompt.mockRestore()
+    prompt.restore()
 
-    expect(screen.queryAllByTestId('down')).toHaveLength(1)
+    assert.strictEqual(screen.queryAllByTestId('down').length, 1)
   })
 
   it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async () => {
@@ -145,25 +144,25 @@ describe('<Game>', () => {
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.queryAllByTestId('enemy').at(2))
     await user.click(screen.getByTestId('start-button'))
-    expect(screen.getByTestId('enemy-short')).toHaveTextContent('AI: ❤️')
+    assert.strictEqual(screen.getByTestId('enemy-short').textContent, 'AI: ❤️')
 
     for (let i = 0; i < 187; i++) {
       await user.keyboard('{Down}')
     }
 
-    expect(screen.getByTestId('replay-out')).toHaveTextContent('௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
+    assert.strictEqual(screen.getByTestId('replay-out').textContent, '௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
 
     // Copy the replay
     await user.click(screen.getByTestId('copy-replay'))
     const contents = await navigator.clipboard.readText()
-    expect(contents).toBe('௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
+    assert.strictEqual(contents, '௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
 
     // "copied!" disappears after a while
-    expect(screen.getByTestId('copy-replay')).toHaveTextContent('copied!')
+    assert.strictEqual(screen.getByTestId('copy-replay').textContent, 'copied!')
 
     jest.runAllTimers()
 
-    expect(screen.getByTestId('copy-replay')).toHaveTextContent('copy replay')
+    assert.strictEqual(screen.getByTestId('copy-replay').textContent, 'copy replay')
 
     await user.click(screen.getByTestId('done'))
   })
@@ -177,7 +176,7 @@ describe('<Game>', () => {
     await user.click(screen.getByTestId('submit-custom-enemy'))
     await user.click(screen.getByTestId('start-button'))
 
-    expect(screen.getByTestId('enemy-short')).toHaveTextContent('AI: custom')
+    assert.strictEqual(screen.getByTestId('enemy-short').textContent, 'AI: custom')
 
     // current piece is a J... assertion TODO
   })
@@ -205,7 +204,7 @@ describe('<Game>', () => {
     await user.click(screen.getByTestId('custom-enemy'))
     await user.click(screen.getByTestId('cancel-custom-enemy'))
 
-    expect(screen.queryAllByTestId('enemy')).toHaveLength(5)
+    assert.strictEqual(screen.queryAllByTestId('enemy').length, 5)
   })
 
   it('errors out if your custom AI is invalid JavaScript, but you can dismiss it', async () => {
@@ -216,11 +215,11 @@ describe('<Game>', () => {
     await user.type(screen.getByTestId('ai-textarea'), '() =>')
 
     const error = console.error
-    console.error = jest.fn()
+    console.error = sinon.stub()
     await user.click(screen.getByTestId('submit-custom-enemy'))
     console.error = error
 
-    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to evaluate your custom AI JavaScript.')
+    assert.strictEqual(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to evaluate your custom AI JavaScript.')
 
     await user.click(screen.getByTestId('dismiss-error'))
   })
@@ -236,18 +235,18 @@ describe('<Game>', () => {
     // Start a replay instead of starting a new game (coverage)
     // TODO: deduplicate that code
     const error = console.error
-    console.error = jest.fn()
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('')
+    console.error = sinon.stub()
+    const prompt = sinon.stub(window, 'prompt')
+    prompt.returns('')
     await user.click(screen.getByTestId('replay-button'))
-    expect(prompt.mock.calls).toEqual([
+    assert.deepStrictEqual(prompt.getCalls().map(call => call.args), [
       ['Paste replay string...']
     ])
-    prompt.mockRestore()
+    prompt.restore()
     console.error = error
 
-    expect(screen.getByTestId('error-real')).toHaveTextContent('BANG')
-    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.')
+    assert.strictEqual(screen.getByTestId('error-real').textContent, 'BANG')
+    assert.strictEqual(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.')
   })
 
   it('errors out if your custom AI returns a bad piece', async () => {
@@ -259,12 +258,12 @@ describe('<Game>', () => {
     await user.click(screen.getByTestId('submit-custom-enemy'))
 
     const error = console.error
-    console.error = jest.fn()
+    console.error = sinon.stub()
     await user.click(screen.getByTestId('start-button'))
     console.error = error
 
-    expect(screen.getByTestId('error-real')).toHaveTextContent('Bad piece ID: K')
-    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.')
+    assert.strictEqual(screen.getByTestId('error-real').textContent, 'Bad piece ID: K')
+    assert.strictEqual(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.')
   })
 
   it('errors out if your custom AI throws an error on a later piece', async () => {
@@ -292,24 +291,24 @@ describe('<Game>', () => {
     }
 
     const error = console.error
-    console.error = jest.fn()
+    console.error = sinon.stub()
     await user.click(screen.getByTestId('down'))
     console.error = error
 
-    expect(screen.getByTestId('error-real')).toHaveTextContent('FZAAPP')
-    expect(screen.getByTestId('error-interpretation')).toHaveTextContent('Caught this exception while trying to generate a new piece using your custom AI. Game halted.')
+    assert.strictEqual(screen.getByTestId('error-real').textContent, 'FZAAPP')
+    assert.strictEqual(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.')
   })
 
   it('lets you decide not to replay anything', async () => {
     renderGame()
 
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce(null)
+    const prompt = sinon.stub(window, 'prompt')
+    prompt.returns(null)
     await user.click(screen.getByTestId('replay-button'))
-    expect(prompt.mock.calls).toEqual([
+    assert.deepStrictEqual(prompt.getCalls().map(call => call.args), [
       ['Paste replay string...']
     ])
-    prompt.mockRestore()
+    prompt.restore()
   })
 
   // The act of initiating a replay causes a timeout to be created which
@@ -334,24 +333,24 @@ describe('<Game>', () => {
 
   it('lets you replay a too-long replay', async () => {
     const originalWarn = console.warn
-    const mockWarn = jest.fn()
+    const mockWarn = sinon.stub()
     console.warn = mockWarn
 
     renderGame()
 
     // Replay keeps pressing Down after game over
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA')
+    const prompt = sinon.stub(window, 'prompt')
+    prompt.returns('AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA')
     await user.click(screen.getByTestId('replay-button'))
-    expect(prompt.mock.calls).toEqual([
+    assert.deepStrictEqual(prompt.getCalls().map(call => call.args), [
       ['Paste replay string...']
     ])
-    prompt.mockRestore()
+    prompt.restore()
 
     // Play beyond the end of the supplied replay.
     await advanceReplaySteps(300)
 
-    expect(mockWarn.mock.calls).toEqual([
+    assert.deepStrictEqual(mockWarn.getCalls().map(call => call.args), [
       ['Ignoring input replay step because mode is', 'GAME_OVER']
     ])
 
@@ -362,13 +361,13 @@ describe('<Game>', () => {
     renderGame()
 
     // Replay is an incomplete game
-    const prompt = jest.spyOn(window, 'prompt')
-    prompt.mockReturnValueOnce('AAAA AAAA AAAA')
+    const prompt = sinon.stub(window, 'prompt')
+    prompt.returns('AAAA AAAA AAAA')
     await user.click(screen.getByTestId('replay-button'))
-    expect(prompt.mock.calls).toEqual([
+    assert.deepStrictEqual(prompt.getCalls().map(call => call.args), [
       ['Paste replay string...']
     ])
-    prompt.mockRestore()
+    prompt.restore()
 
     // Play beyond the end of the supplied replay
     await advanceReplaySteps(60)

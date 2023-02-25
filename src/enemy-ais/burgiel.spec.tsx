@@ -1,7 +1,6 @@
 /* eslint-env jest */
 
-'use strict'
-
+import assert from 'node:assert'
 import type { CoreState } from '../components/Game/Game'
 import { burgAi } from './burgiel'
 
@@ -13,7 +12,7 @@ describe('burgAi', () => {
   const getNextCoreStates = (): CoreState[] => []
 
   it('generates an S at first', async () => {
-    expect(await burgAi({
+    assert.deepStrictEqual(await burgAi({
       score: 0,
       well: [
         0b000000,
@@ -23,11 +22,11 @@ describe('burgAi', () => {
         0b000000,
         0b000000
       ]
-    }, undefined, getNextCoreStates)).toEqual(['S', 'Z'])
+    }, undefined, getNextCoreStates), ['S', 'Z'])
   })
 
   it('generates a Z next', async () => {
-    expect(await burgAi({
+    assert.deepStrictEqual(await burgAi({
       score: 0,
       well: [
         0b000000,
@@ -37,11 +36,11 @@ describe('burgAi', () => {
         0b000011,
         0b000010
       ]
-    }, 'Z', getNextCoreStates)).toEqual(['Z', 'S'])
+    }, 'Z', getNextCoreStates), ['Z', 'S'])
   })
 
   it('generates an S after that', async () => {
-    expect(await burgAi({
+    assert.deepStrictEqual(await burgAi({
       score: 0,
       well: [
         0b000000,
@@ -51,6 +50,6 @@ describe('burgAi', () => {
         0b001111,
         0b000110
       ]
-    }, 'S', getNextCoreStates)).toEqual(['S', 'Z'])
+    }, 'S', getNextCoreStates), ['S', 'Z'])
   })
 })

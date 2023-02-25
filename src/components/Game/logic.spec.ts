@@ -3,6 +3,7 @@
 // The logic for these tests is pretty ridiculous, but this is MINUTES more
 // efficient than plugging these replays into an actual <Game> instance.
 
+import assert from 'node:assert'
 import { getLogic } from './logic'
 import type { GameState } from './logic'
 import { hatetris, hatetrisMild, brz } from './Game'
@@ -297,10 +298,9 @@ describe('logic', () => {
                   }
                 }
 
-                expect(state.error)
-                  .toBeNull()
-                expect(state.wellStates[state.wellStateId].core.score)
-                  .toBe(expectedScore)
+                assert.strictEqual(state.error, null)
+                assert.strictEqual(state.wellStates[state.wellStateId].core.score,
+                  expectedScore)
               })
             })
           })

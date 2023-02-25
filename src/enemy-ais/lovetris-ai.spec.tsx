@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import assert from 'node:assert'
 import { getLogic } from '../components/Game/logic'
 import { lovetrisAi } from './lovetris-ai'
 import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
@@ -20,7 +21,7 @@ const getNextCoreStates = logic.getNextCoreStates
 
 describe('lovetrisAi', () => {
   it('generates I every time right now', async () => {
-    expect(await lovetrisAi({
+    assert.strictEqual(await lovetrisAi({
       score: 0,
       well: [
         0b0000000000,
@@ -32,6 +33,6 @@ describe('lovetrisAi', () => {
         0b0000000000,
         0b0000000000
       ]
-    }, undefined, getNextCoreStates)).toBe('I')
+    }, undefined, getNextCoreStates), 'I')
   })
 })
