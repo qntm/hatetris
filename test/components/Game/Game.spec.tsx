@@ -1,14 +1,14 @@
 /* eslint-env jest */
 
-import assert from 'node:assert'
+import * as assert from 'node:assert'
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import sinon from 'sinon'
 
-import Game from './Game'
-import type { GameProps } from './Game'
-import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
+import Game from '../../../src/components/Game/Game.tsx'
+import type { GameProps } from '../../../src/components/Game/Game.tsx'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.ts'
 
 const replayTimeout = 2
 

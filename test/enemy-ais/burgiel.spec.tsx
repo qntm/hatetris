@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
-import assert from 'node:assert'
-import type { CoreState } from '../components/Game/Game'
-import { burgAi } from './burgiel'
+import * as assert from 'node:assert'
+import type { CoreState } from '../../src/components/Game/Game.tsx'
+import { burgAi } from '../../src/enemy-ais/burgiel.ts'
 
 // Note: well bits are flipped compared to what you would see on the screen.
 // Least significant bit is rendered on the *left* on web, but appears to the

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   collectCoverage: true,
   setupFilesAfterEnv: ['<rootDir>/config/jestSetup.ts'],
   moduleNameMapper: {

@@ -1,12 +1,12 @@
 /* eslint-env jest */
 
-import assert from 'node:assert'
+import * as assert from 'node:assert'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 
-import { Well } from './Well'
-import type { WellProps } from './Well'
-import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
+import { Well } from '../../../src/components/Well/Well.tsx'
+import type { WellProps } from '../../../src/components/Well/Well.tsx'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.ts'
 
 const bar = 4
 const wellDepth = 20 // min = bar

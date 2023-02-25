@@ -3,19 +3,22 @@
     "baseUrl": ".",
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "ESNext",
     "moduleResolution": "node",
     "lib": [
       "dom",
       "es2019"
     ],
-    "target": "es5",
     "jsx": "react",
     "allowJs": true,
     "downlevelIteration": true
   },
+  "ts-node": {
+    "esm": true
+  },
   "include": [
     "src/**/*",
+    "test/**/*",
     "./jestSetup.ts"
   ]
 }

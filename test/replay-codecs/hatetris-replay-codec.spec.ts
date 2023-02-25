@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import assert from 'node:assert'
-import hatetrisReplayCodec from './hatetris-replay-codec'
+import * as assert from 'node:assert'
+import hatetrisReplayCodec from '../../src/replay-codecs/hatetris-replay-codec.ts'
 
 describe('hatetrisReplayCodec', () => {
   it('encodes', () => {

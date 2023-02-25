@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import assert from 'node:assert'
-import hatetrisRotationSystem from './hatetris-rotation-system'
+import * as assert from 'node:assert'
+import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.ts'
 
 describe('hatetrisRotationSystem', () => {
   it('has the right rotations', () => {

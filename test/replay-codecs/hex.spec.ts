@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import assert from 'node:assert'
-import hex from './hex'
+import * as assert from 'node:assert'
+import hex from '../../src/replay-codecs/hex.ts'
 
 describe('hex', () => {
   it('works', () => {

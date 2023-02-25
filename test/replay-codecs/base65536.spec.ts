@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import assert from 'node:assert'
-import * as base65536 from './base65536'
+import * as assert from 'node:assert'
+import * as base65536 from '../../src/replay-codecs/base65536.ts'
 
 describe('base65536', () => {
   it('works', () => {

@@ -1,9 +1,9 @@
 /* eslint-env jest */
 
-import assert from 'node:assert'
-import { getLogic } from '../components/Game/logic'
-import { lovetrisAi } from './lovetris-ai'
-import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
+import * as assert from 'node:assert'
+import { getLogic } from '../../src/components/Game/logic.ts'
+import { lovetrisAi } from '../../src/enemy-ais/lovetris-ai.ts'
+import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.ts'
 
 // Note: well bits are flipped compared to what you would see on the screen.
 // Least significant bit is rendered on the *left* on web, but appears to the

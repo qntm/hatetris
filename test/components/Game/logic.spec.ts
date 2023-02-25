@@ -3,12 +3,12 @@
 // The logic for these tests is pretty ridiculous, but this is MINUTES more
 // efficient than plugging these replays into an actual <Game> instance.
 
-import assert from 'node:assert'
-import { getLogic } from './logic'
-import type { GameState } from './logic'
-import { hatetris, hatetrisMild, brz } from './Game'
-import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
-import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
+import * as assert from 'node:assert'
+import { getLogic } from '../../../src/components/Game/logic'
+import type { GameState } from '../../../src/components/Game/logic'
+import { hatetris, hatetrisMild, brz } from '../../../src/components/Game/Game'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system'
+import hatetrisReplayCodec from '../../../src/replay-codecs/hatetris-replay-codec'
 
 const logic = getLogic({
   bar: 4,
