@@ -10,8 +10,6 @@ import Game from './Game'
 import type { GameProps } from './Game'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
-jest.useFakeTimers()
-
 const replayTimeout = 2
 
 describe('<Game>', () => {
@@ -29,15 +27,22 @@ describe('<Game>', () => {
   }
 
   let user: ReturnType<typeof userEvent.setup>
+  let clock
 
   beforeEach(() => {
+    clock = sinon.useFakeTimers()
+
     // RTL's keyboard activity simulation involves asynchronous delays.
-    // We need to advance time so that those delayed things actually happen
     user = userEvent.setup({
+    // We need to advance time so that those delayed things actually happen
       advanceTimers: number => {
-        jest.advanceTimersByTime(number)
+        clock.tick(number)
       }
     })
+  })
+
+  afterEach(() => {
+    clock.restore()
   })
 
   it('rejects a rotation system with no pieces', () => {
@@ -160,7 +165,7 @@ describe('<Game>', () => {
     // "copied!" disappears after a while
     assert.strictEqual(screen.getByTestId('copy-replay').textContent, 'copied!')
 
-    jest.runAllTimers()
+    clock.runAll()
 
     assert.strictEqual(screen.getByTestId('copy-replay').textContent, 'copy replay')
 
@@ -312,7 +317,7 @@ describe('<Game>', () => {
   })
 
   // The act of initiating a replay causes a timeout to be created which
-  // will play one step of the replay. If we use Jest to wait for that
+  // will play one step of the replay. If we use Sinon to wait for that
   // timeout to trigger, then that'll play back one move... but it will
   // still leave various promises unresolved. `handleMove` won't return,
   // which means `handleRedo` won't return, which means the next replay
@@ -324,7 +329,7 @@ describe('<Game>', () => {
       const promise = new Promise(resolve => {
         setTimeout(resolve, 0)
       })
-      await jest.advanceTimersByTime(replayTimeout)
+      await clock.tick(replayTimeout)
 
       // ...then `await` THAT
       await promise
