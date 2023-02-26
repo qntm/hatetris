@@ -2,8 +2,6 @@ import classnames from 'classnames'
 import * as React from 'react'
 import type { WellState, RotationSystem } from '../Game/Game.jsx'
 
-import './Well.css'
-
 type WellProps = {
   bar: number;
   rotationSystem: RotationSystem;

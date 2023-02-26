@@ -2,18 +2,16 @@
   HATETRIS instance builder
 */
 
-import './Game.css'
-
 import * as React from 'react'
 
-import { hatetrisAi } from '../../enemy-ais/hatetris-ai'
-import { hatetrisMildAi } from '../../enemy-ais/hatetris-mild'
-import { lovetrisAi } from '../../enemy-ais/lovetris-ai'
-import { brzAi } from '../../enemy-ais/brzustowski'
-import { burgAi } from '../../enemy-ais/burgiel'
-import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec'
-import { Well } from '../Well/Well'
-import { getLogic } from './logic'
+import { hatetrisAi } from '../../enemy-ais/hatetris-ai.js'
+import { hatetrisMildAi } from '../../enemy-ais/hatetris-mild.js'
+import { lovetrisAi } from '../../enemy-ais/lovetris-ai.js'
+import { brzAi } from '../../enemy-ais/brzustowski.js'
+import { burgAi } from '../../enemy-ais/burgiel.js'
+import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec.js'
+import { Well } from '../Well/Well.jsx'
+import { getLogic } from './logic.js'
 import type {
   CoreState,
   Enemy,
@@ -23,7 +21,7 @@ import type {
   Piece,
   RotationSystem,
   WellState
-} from './logic'
+} from './logic.js'
 
 const minWidth = 4
 

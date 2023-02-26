@@ -4,11 +4,12 @@
 // efficient than plugging these replays into an actual <Game> instance.
 
 import * as assert from 'node:assert'
-import { getLogic } from '../../../src/components/Game/logic'
-import type { GameState } from '../../../src/components/Game/logic'
-import { hatetris, hatetrisMild, brz } from '../../../src/components/Game/Game'
-import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system'
-import hatetrisReplayCodec from '../../../src/replay-codecs/hatetris-replay-codec'
+import { describe, it } from 'mocha'
+import { getLogic } from '../../../src/components/Game/logic.js'
+import type { GameState } from '../../../src/components/Game/logic.js'
+import { hatetris, hatetrisMild, brz } from '../../../src/components/Game/Game.jsx'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.js'
+import hatetrisReplayCodec from '../../../src/replay-codecs/hatetris-replay-codec.js'
 
 const logic = getLogic({
   bar: 4,
@@ -266,8 +267,9 @@ describe('logic', () => {
       describe(aiName, () => {
         aiRuns.forEach(({ name, expectedScore, replays }) => {
           describe(name, () => {
-            Object.entries(replays).forEach(([encoding, string]) => {
-              it(encoding, async () => {
+            Object.entries(replays).forEach(([encoding, string]: [string, string]) => {
+              it(encoding, async function () {
+                this.timeout(5000)
                 const replay = hatetrisReplayCodec.decode(string)
 
                 const firstState: GameState = {

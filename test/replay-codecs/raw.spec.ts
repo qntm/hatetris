@@ -1,7 +1,6 @@
-/* eslint-env jest */
-
 import * as assert from 'node:assert'
-import * as raw from '../../src/replay-codecs/raw.ts'
+import { describe, it } from 'mocha'
+import * as raw from '../../src/replay-codecs/raw.js'
 
 describe('raw', () => {
   it('raw', () => {
