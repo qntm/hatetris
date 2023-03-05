@@ -5,15 +5,16 @@ import { describe, it, beforeEach, afterEach } from 'mocha'
 import * as React from 'react'
 import * as sinon from 'sinon'
 
-import Game from '../../../src/components/Game/Game.jsx'
-import type { GameProps } from '../../../src/components/Game/Game.jsx'
-import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.js'
+import Game from '../../../src/components/Game/Game.tsx'
+import type { GameProps } from '../../../src/components/Game/Game.tsx'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.ts'
 
 const replayTimeout = 2
 
 describe('<Game>', () => {
   const renderGame = (props: Partial<GameProps> = {}) => {
     // just uncommenting code which makes use of RTL's `render` makes Mocha hang??
+    // Or rather, adding --require global-jsdom/register to Mocha's command line has that effect
     render(
       <Game
         bar={4}

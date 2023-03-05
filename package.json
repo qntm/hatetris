@@ -14,7 +14,7 @@
     "cypress": "start-server-and-test \"npm run start\" http://localhost:3000/hatetris.html \"cypress run\"",
     "cypress-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/hatetris.html \"cypress run\"",
     "eslint": "eslint . --ext .js,.ts,.tsx",
-    "mocha": "cross-env DEBUG=mocha:* NODE_OPTIONS=\"--experimental-loader ts-node/esm\" c8 --100 mocha --require global-jsdom/register test/**/Game.spec.{ts,tsx}",
+    "mocha": "c8 --100 node --experimental-loader ./loader-hook.js ./node_modules/mocha/bin/mocha.js test/**/*.spec.{ts,tsx}",
     "jest": "jest",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",

@@ -1,6 +1,6 @@
 import * as assert from 'node:assert'
 import { describe, it } from 'mocha'
-import * as base65536 from '../../src/replay-codecs/base65536.js'
+import * as base65536 from '../../src/replay-codecs/base65536.ts'
 
 describe('base65536', () => {
   it('works', () => {
