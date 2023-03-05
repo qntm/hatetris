@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist/",
-    "noImplicitAny": true,
-    "module": "es6",
+    "noImplicitAny": false,
+    "module": "ESNext",
     "moduleResolution": "node",
     "lib": [
       "dom",
@@ -13,8 +13,12 @@
     "allowJs": true,
     "downlevelIteration": true
   },
+  "ts-node": {
+    "esm": true
+  },
   "include": [
     "src/**/*",
+    "test/**/*",
     "./jestSetup.ts"
   ]
 }

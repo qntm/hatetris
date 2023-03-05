@@ -1,15 +1,26 @@
+// When we have our `package.json` configured with `"type": "module"`, we opt
+// in to stricter module resolution behaviour. This causes Node.js to raise an
+// ERR_UNKNOWN_FILE_EXTENSION error if we attempt to `node a.ts` at the command
+// line or `import 'a.tsx'` in code. To work around this, Node.js exposes an
+// experimental loader API [1] which can be used to modify the default module
+// loading behaviour. We use this to add a custom loader for TypeScript and TSX
+// files - one which uses Babel to transpile JSX and TypeScript type
+// annotations away. We use this during Mocha testing.
+// [1] https://nodejs.org/docs/latest-v18.x/api/esm.html#loaders
+
 import fs from 'node:fs'
 import babel from '@babel/core'
 
 export async function load(url, context, nextLoad) {
   if (url.endsWith('.ts') || url.endsWith('.tsx')) {
-    // Strip out all the TypeScript, and the JSX too if necessary
     if (!url.startsWith('file:///')) {
       throw Error(`Don't know how to convert url ${url} to a filename`)
     }
     const filename = url.substring('file:///'.length)
 
-    // Don't compile JSX unless we need to
+    // We want this transformation to be fast, so don't compile JSX unless we
+    // need to. Do NOT compile to CommonJS modules, leave as ES modules. Note
+    // that no TypeScript type checking takes place.
     const presets = url.endsWith('.tsx')
       ? [
           ['@babel/preset-react'],
@@ -21,6 +32,7 @@ export async function load(url, context, nextLoad) {
       : [
           '@babel/preset-typescript'
         ]
+
     const transformed = await babel.transformFileAsync(filename, { presets })
 
     return {
@@ -30,7 +42,7 @@ export async function load(url, context, nextLoad) {
     }
   }
 
-  return await nextLoad(
+  return nextLoad(
     url,
     context // Fun fact, the need to pass this argument is not documented!
   )
