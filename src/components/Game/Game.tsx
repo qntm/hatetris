@@ -364,12 +364,16 @@ class Game extends React.Component<GameProps, GameState> {
 
   handleClickCopyReplay = () => {
     const {
+      copyTimeout
+    } = this.props
+
+    const {
       replay
     } = this.state
 
     return navigator.clipboard.writeText(hatetrisReplayCodec.encode(replay))
       .then(() => {
-        const replayCopiedTimeoutId = setTimeout(this.handleCopiedTimeout, 3000)
+        const replayCopiedTimeoutId = setTimeout(this.handleCopiedTimeout, copyTimeout)
         this.setState({
           replayCopiedTimeoutId
         })

@@ -8,14 +8,13 @@
 // annotations away. We use this during Mocha testing.
 // [1] https://nodejs.org/docs/latest-v18.x/api/esm.html#loaders
 
+import assert from 'node:assert'
 import fs from 'node:fs'
 import babel from '@babel/core'
 
 export async function load(url, context, nextLoad) {
   if (url.endsWith('.ts') || url.endsWith('.tsx')) {
-    if (!url.startsWith('file:///')) {
-      throw Error(`Don't know how to convert url ${url} to a filename`)
-    }
+    assert.strictEqual(url.startsWith('file:///'), true, `Don't know how to convert url ${url} to a filename`)
     const filename = url.substring('file:///'.length)
 
     // We want this transformation to be fast, so don't compile JSX unless we
@@ -33,7 +32,10 @@ export async function load(url, context, nextLoad) {
           '@babel/preset-typescript'
         ]
 
-    const transformed = await babel.transformFileAsync(filename, { presets })
+    const transformed = await babel.transformFileAsync(filename, {
+      presets,
+      retainLines: true
+    })
 
     return {
       shortCircuit: true,

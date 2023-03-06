@@ -3,21 +3,28 @@ import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
 import { describe, it, beforeEach, afterEach } from 'mocha'
 import * as React from 'react'
+import { act } from 'react-dom/test-utils'
 import * as sinon from 'sinon'
 
 import Game from '../../../src/components/Game/Game.tsx'
 import type { GameProps } from '../../../src/components/Game/Game.tsx'
 import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.ts'
 
-const replayTimeout = 2
+// It looks like Testing Library React doesn't play well with Sinon's fake timers,
+// so just do all of our testing in real time!
+const replayTimeout = 0
+const copyTimeout = 100
 
-describe('<Game>', () => {
+describe('<Game>', function () {
+  this.timeout(5000)
+
   const renderGame = (props: Partial<GameProps> = {}) => {
     // just uncommenting code which makes use of RTL's `render` makes Mocha hang??
     // Or rather, adding --require global-jsdom/register to Mocha's command line has that effect
     render(
       <Game
         bar={4}
+        copyTimeout={copyTimeout}
         replayTimeout={replayTimeout}
         rotationSystem={hatetrisRotationSystem}
         wellDepth={20}
@@ -26,39 +33,11 @@ describe('<Game>', () => {
       />
     )
   }
-  /*
 
   let user: ReturnType<typeof userEvent.setup>
-  let clock: ReturnType<typeof sinon.useFakeTimers>
 
   beforeEach(() => {
-    //clock = sinon.useFakeTimers()
-    // performance.mark = (
-      // name,
-      // { detail = null, startTime = performance.now() } = {}
-    // ) => ({
-      // detail,
-      // duration: 0,
-      // entryType: 'mark',
-      // name,
-      // startTime,
-      // toJSON: function () { return JSON.stringify(this) }
-    // })
-    // performance.clearMarks = () => undefined
-    // performance.clearMeasures = () => undefined
-    // The above seems fine and dandy but SOMETHING doesn't shut down afterwards...
-
-    // RTL's keyboard activity simulation involves asynchronous delays.
-    user = userEvent.setup({
-    // We need to advance time so that those delayed things actually happen
-      advanceTimers: number => {
-        //clock.tick(number)
-      }
-    })
-  })
-
-  afterEach(() => {
-    //clock.restore()
+    user = userEvent.setup()
   })
 
   it('rejects a rotation system with no pieces', () => {
@@ -86,7 +65,6 @@ describe('<Game>', () => {
 
   it('ignores all keystrokes before the game has begun', async () => {
     const warn = sinon.stub(console, 'warn')
-
     renderGame()
     assert.strictEqual(screen.getByTestId('start-button').textContent, 'start new game')
 
@@ -157,7 +135,8 @@ describe('<Game>', () => {
     assert.strictEqual(screen.queryAllByTestId('down').length, 1)
   })
 
-  it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async () => {
+  it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async function () {
+    this.timeout(10000)
     renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
@@ -179,7 +158,9 @@ describe('<Game>', () => {
     // "copied!" disappears after a while
     assert.strictEqual(screen.getByTestId('copy-replay').textContent, 'copied!')
 
-    clock.runAll()
+    await new Promise(resolve => {
+      setTimeout(resolve, copyTimeout)
+    })
 
     assert.strictEqual(screen.getByTestId('copy-replay').textContent, 'copy replay')
 
@@ -337,9 +318,8 @@ describe('<Game>', () => {
   const advanceReplaySteps = async (n: number) => {
     for (let i = 0; i < n; i++) {
       const promise = new Promise(resolve => {
-        setTimeout(resolve, 0)
+        setTimeout(resolve, replayTimeout)
       })
-      await clock.tick(replayTimeout)
 
       // ...then `await` THAT
       await promise
@@ -388,5 +368,4 @@ describe('<Game>', () => {
     await user.keyboard('{Control>}z{/Control}')
     // TODO: assert that `wellStateId` is now decremented?
   })
-  */
 })
