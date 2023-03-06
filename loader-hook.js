@@ -9,10 +9,9 @@
 // [1] https://nodejs.org/docs/latest-v18.x/api/esm.html#loaders
 
 import assert from 'node:assert'
-import fs from 'node:fs'
 import babel from '@babel/core'
 
-export async function load(url, context, nextLoad) {
+export async function load (url, context, nextLoad) {
   if (url.endsWith('.ts') || url.endsWith('.tsx')) {
     assert.strictEqual(url.startsWith('file:///'), true, `Don't know how to convert url ${url} to a filename`)
     const filename = url.substring('file:///'.length)

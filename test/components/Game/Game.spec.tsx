@@ -1,9 +1,8 @@
 import * as assert from 'node:assert'
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
-import { describe, it, beforeEach, afterEach } from 'mocha'
+import { describe, it, beforeEach } from 'mocha'
 import * as React from 'react'
-import { act } from 'react-dom/test-utils'
 import * as sinon from 'sinon'
 
 import Game from '../../../src/components/Game/Game.tsx'
