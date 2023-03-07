@@ -1,8 +1,7 @@
-const webpack = require('webpack')
+import webpack from 'webpack'
+import webpackConfigProd from './webpack.config.prod.js'
 
-const webpackConfigProd = require('./webpack.config.prod')
-
-module.exports = {
+export default {
   ...webpackConfigProd,
   mode: 'development',
 

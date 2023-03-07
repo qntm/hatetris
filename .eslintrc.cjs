@@ -1,3 +1,5 @@
+// TODO: https://eslint.org/docs/latest/use/configure/configuration-files-new
+
 module.exports = {
   env: {
     browser: true,
@@ -20,7 +22,7 @@ module.exports = {
   },
   plugins: [
     'react',
-    '@typescript-eslint'
+    '@typescript-eslint' // `@typescript-eslint/eslint-plugin`
   ],
   rules: {
     // <https://github.com/typescript-eslint/typescript-eslint/issues/2540> ???

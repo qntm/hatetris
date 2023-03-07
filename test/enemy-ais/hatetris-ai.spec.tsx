@@ -11,6 +11,7 @@ import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation
 const logic = getLogic({
   bar: 4,
   replayTimeout: 0,
+  copyTimeout: 0,
   rotationSystem: hatetrisRotationSystem,
   wellDepth: 8,
   wellWidth: 10

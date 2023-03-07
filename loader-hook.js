@@ -8,7 +8,6 @@
 // annotations away. We use this during Mocha testing.
 // [1] https://nodejs.org/docs/latest-v18.x/api/esm.html#loaders
 
-import assert from 'node:assert'
 import fs from 'node:fs'
 import babel from '@babel/core'
 

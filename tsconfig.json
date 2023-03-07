@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./dist/",
     "noImplicitAny": true,
     "module": "ESNext",
     "moduleResolution": "node",
     "lib": [
-      "dom",
-      "es2019"
+      "dom"
     ],
-    "jsx": "react",
-    "allowJs": true,
-    "downlevelIteration": true
+    "jsx": "react"
   },
   "include": [
     "src/**/*",

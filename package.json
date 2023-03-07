@@ -17,8 +17,8 @@
     "mocha": "c8 --100 node --experimental-loader ./loader-hook.js ./node_modules/mocha/bin/mocha.js --require global-jsdom/register test/**/*.spec.{ts,tsx}",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",
-    "test": "npm run eslint && npm run mocha && npm run build && npm run cypress-built",
-    "tsc": "tsc"
+    "test": "npm run eslint && npm run tsc && npm run mocha && npm run cypress && npm run build && npm run cypress-built",
+    "tsc": "tsc --noEmit"
   },
   "keywords": [
     "tetris"
@@ -30,8 +30,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
-    "@babel/node": "^7.14.7",
-    "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.14.5",
     "@testing-library/react": "^14.0.0",
@@ -42,11 +40,11 @@
     "@types/sinon": "^10.0.13",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
+    "babel-loader": "^9.1.2",
     "base2048": "^2.0.1",
     "base65536": "^4.0.2",
     "c8": "^7.13.0",
     "classnames": "^2.2.6",
-    "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "cypress": "^12.2.0",
     "eslint": "^8.16.0",
@@ -58,10 +56,8 @@
     "eslint-plugin-standard": "^5.0.0",
     "express": "^4.17.3",
     "global-jsdom": "^8.7.0",
-    "html-loader": "^4.0.0",
     "html-webpack-plugin": "^5.3.2",
     "jsdom": "^21.1.0",
-    "jsdom-global": "^3.0.2",
     "mini-css-extract-plugin": "^2.2.1",
     "mocha": "^10.2.0",
     "react": "^18.2.0",
@@ -69,10 +65,9 @@
     "react-dom": "^18.2.0",
     "sinon": "^15.0.1",
     "start-server-and-test": "^2.0.0",
-    "ts-loader": "^9.2.3",
     "typescript": "^4.4.2",
     "webpack": "^5.51.1",
-    "webpack-cli": "^5.0.0",
+    "webpack-cli": "^5.0.1",
     "webpack-dev-middleware": "^6.0.1",
     "webpack-hot-middleware": "^2.25.0"
   }

@@ -22,16 +22,46 @@ export default {
     })
   ],
   resolve: {
-    extensions: ['.tsx', '.ts', '.jsx', '.js']
+    // TypeScript requires us to lie in our `import`s
+    extensionAlias: {
+      '.js': [
+        '.ts',
+        '.js' // third-party code
+      ],
+      '.jsx': '.tsx'
+    },
+
+    extensions: [
+      '.tsx',
+      '.ts',
+      '.js' // third-party code
+    ]
   },
   module: {
     rules: [{
-      test: /\.(js|jsx|ts|tsx)$/,
-      exclude: /node_modules/,
-      use: 'ts-loader'
+      test: /\.tsx$/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['@babel/preset-react'],
+            ['@babel/preset-typescript', {
+              isTSX: true,
+              allExtensions: true
+            }]
+          ]
+        }
+      }
     }, {
-      test: /\.html$/,
-      loader: 'html-loader'
+      test: /\.ts$/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            '@babel/preset-typescript'
+          ]
+        }
+      }
     }, {
       test: /\.css$/,
       use: [

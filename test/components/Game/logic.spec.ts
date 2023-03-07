@@ -14,6 +14,7 @@ import hatetrisReplayCodec from '../../../src/replay-codecs/hatetris-replay-code
 const logic = getLogic({
   bar: 4,
   replayTimeout: 0,
+  copyTimeout: 0,
   rotationSystem: hatetrisRotationSystem,
   wellDepth: 20,
   wellWidth: 10
