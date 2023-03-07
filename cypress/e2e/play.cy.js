@@ -73,7 +73,8 @@ describe('HATETRIS', () => {
 
       // Drop
       for (let j = 0; j < 18; j++) {
-        cy.get('button').contains('↓').click()
+        cy
+          .get('button').contains('↓').click()
       }
     }
 
