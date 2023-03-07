@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist/",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "module": "ESNext",
     "moduleResolution": "node",
     "lib": [
@@ -13,12 +13,8 @@
     "allowJs": true,
     "downlevelIteration": true
   },
-  "ts-node": {
-    "esm": true
-  },
   "include": [
     "src/**/*",
-    "test/**/*",
-    "./jestSetup.ts"
+    "test/**/*"
   ]
 }

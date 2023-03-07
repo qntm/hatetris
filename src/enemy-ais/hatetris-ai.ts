@@ -1,4 +1,4 @@
-import type { CoreState, EnemyAi } from '../components/Game/Game.tsx'
+import type { CoreState, EnemyAi } from '../components/Game/Game.jsx'
 
 // Maps seen wells to the number of times seen
 type HatetrisAiState = {

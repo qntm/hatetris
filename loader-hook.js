@@ -9,17 +9,91 @@
 // [1] https://nodejs.org/docs/latest-v18.x/api/esm.html#loaders
 
 import assert from 'node:assert'
+import fs from 'node:fs'
 import babel from '@babel/core'
 
+const lookup = {
+  js: 'ts',
+  jsx: 'tsx',
+  cjs: 'cts',
+  cjsx: 'ctsx',
+  mjs: 'mts',
+  mjsx: 'mtsx'
+}
+
+// If the specifier ends with ".js" or ".jsx", this could be a lie -
+// search for the corresponding .ts or .tsx file on disk and, if present,
+// return that filename instead instead
+const getTsFilename = specifier => {
+  if (!specifier.startsWith('file:///')) {
+    // e.g. 'node:assert'
+    return null
+  }
+
+  const filename = specifier.substring('file:///'.length)
+
+  let tsFilename = null
+  for (const [jsExt, tsExt] of Object.entries(lookup)) {
+    if (filename.endsWith(`.${jsExt}`)) {
+      tsFilename = filename.substring(0, filename.length - `.${jsExt}`.length) + `.${tsExt}`
+      break
+    }
+    if (filename.endsWith(`.${tsExt}`)) {
+      tsFilename = filename
+      break
+    }
+  }
+
+  if (tsFilename === null) {
+    // Possibly unreachable
+    return null
+  }
+
+  try {
+    fs.statSync(tsFilename)
+    return tsFilename
+  } catch (error) {
+    /* c8 ignore start */
+    if (error.code !== 'ENOENT') {
+      // E.g. permissions error
+      throw error
+    }
+    /* c8 ignore end */
+    // Otherwise, .ts file doesn't exist.
+  }
+
+  return null
+}
+
+export async function resolve (specifier, context, nextResolve) {
+  const { parentURL = null } = context
+
+  const absSpecifier = parentURL === null
+    ? new URL(specifier).href
+    : new URL(specifier, parentURL).href
+
+  const tsFilename = getTsFilename(absSpecifier)
+
+  if (tsFilename !== null) {
+    return {
+      shortCircuit: true,
+      url: 'file:///' + tsFilename
+    }
+  }
+
+  return nextResolve(specifier, context)
+}
+
 export async function load (url, context, nextLoad) {
-  if (url.endsWith('.ts') || url.endsWith('.tsx')) {
-    assert.strictEqual(url.startsWith('file:///'), true, `Don't know how to convert url ${url} to a filename`)
-    const filename = url.substring('file:///'.length)
+  const tsFilename = getTsFilename(url)
+
+  if (tsFilename !== null) {
+    const content = fs.readFileSync(tsFilename, 'utf8')
 
     // We want this transformation to be fast, so don't compile JSX unless we
     // need to. Do NOT compile to CommonJS modules, leave as ES modules. Note
     // that no TypeScript type checking takes place.
-    const presets = url.endsWith('.tsx')
+    const presets = tsFilename.endsWith('.tsx')
       ? [
           ['@babel/preset-react'],
           ['@babel/preset-typescript', {
@@ -31,7 +105,8 @@ export async function load (url, context, nextLoad) {
           '@babel/preset-typescript'
         ]
 
-    const transformed = await babel.transformFileAsync(filename, {
+    const transformed = babel.transformSync(content, {
+      filename: tsFilename,
       presets,
       retainLines: true
     })
@@ -43,8 +118,5 @@ export async function load (url, context, nextLoad) {
     }
   }
 
-  return nextLoad(
-    url,
-    context // Fun fact, the need to pass this argument is not documented!
-  )
+  return nextLoad(url, context)
 }

@@ -5,11 +5,11 @@
 
 import * as assert from 'node:assert'
 import { describe, it } from 'mocha'
-import { getLogic } from '../../../src/components/Game/logic.ts'
-import type { GameState } from '../../../src/components/Game/logic.ts'
-import { hatetris, hatetrisMild, brz } from '../../../src/components/Game/Game.tsx'
-import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.ts'
-import hatetrisReplayCodec from '../../../src/replay-codecs/hatetris-replay-codec.ts'
+import { getLogic } from '../../../src/components/Game/logic.js'
+import type { GameState } from '../../../src/components/Game/logic.js'
+import { hatetris, hatetrisMild, brz } from '../../../src/components/Game/Game.jsx'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.js'
+import hatetrisReplayCodec from '../../../src/replay-codecs/hatetris-replay-codec.js'
 
 const logic = getLogic({
   bar: 4,

@@ -1,6 +1,6 @@
 import * as assert from 'node:assert'
 import { describe, it } from 'mocha'
-import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.ts'
+import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.js'
 
 describe('hatetrisRotationSystem', () => {
   it('has the right rotations', () => {

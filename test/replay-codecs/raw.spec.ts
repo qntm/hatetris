@@ -1,6 +1,6 @@
 import * as assert from 'node:assert'
 import { describe, it } from 'mocha'
-import * as raw from '../../src/replay-codecs/raw.ts'
+import * as raw from '../../src/replay-codecs/raw.js'
 
 describe('raw', () => {
   it('raw', () => {

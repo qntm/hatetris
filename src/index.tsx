@@ -9,8 +9,8 @@ import './index.css'
 import './components/Game/Game.css'
 import './components/Well/Well.css'
 
-import Game from './components/Game/Game'
-import hatetrisRotationSystem from './rotation-systems/hatetris-rotation-system'
+import Game from './components/Game/Game.jsx'
+import hatetrisRotationSystem from './rotation-systems/hatetris-rotation-system.js'
 
 ReactDOM.render(
   (
