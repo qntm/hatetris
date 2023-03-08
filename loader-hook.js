@@ -29,10 +29,12 @@ const getTsFilename = specifier => {
     return null
   }
 
-  // It is late and I am tired
+  // It is late and I am too tired to figure out the proper way to do this
+  /* c8 ignore start */
   const filename = process.platform === 'win32'
     ? specifier.substring('file:///'.length)
     : specifier.substring('file://'.length)
+  /* c8 ignore end */
 
   let tsFilename = null
   for (const [jsExt, tsExt] of Object.entries(lookup)) {
