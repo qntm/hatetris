@@ -46,6 +46,7 @@ export type EnemyAi = (
 export type GameProps = {
   bar: number,
   replayTimeout: number,
+  copyTimeout: number,
   rotationSystem: RotationSystem,
   wellDepth: number,
   wellWidth: number

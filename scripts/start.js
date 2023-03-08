@@ -1,10 +1,10 @@
-const express = require('express')
-const WebpackDevServerUtils = require('react-dev-utils/WebpackDevServerUtils')
-const webpack = require('webpack')
-const WebpackDevMiddleware = require('webpack-dev-middleware')
-const WebpackHotMiddleware = require('webpack-hot-middleware')
+import express from 'express'
+import WebpackDevServerUtils from 'react-dev-utils/WebpackDevServerUtils.js'
+import webpack from 'webpack'
+import WebpackDevMiddleware from 'webpack-dev-middleware'
+import WebpackHotMiddleware from 'webpack-hot-middleware'
 
-const config = require('../config/webpack.config.dev')
+import config from '../config/webpack.config.dev.js'
 
 const compiler = WebpackDevServerUtils.createCompiler({
   webpack,

@@ -1,13 +1,10 @@
-/* eslint-env jest */
-
-'use strict'
-
+import * as assert from 'node:assert'
 import { render, screen } from '@testing-library/react'
+import { describe, it } from 'mocha'
 import * as React from 'react'
-
-import { Well } from './Well'
-import type { WellProps } from './Well'
-import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
+import { Well } from '../../../src/components/Well/Well.jsx'
+import type { WellProps } from '../../../src/components/Well/Well.jsx'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.js'
 
 const bar = 4
 const wellDepth = 20 // min = bar
@@ -27,8 +24,8 @@ describe('<Well>', () => {
 
   it('null well state', () => {
     renderWell()
-    expect(screen.queryAllByTestId('well__cell')).toHaveLength(190)
-    expect(screen.queryAllByTestId('well__cell well__cell--bar')).toHaveLength(10)
+    assert.strictEqual(screen.queryAllByTestId('well__cell').length, 190)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--bar').length, 10)
   })
 
   it('initial well state', () => {
@@ -63,7 +60,7 @@ describe('<Well>', () => {
         piece: { id: 'S', x: 3, y: 0, o: 0 }
       }
     })
-    expect(screen.queryAllByTestId('well__cell well__cell--live')).toHaveLength(4)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
   })
 
   it('game over well state', () => {
@@ -98,7 +95,7 @@ describe('<Well>', () => {
         piece: null
       }
     })
-    expect(screen.queryAllByTestId('well__cell well__cell--landed')).toHaveLength(112)
-    expect(screen.queryAllByTestId('well__cell well__cell--bar well__cell--landed')).toHaveLength(2)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--landed').length, 112)
+    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--bar well__cell--landed').length, 2)
   })
 })

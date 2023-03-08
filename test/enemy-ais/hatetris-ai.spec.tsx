@@ -1,8 +1,8 @@
-/* eslint-env jest */
-
-import { getLogic } from '../components/Game/logic'
-import { hatetrisAi } from './hatetris-ai'
-import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
+import * as assert from 'node:assert'
+import { describe, it } from 'mocha'
+import { getLogic } from '../../src/components/Game/logic.js'
+import { hatetrisAi } from '../../src/enemy-ais/hatetris-ai.js'
+import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.js'
 
 // Note: well bits are flipped compared to what you would see on the screen.
 // Least significant bit is rendered on the *left* on web, but appears to the
@@ -11,6 +11,7 @@ import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system
 const logic = getLogic({
   bar: 4,
   replayTimeout: 0,
+  copyTimeout: 0,
   rotationSystem: hatetrisRotationSystem,
   wellDepth: 8,
   wellWidth: 10
@@ -30,10 +31,10 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['S', {
+    }, undefined, getNextCoreStates), ['S', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -49,10 +50,10 @@ describe('hatetrisAi', () => {
       0b0001000000,
       0b1111011111
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['Z', {
+    }, undefined, getNextCoreStates), ['Z', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -68,10 +69,10 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b1111101111
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['O', {
+    }, undefined, getNextCoreStates), ['O', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -87,10 +88,10 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b1111001111
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['I', {
+    }, undefined, getNextCoreStates), ['I', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -106,10 +107,10 @@ describe('hatetrisAi', () => {
       0b1011100111,
       0b1111110111
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['L', {
+    }, undefined, getNextCoreStates), ['L', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -125,10 +126,10 @@ describe('hatetrisAi', () => {
       0b1011100111,
       0b1111101111
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['J', {
+    }, undefined, getNextCoreStates), ['J', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -144,10 +145,10 @@ describe('hatetrisAi', () => {
       0b1111000011,
       0b1111100111
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['T', {
+    }, undefined, getNextCoreStates), ['T', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -168,10 +169,10 @@ describe('hatetrisAi', () => {
       0b1111000011,
       0b1111100111
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['L', {
+    }, undefined, getNextCoreStates), ['L', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -188,10 +189,10 @@ describe('hatetrisAi', () => {
       0b1111111110,
       0b1111111110
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
-    }, undefined, getNextCoreStates)).toEqual(['S', {
+    }, undefined, getNextCoreStates), ['S', {
       [JSON.stringify(well)]: 1
     }])
   })
@@ -208,7 +209,7 @@ describe('hatetrisAi', () => {
       0b0001000000,
       0b0011100000
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
     }, {
@@ -222,7 +223,7 @@ describe('hatetrisAi', () => {
         0b0001000110, // an S was landed here
         0b0011100011
       ])]: 1
-    }, getNextCoreStates)).toEqual(['Z', {
+    }, getNextCoreStates), ['Z', {
       [JSON.stringify([
         0b0000000000,
         0b0000000000,
@@ -248,7 +249,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
     }, {
@@ -322,7 +323,7 @@ describe('hatetrisAi', () => {
         0b0000000010,
         0b0000000111 // a T was landed
       ])]: 1
-    }, getNextCoreStates)).toEqual(['S', {
+    }, getNextCoreStates), ['S', {
       [JSON.stringify([
         0b0000000000,
         0b0000000000,
@@ -408,7 +409,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    expect(await hatetrisAi({
+    assert.deepStrictEqual(await hatetrisAi({
       score: 0,
       well
     }, {
@@ -493,7 +494,7 @@ describe('hatetrisAi', () => {
         0b0000000111 // a T was landed
       ])]: 3,
       [JSON.stringify(well)]: 1 // already seen this well once!
-    }, getNextCoreStates)).toEqual(['T', {
+    }, getNextCoreStates), ['T', {
       [JSON.stringify([
         0b0000000000,
         0b0000000000,

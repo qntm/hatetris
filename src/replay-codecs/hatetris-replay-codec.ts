@@ -2,10 +2,10 @@
   Replay handling. This codec is a combination of three other codecs
 */
 
-import * as raw from './raw'
-import hex from './hex'
-import * as base65536 from './base65536'
-import * as base2048 from './base2048'
+import * as raw from './raw.js'
+import hex from './hex.js'
+import * as base65536 from './base65536.js'
+import * as base2048 from './base2048.js'
 
 /**
   Convert an array of moves into a replay

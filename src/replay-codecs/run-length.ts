@@ -1,5 +1,3 @@
-'use strict'
-
 interface Run {
   length: number,
   entry: any
