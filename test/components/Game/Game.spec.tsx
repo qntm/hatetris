@@ -17,8 +17,6 @@ describe('<Game>', function () {
   this.timeout(5000)
 
   const renderGame = (props: Partial<GameProps> = {}) => {
-    // just uncommenting code which makes use of RTL's `render` makes Mocha hang??
-    // Or rather, adding --require global-jsdom/register to Mocha's command line has that effect
     render(
       <Game
         bar={4}
