@@ -24,12 +24,21 @@ const lookup = {
 // search for the corresponding .ts or .tsx file on disk and, if present,
 // return that filename instead instead
 const getTsFilename = specifier => {
-  if (!specifier.startsWith('file:///')) {
+  let filename
+  if (specifier.startsWith('file:///')) {
+    // Windows relative file import
+    filename = specifier.substring('file:///'.length)
+  } else if (specifier.startsWith('/')) {
+    // Linux relative file imports, apparently?
+    filename = specifier
+  } else {
     // e.g. 'node:assert'
-    return null
+    filename = null
   }
 
-  const filename = specifier.substring('file:///'.length)
+  if (filename === null) {
+    return null
+  }
 
   let tsFilename = null
   for (const [jsExt, tsExt] of Object.entries(lookup)) {
@@ -65,6 +74,7 @@ const getTsFilename = specifier => {
 }
 
 export async function resolve (specifier, context, nextResolve) {
+  console.log('resolve', specifier, context.parentURL)
   const { parentURL = null } = context
 
   const absSpecifier = parentURL === null
@@ -84,6 +94,7 @@ export async function resolve (specifier, context, nextResolve) {
 }
 
 export async function load (url, context, nextLoad) {
+  console.log('load', url)
   const tsFilename = getTsFilename(url)
 
   if (tsFilename !== null) {
