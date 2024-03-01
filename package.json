@@ -39,7 +39,7 @@
     "@types/react-dom": "^18.0.3",
     "@types/sinon": "^10.0.13",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
-    "@typescript-eslint/parser": "^6.2.1",
+    "@typescript-eslint/parser": "^7.1.0",
     "babel-loader": "^9.1.2",
     "base2048": "^2.0.1",
     "base65536": "^4.0.2",
