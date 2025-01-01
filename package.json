@@ -38,7 +38,7 @@
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "@types/sinon": "^17.0.3",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
     "@typescript-eslint/parser": "^7.1.0",
     "babel-loader": "^9.1.2",
     "base2048": "^2.0.1",
