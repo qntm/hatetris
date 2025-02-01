@@ -47,7 +47,7 @@
     "classnames": "^2.2.6",
     "css-loader": "^7.1.1",
     "cypress": "^13.1.0",
-    "eslint": "^8.16.0",
+    "eslint": "^9.19.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
