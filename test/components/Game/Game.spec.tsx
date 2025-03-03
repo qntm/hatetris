@@ -133,6 +133,18 @@ describe('<Game>', function () {
 
   it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async function () {
     this.timeout(10000)
+
+    let calls: any[] = []
+    const clipboard = navigator.clipboard
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
+        writeText: async (...args: any[]) => {
+          calls.push(args)
+        }
+      },
+      writable: true
+    })
+
     renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
@@ -148,8 +160,14 @@ describe('<Game>', function () {
 
     // Copy the replay
     await user.click(screen.getByTestId('copy-replay'))
-    const contents = await navigator.clipboard.readText()
-    assert.strictEqual(contents, '௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
+
+    assert.deepStrictEqual(calls, [
+      ['௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ']
+    ])
+    Object.defineProperty(navigator, 'clipboard', {
+      value: clipboard,
+      writable: true
+    })
 
     // "copied!" disappears after a while
     assert.strictEqual(screen.getByTestId('copy-replay').textContent, 'copied!')
