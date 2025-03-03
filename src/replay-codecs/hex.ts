@@ -60,7 +60,7 @@ const encode = (inputMoves: string[]): string => inputMoves
 */
 const decode = (string: string): string[] => string
   .split('')
-  .map(chr => hexChars.includes(chr) ? reverseLookup[chr] : [])
+  .map((chr: string): string[] => reverseLookup[chr] ?? [])
   .flat()
 
 export default { encode, decode }
