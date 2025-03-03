@@ -9,6 +9,7 @@
 // [1] https://nodejs.org/docs/latest-v18.x/api/esm.html#loaders
 
 import fs from 'node:fs'
+
 import babel from '@babel/core'
 
 const lookup = {

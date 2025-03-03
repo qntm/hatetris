@@ -1,4 +1,5 @@
 import webpack from 'webpack'
+
 import webpackConfigProd from './webpack.config.prod.js'
 
 export default {
