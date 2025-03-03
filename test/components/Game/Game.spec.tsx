@@ -134,11 +134,11 @@ describe('<Game>', function () {
   it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async function () {
     this.timeout(10000)
 
-    let calls = []
+    let calls: any[] = []
     const clipboard = navigator.clipboard
     Object.defineProperty(navigator, 'clipboard', {
       value: {
-        writeText: async (...args) => {
+        writeText: async (...args: any[]) => {
           calls.push(args)
         }
       },
