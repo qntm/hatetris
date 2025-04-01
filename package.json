@@ -38,7 +38,7 @@
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "@types/sinon": "^17.0.3",
-    "babel-loader": "^9.1.2",
+    "babel-loader": "^10.0.0",
     "base2048": "^2.0.1",
     "base65536": "^4.0.2",
     "c8": "^10.1.2",
