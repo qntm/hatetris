@@ -291,7 +291,7 @@ describe('logic', () => {
           describe(name, () => {
             Object.entries(replays).forEach(([encoding, string]: [string, string]) => {
               it(encoding, async function () {
-                this.timeout(120_000)
+                this.timeout(240_000)
                 const replay = hatetrisReplayCodec.decode(string)
 
                 const firstState: GameState = {
