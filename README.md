@@ -112,3 +112,7 @@ async currentWellState => {
 ### Does this use `eval` internally? Isn't there a security risk from that?
 
 Yes, and yes. You are at mortal risk of attacking yourself. Do not paste code into HATETRIS unless you trust it.
+
+## Related
+
+* [HATETRIS-public-beamsearch](https://github.com/thecog19/HATETRIS-public-beamsearch) by David &amp; Felipe
