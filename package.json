@@ -44,7 +44,7 @@
     "c8": "^10.1.2",
     "classnames": "^2.2.6",
     "css-loader": "^7.1.1",
-    "cypress": "^14.3.2",
+    "cypress": "^15.3.0",
     "eslint": "^9.21.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react-hooks": "^5.2.0",
