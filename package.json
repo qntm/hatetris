@@ -14,10 +14,10 @@
     "cypress": "start-server-and-test \"npm run start\" http://localhost:3000/hatetris.html \"cypress run\"",
     "cypress-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/hatetris.html \"cypress run\"",
     "eslint": "eslint .",
-    "mocha": "c8 --100 node --experimental-loader ./loader-hook.js ./node_modules/mocha/bin/mocha.js --require global-jsdom/register test/**/*.spec.{ts,tsx}",
+    "unit": "c8 --100 node --experimental-loader ./loader-hook.js ./node_modules/mocha/bin/mocha.js --require global-jsdom/register test/**/*.spec.{ts,tsx}",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",
-    "test": "npm run eslint && npm run tsc && npm run mocha && npm run cypress && npm run build && npm run cypress-built",
+    "test": "npm run eslint && npm run tsc && npm run unit && npm run cypress && npm run build && npm run cypress-built",
     "tsc": "tsc --noEmit"
   },
   "keywords": [
