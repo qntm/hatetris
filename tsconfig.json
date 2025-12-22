@@ -4,6 +4,7 @@
     "noImplicitAny": true,
     "module": "ESNext",
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "lib": [
       "dom"
     ],
