@@ -1,4 +1,5 @@
-import * as assert from 'node:assert'
+import assert from 'node:assert/strict'
+
 import { render, screen } from '@testing-library/react'
 import { describe, it } from 'mocha'
 import * as React from 'react'
@@ -24,8 +25,8 @@ describe('<Well>', () => {
 
   it('null well state', () => {
     renderWell()
-    assert.strictEqual(screen.queryAllByTestId('well__cell').length, 190)
-    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--bar').length, 10)
+    assert.equal(screen.queryAllByTestId('well__cell').length, 190)
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--bar').length, 10)
   })
 
   it('initial well state', () => {
@@ -60,7 +61,7 @@ describe('<Well>', () => {
         piece: { id: 'S', x: 3, y: 0, o: 0 }
       }
     })
-    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
   })
 
   it('game over well state', () => {
@@ -95,7 +96,7 @@ describe('<Well>', () => {
         piece: null
       }
     })
-    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--landed').length, 112)
-    assert.strictEqual(screen.queryAllByTestId('well__cell well__cell--bar well__cell--landed').length, 2)
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--landed').length, 112)
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--bar well__cell--landed').length, 2)
   })
 })
