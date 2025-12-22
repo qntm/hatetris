@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
+import { describe, it, beforeEach } from 'node:test'
 
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
-import { describe, it, beforeEach } from 'mocha'
 import * as React from 'react'
 import * as sinon from 'sinon'
 import Game from '../../../src/components/Game/Game.jsx'
@@ -14,9 +14,7 @@ import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotat
 const replayTimeout = 0
 const copyTimeout = 100
 
-describe('<Game>', function () {
-  this.timeout(5000)
-
+describe('<Game>', () => {
   const renderGame = (props: Partial<GameProps> = {}) => {
     render(
       <Game
@@ -132,9 +130,7 @@ describe('<Game>', function () {
     assert.equal(screen.queryAllByTestId('down').length, 1)
   })
 
-  it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async function () {
-    this.timeout(10000)
-
+  it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async () => {
     let calls: any[] = []
     const clipboard = navigator.clipboard
     Object.defineProperty(navigator, 'clipboard', {

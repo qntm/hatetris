@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
 
 import { render, screen } from '@testing-library/react'
-import { describe, it } from 'mocha'
 import * as React from 'react'
 import { Well } from '../../../src/components/Well/Well.jsx'
 import type { WellProps } from '../../../src/components/Well/Well.jsx'

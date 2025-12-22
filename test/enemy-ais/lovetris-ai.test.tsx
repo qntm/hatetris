@@ -1,5 +1,6 @@
 import * as assert from 'node:assert/strict'
-import { describe, it } from 'mocha'
+import { describe, it } from 'node:test'
+
 import { getLogic } from '../../src/components/Game/logic.js'
 import { lovetrisAi } from '../../src/enemy-ais/lovetris-ai.js'
 import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.js'

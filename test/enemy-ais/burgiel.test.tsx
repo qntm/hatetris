@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
 
-import { describe, it } from 'mocha'
 import type { CoreState } from '../../src/components/Game/Game.jsx'
 import { burgAi } from '../../src/enemy-ais/burgiel.js'
 
