@@ -26,9 +26,4 @@ jobs:
     - name: 'Actual npm tasks'
       run: |
         npm install
-        npm run eslint
-        npm run tsc
-        npm run mocha
-        npm run cypress
-        npm run build
-        npm run cypress-built
+        npm run test
