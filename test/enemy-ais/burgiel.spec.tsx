@@ -1,4 +1,5 @@
-import * as assert from 'node:assert'
+import assert from 'node:assert/strict'
+
 import { describe, it } from 'mocha'
 import type { CoreState } from '../../src/components/Game/Game.jsx'
 import { burgAi } from '../../src/enemy-ais/burgiel.js'
@@ -11,7 +12,7 @@ describe('burgAi', () => {
   const getNextCoreStates = (): CoreState[] => []
 
   it('generates an S at first', async () => {
-    assert.deepStrictEqual(await burgAi({
+    assert.deepEqual(await burgAi({
       score: 0,
       well: [
         0b000000,
@@ -25,7 +26,7 @@ describe('burgAi', () => {
   })
 
   it('generates a Z next', async () => {
-    assert.deepStrictEqual(await burgAi({
+    assert.deepEqual(await burgAi({
       score: 0,
       well: [
         0b000000,
@@ -39,7 +40,7 @@ describe('burgAi', () => {
   })
 
   it('generates an S after that', async () => {
-    assert.deepStrictEqual(await burgAi({
+    assert.deepEqual(await burgAi({
       score: 0,
       well: [
         0b000000,
