@@ -3,7 +3,8 @@
 // The logic for these tests is pretty ridiculous, but this is MINUTES more
 // efficient than plugging these replays into an actual <Game> instance.
 
-import * as assert from 'node:assert'
+import assert from 'node:assert/strict'
+
 import { describe, it } from 'mocha'
 import { getLogic } from '../../../src/components/Game/logic.js'
 import type { GameState } from '../../../src/components/Game/logic.js'
@@ -322,8 +323,8 @@ describe('logic', () => {
                   }
                 }
 
-                assert.strictEqual(state.error, null)
-                assert.strictEqual(state.wellStates[state.wellStateId].core.score,
+                assert.equal(state.error, null)
+                assert.equal(state.wellStates[state.wellStateId].core.score,
                   expectedScore)
               })
             })
