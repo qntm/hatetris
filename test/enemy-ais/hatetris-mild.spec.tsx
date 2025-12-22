@@ -1,4 +1,5 @@
-import * as assert from 'node:assert'
+import assert from 'node:assert/strict'
+
 import { describe, it } from 'mocha'
 import { getLogic } from '../../src/components/Game/logic.js'
 import { hatetrisMildAi } from './../../src/enemy-ais/hatetris-mild.js'
@@ -31,7 +32,7 @@ describe('hatetrisMildAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'S')
@@ -48,7 +49,7 @@ describe('hatetrisMildAi', () => {
       0b0001000000,
       0b1111011111
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'Z')
@@ -65,7 +66,7 @@ describe('hatetrisMildAi', () => {
       0b0000000000,
       0b1111101111
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'O')
@@ -82,7 +83,7 @@ describe('hatetrisMildAi', () => {
       0b0000000000,
       0b1111001111
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'I')
@@ -99,7 +100,7 @@ describe('hatetrisMildAi', () => {
       0b1011100111,
       0b1111110111
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'L')
@@ -116,7 +117,7 @@ describe('hatetrisMildAi', () => {
       0b1011100111,
       0b1111101111
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'J')
@@ -133,7 +134,7 @@ describe('hatetrisMildAi', () => {
       0b1111000011,
       0b1111100111
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'T')
@@ -155,7 +156,7 @@ describe('hatetrisMildAi', () => {
       0b1111000011,
       0b1111100111
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'L')
@@ -173,7 +174,7 @@ describe('hatetrisMildAi', () => {
       0b1111111110,
       0b1111111110
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), 'S')
@@ -191,7 +192,7 @@ describe('hatetrisMildAi', () => {
       0b0001000000,
       0b0011100000
     ]
-    assert.strictEqual(await hatetrisMildAi({
+    assert.equal(await hatetrisMildAi({
       score: 0,
       well
     }, new Set([
