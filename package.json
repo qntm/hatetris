@@ -14,10 +14,10 @@
     "cypress": "start-server-and-test \"npm run start\" http://localhost:3000/hatetris.html \"cypress run\"",
     "cypress-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/hatetris.html \"cypress run\"",
     "eslint": "eslint .",
-    "mocha": "c8 --100 node --experimental-loader ./loader-hook.js ./node_modules/mocha/bin/mocha.js --require global-jsdom/register test/**/*.spec.{ts,tsx}",
+    "unit": "c8 --100 node --import ./register.js --require global-jsdom/register --test \"**/*.test.{ts,tsx}\"",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",
-    "test": "npm run eslint && npm run tsc && npm run mocha && npm run cypress && npm run build && npm run cypress-built",
+    "test": "npm run eslint && npm run tsc && npm run unit && npm run cypress && npm run build && npm run cypress-built",
     "tsc": "tsc --noEmit"
   },
   "keywords": [
@@ -34,7 +34,6 @@
     "@babel/preset-typescript": "^7.14.5",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.4.3",
-    "@types/mocha": "^10.0.1",
     "@types/react": "^19.0.4",
     "@types/react-dom": "^19.0.4",
     "@types/sinon": "^21.0.0",
@@ -52,7 +51,6 @@
     "global-jsdom": "^27.0.0",
     "html-webpack-plugin": "^5.3.2",
     "mini-css-extract-plugin": "^2.2.1",
-    "mocha": "^11.0.0",
     "neostandard": "^0.12.1",
     "react": "^19.0.4",
     "react-dev-utils": "^12.0.0",

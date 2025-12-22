@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
 
-import { describe, it } from 'mocha'
 import hex from '../../src/replay-codecs/hex.js'
 
 describe('hex', () => {

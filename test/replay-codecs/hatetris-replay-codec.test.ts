@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
 
-import { describe, it } from 'mocha'
 import hatetrisReplayCodec from '../../src/replay-codecs/hatetris-replay-codec.js'
 
 describe('hatetrisReplayCodec', () => {

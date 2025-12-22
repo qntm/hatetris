@@ -1,11 +1,9 @@
-/* eslint-env jest */
-
 // The logic for these tests is pretty ridiculous, but this is MINUTES more
 // efficient than plugging these replays into an actual <Game> instance.
 
 import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
 
-import { describe, it } from 'mocha'
 import { getLogic } from '../../../src/components/Game/logic.js'
 import type { GameState } from '../../../src/components/Game/logic.js'
 import { hatetris, hatetrisMild, brz } from '../../../src/components/Game/Game.jsx'
@@ -291,8 +289,7 @@ describe('logic', () => {
         aiRuns.forEach(({ name, expectedScore, replays }) => {
           describe(name, () => {
             Object.entries(replays).forEach(([encoding, string]: [string, string]) => {
-              it(encoding, async function () {
-                this.timeout(240_000)
+              it(encoding, async () => {
                 const replay = hatetrisReplayCodec.decode(string)
 
                 const firstState: GameState = {

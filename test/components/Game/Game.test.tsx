@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
+import { describe, it, beforeEach } from 'node:test'
 
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
-import { describe, it, beforeEach } from 'mocha'
 import * as React from 'react'
 import * as sinon from 'sinon'
 import Game from '../../../src/components/Game/Game.jsx'
@@ -14,22 +14,18 @@ import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotat
 const replayTimeout = 0
 const copyTimeout = 100
 
-describe('<Game>', function () {
-  this.timeout(5000)
-
-  const renderGame = (props: Partial<GameProps> = {}) => {
-    render(
-      <Game
-        bar={4}
-        copyTimeout={copyTimeout}
-        replayTimeout={replayTimeout}
-        rotationSystem={hatetrisRotationSystem}
-        wellDepth={20}
-        wellWidth={10}
-        {...props}
-      />
-    )
-  }
+describe('<Game>', () => {
+  const renderGame = (props: Partial<GameProps> = {}) => render(
+    <Game
+      bar={4}
+      copyTimeout={copyTimeout}
+      replayTimeout={replayTimeout}
+      rotationSystem={hatetrisRotationSystem}
+      wellDepth={20}
+      wellWidth={10}
+      {...props}
+    />
+  )
 
   let user: ReturnType<typeof userEvent.setup>
 
@@ -38,7 +34,7 @@ describe('<Game>', function () {
   })
 
   it('rejects a rotation system with no pieces', () => {
-    renderGame({
+    const game = renderGame({
       rotationSystem: {
         placeNewPiece: () => ({ id: '', o: NaN, x: NaN, y: NaN }),
         rotations: {}
@@ -46,23 +42,26 @@ describe('<Game>', function () {
     })
     assert.equal(screen.getByTestId('error-real').textContent, 'Have to have at least one piece!')
     assert.equal(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to start HATETRIS. Application halted.')
+    game.unmount()
   })
 
   it('rejects a well depth below the bar', () => {
-    renderGame({ bar: 4, wellDepth: 3 })
+    const game = renderGame({ bar: 4, wellDepth: 3 })
     assert.equal(screen.getByTestId('error-real').textContent, 'Can\'t have well with depth 3 less than bar at 4')
     assert.equal(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to start HATETRIS. Application halted.')
+    game.unmount()
   })
 
   it('rejects a well width less than 4', () => {
-    renderGame({ wellWidth: 3 })
+    const game = renderGame({ wellWidth: 3 })
     assert.equal(screen.getByTestId('error-real').textContent, 'Can\'t have well with width 3 less than 4')
     assert.equal(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to start HATETRIS. Application halted.')
+    game.unmount()
   })
 
   it('ignores all keystrokes before the game has begun', async () => {
     const warn = sinon.stub(console, 'warn')
-    renderGame()
+    const game = renderGame()
     assert.equal(screen.getByTestId('start-button').textContent, 'start new game')
 
     await user.keyboard('{Left}')
@@ -76,12 +75,13 @@ describe('<Game>', function () {
     assert.equal(screen.getByTestId('start-button').textContent, 'start new game')
 
     warn.restore()
+    game.unmount()
   })
 
   it('lets you play a few moves', async () => {
     const warn = sinon.stub(console, 'warn')
 
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('start-button'))
     assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
@@ -116,10 +116,11 @@ describe('<Game>', function () {
     assert.equal(warn.getCalls().length, 1)
 
     warn.restore()
+    game.unmount()
   })
 
   it('just lets you play if you enter an empty replay', async () => {
-    renderGame()
+    const game = renderGame()
 
     const prompt = sinon.stub(window, 'prompt')
     prompt.returns('')
@@ -130,11 +131,10 @@ describe('<Game>', function () {
     prompt.restore()
 
     assert.equal(screen.queryAllByTestId('down').length, 1)
+    game.unmount()
   })
 
-  it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async function () {
-    this.timeout(10000)
-
+  it('lets you select a different AI and play a full game with it and provides a replay which you can copy', async () => {
     let calls: any[] = []
     const clipboard = navigator.clipboard
     Object.defineProperty(navigator, 'clipboard', {
@@ -146,7 +146,7 @@ describe('<Game>', function () {
       writable: true
     })
 
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.queryAllByTestId('enemy').at(2))
@@ -180,10 +180,11 @@ describe('<Game>', function () {
     assert.equal(screen.getByTestId('copy-replay').textContent, 'copy replay')
 
     await user.click(screen.getByTestId('done'))
+    game.unmount()
   })
 
   it('lets you use a custom AI', async () => {
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.getByTestId('custom-enemy'))
@@ -194,10 +195,11 @@ describe('<Game>', function () {
     assert.equal(screen.getByTestId('enemy-short').textContent, 'AI: custom')
 
     // current piece is a J... assertion TODO
+    game.unmount()
   })
 
   it('supports a custom AI with state', async () => {
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.getByTestId('custom-enemy'))
@@ -210,20 +212,22 @@ describe('<Game>', function () {
 
     // first piece is an S... assertion TODO
     // second piece is a Z... assertion TODO
+    game.unmount()
   })
 
   it('lets you decide NOT to use a custom AI', async () => {
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.getByTestId('custom-enemy'))
     await user.click(screen.getByTestId('cancel-custom-enemy'))
 
     assert.equal(screen.queryAllByTestId('enemy').length, 5)
+    game.unmount()
   })
 
   it('errors out if your custom AI is invalid JavaScript, but you can dismiss it', async () => {
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.getByTestId('custom-enemy'))
@@ -236,10 +240,11 @@ describe('<Game>', function () {
     assert.equal(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to evaluate your custom AI JavaScript.')
 
     await user.click(screen.getByTestId('dismiss-error'))
+    game.unmount()
   })
 
   it('errors out if your custom AI throws an error on the first piece', async () => {
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.getByTestId('custom-enemy'))
@@ -260,10 +265,11 @@ describe('<Game>', function () {
 
     assert.equal(screen.getByTestId('error-real').textContent, 'BANG')
     assert.equal(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.')
+    game.unmount()
   })
 
   it('errors out if your custom AI returns a bad piece', async () => {
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.getByTestId('custom-enemy'))
@@ -276,10 +282,11 @@ describe('<Game>', function () {
 
     assert.equal(screen.getByTestId('error-real').textContent, 'Bad piece ID: K')
     assert.equal(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to generate the first piece using your custom enemy AI. Game abandoned.')
+    game.unmount()
   })
 
   it('errors out if your custom AI throws an error on a later piece', async () => {
-    renderGame()
+    const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
     await user.click(screen.getByTestId('custom-enemy'))
@@ -308,10 +315,11 @@ describe('<Game>', function () {
 
     assert.equal(screen.getByTestId('error-real').textContent, 'FZAAPP')
     assert.equal(screen.getByTestId('error-interpretation').textContent, 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.')
+    game.unmount()
   })
 
   it('lets you decide not to replay anything', async () => {
-    renderGame()
+    const game = renderGame()
 
     const prompt = sinon.stub(window, 'prompt')
     prompt.returns(null)
@@ -320,6 +328,7 @@ describe('<Game>', function () {
       ['Paste replay string...']
     ])
     prompt.restore()
+    game.unmount()
   })
 
   // The act of initiating a replay causes a timeout to be created which
@@ -344,7 +353,7 @@ describe('<Game>', function () {
   it('lets you replay a too-long replay', async () => {
     const warn = sinon.stub(console, 'warn')
 
-    renderGame()
+    const game = renderGame()
 
     // Replay keeps pressing Down after game over
     const prompt = sinon.stub(window, 'prompt')
@@ -362,11 +371,12 @@ describe('<Game>', function () {
       ['Ignoring input replay step because mode is', 'GAME_OVER']
     ])
 
+    game.unmount()
     warn.restore()
   })
 
   it('lets you undo and stops replaying when a replay is in progress', async () => {
-    renderGame()
+    const game = renderGame()
 
     // Replay is an incomplete game
     const prompt = sinon.stub(window, 'prompt')
@@ -382,5 +392,6 @@ describe('<Game>', function () {
 
     await user.keyboard('{Control>}z{/Control}')
     // TODO: assert that `wellStateId` is now decremented?
+    game.unmount()
   })
 })

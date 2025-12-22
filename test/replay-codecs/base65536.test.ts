@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
 
-import { describe, it } from 'mocha'
 import * as base65536 from '../../src/replay-codecs/base65536.js'
 
 describe('base65536', () => {
