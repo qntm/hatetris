@@ -1,10 +1,11 @@
-import * as assert from 'node:assert'
+import assert from 'node:assert/strict'
+
 import { describe, it } from 'mocha'
 import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.js'
 
 describe('hatetrisRotationSystem', () => {
   it('has the right rotations', () => {
-    assert.deepStrictEqual(hatetrisRotationSystem.rotations, {
+    assert.deepEqual(hatetrisRotationSystem.rotations, {
       S: [
         { xMin: 1, yMin: 1, xDim: 3, yDim: 2, rows: [6, 3] },
         { xMin: 1, yMin: 1, xDim: 2, yDim: 3, rows: [1, 3, 2] },
