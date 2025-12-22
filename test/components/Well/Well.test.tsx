@@ -24,13 +24,14 @@ describe('<Well>', () => {
   )
 
   it('null well state', () => {
-    renderWell()
+    const well = renderWell()
     assert.equal(screen.queryAllByTestId('well__cell').length, 190)
     assert.equal(screen.queryAllByTestId('well__cell well__cell--bar').length, 10)
+    well.unmount()
   })
 
   it('initial well state', () => {
-    renderWell({
+    const well = renderWell({
       wellState: {
         core: {
           well: [
@@ -62,10 +63,11 @@ describe('<Well>', () => {
       }
     })
     assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
+    well.unmount()
   })
 
   it('game over well state', () => {
-    renderWell({
+    const well = renderWell({
       wellState: {
         core: {
           well: [
@@ -98,5 +100,6 @@ describe('<Well>', () => {
     })
     assert.equal(screen.queryAllByTestId('well__cell well__cell--landed').length, 112)
     assert.equal(screen.queryAllByTestId('well__cell well__cell--bar well__cell--landed').length, 2)
+    well.unmount()
   })
 })

@@ -290,6 +290,7 @@ describe('logic', () => {
           describe(name, () => {
             Object.entries(replays).forEach(([encoding, string]: [string, string]) => {
               it(encoding, async () => {
+                console.log(aiName, enemy, name, expectedScore, encoding)
                 const replay = hatetrisReplayCodec.decode(string)
 
                 const firstState: GameState = {
