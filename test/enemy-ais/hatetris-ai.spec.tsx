@@ -1,4 +1,5 @@
-import * as assert from 'node:assert'
+import assert from 'node:assert/strict'
+
 import { describe, it } from 'mocha'
 import { getLogic } from '../../src/components/Game/logic.js'
 import { hatetrisAi } from '../../src/enemy-ais/hatetris-ai.js'
@@ -31,7 +32,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['S', {
@@ -50,7 +51,7 @@ describe('hatetrisAi', () => {
       0b0001000000,
       0b1111011111
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['Z', {
@@ -69,7 +70,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b1111101111
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['O', {
@@ -88,7 +89,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b1111001111
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['I', {
@@ -107,7 +108,7 @@ describe('hatetrisAi', () => {
       0b1011100111,
       0b1111110111
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['L', {
@@ -126,7 +127,7 @@ describe('hatetrisAi', () => {
       0b1011100111,
       0b1111101111
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['J', {
@@ -145,7 +146,7 @@ describe('hatetrisAi', () => {
       0b1111000011,
       0b1111100111
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['T', {
@@ -169,7 +170,7 @@ describe('hatetrisAi', () => {
       0b1111000011,
       0b1111100111
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['L', {
@@ -189,7 +190,7 @@ describe('hatetrisAi', () => {
       0b1111111110,
       0b1111111110
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, undefined, getNextCoreStates), ['S', {
@@ -209,7 +210,7 @@ describe('hatetrisAi', () => {
       0b0001000000,
       0b0011100000
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, {
@@ -249,7 +250,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, {
@@ -409,7 +410,7 @@ describe('hatetrisAi', () => {
       0b0000000000,
       0b0000000000
     ]
-    assert.deepStrictEqual(await hatetrisAi({
+    assert.deepEqual(await hatetrisAi({
       score: 0,
       well
     }, {
