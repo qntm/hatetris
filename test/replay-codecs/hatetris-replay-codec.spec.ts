@@ -1,22 +1,23 @@
-import * as assert from 'node:assert'
+import assert from 'node:assert/strict'
+
 import { describe, it } from 'mocha'
 import hatetrisReplayCodec from '../../src/replay-codecs/hatetris-replay-codec.js'
 
 describe('hatetrisReplayCodec', () => {
   it('encodes', () => {
-    assert.strictEqual(hatetrisReplayCodec.encode(['D', 'D', 'D', 'R', 'U', 'D']), 'ਹԇ')
+    assert.equal(hatetrisReplayCodec.encode(['D', 'D', 'D', 'R', 'U', 'D']), 'ਹԇ')
   })
 
   it('decodes', () => {
-    assert.deepStrictEqual(hatetrisReplayCodec.decode('A9E'), ['D', 'D', 'D', 'R', 'U', 'D'])
-    assert.deepStrictEqual(hatetrisReplayCodec.decode('𤺤'), ['D', 'D', 'D', 'R', 'U', 'D'])
-    assert.deepStrictEqual(hatetrisReplayCodec.decode('ਹԇ'), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepEqual(hatetrisReplayCodec.decode('A9E'), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepEqual(hatetrisReplayCodec.decode('𤺤'), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepEqual(hatetrisReplayCodec.decode('ਹԇ'), ['D', 'D', 'D', 'R', 'U', 'D'])
   })
 
   it('decodes with spaces', () => {
-    assert.deepStrictEqual(hatetrisReplayCodec.decode(' A9E'), ['D', 'D', 'D', 'R', 'U', 'D'])
-    assert.deepStrictEqual(hatetrisReplayCodec.decode('𤺤 '), ['D', 'D', 'D', 'R', 'U', 'D'])
-    assert.deepStrictEqual(hatetrisReplayCodec.decode(' ਹԇ '), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepEqual(hatetrisReplayCodec.decode(' A9E'), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepEqual(hatetrisReplayCodec.decode('𤺤 '), ['D', 'D', 'D', 'R', 'U', 'D'])
+    assert.deepEqual(hatetrisReplayCodec.decode(' ਹԇ '), ['D', 'D', 'D', 'R', 'U', 'D'])
   })
 
   // Due to padding, a replay (which always ends with a "D" instruction) sometimes has an
