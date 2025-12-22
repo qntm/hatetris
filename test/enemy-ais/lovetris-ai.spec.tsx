@@ -1,4 +1,4 @@
-import * as assert from 'node:assert'
+import * as assert from 'node:assert/strict'
 import { describe, it } from 'mocha'
 import { getLogic } from '../../src/components/Game/logic.js'
 import { lovetrisAi } from '../../src/enemy-ais/lovetris-ai.js'
@@ -21,7 +21,7 @@ const getNextCoreStates = logic.getNextCoreStates
 
 describe('lovetrisAi', () => {
   it('generates I every time right now', async () => {
-    assert.strictEqual(await lovetrisAi({
+    assert.equal(await lovetrisAi({
       score: 0,
       well: [
         0b0000000000,
