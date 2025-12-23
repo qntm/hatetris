@@ -149,7 +149,7 @@ describe('<Game>', () => {
     const game = renderGame()
 
     await user.click(screen.getByTestId('select-ai'))
-    await user.click(screen.queryAllByTestId('enemy').at(2))
+    await user.click(screen.queryAllByTestId('enemy')[2])
     await user.click(screen.getByTestId('start-button'))
     assert.equal(screen.getByTestId('enemy-short').textContent, 'AI: ❤️')
 
