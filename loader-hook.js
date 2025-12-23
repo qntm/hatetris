@@ -58,12 +58,10 @@ const getTsFilename = specifier => {
     fs.statSync(tsFilename)
     return tsFilename
   } catch (error) {
-    /* c8 ignore start */
     if (error.code !== 'ENOENT') {
       // E.g. permissions error
       throw error
     }
-    /* c8 ignore end */
     // Otherwise, .ts file doesn't exist.
   }
 
