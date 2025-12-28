@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import * as base2048 from '../../src/replay-codecs/base2048.js'
+import * as base2048 from '../../src/replay-codecs/base2048.ts'
 
 describe('base2048', () => {
   it('works', () => {

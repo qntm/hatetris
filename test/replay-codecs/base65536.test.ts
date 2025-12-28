@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import * as base65536 from '../../src/replay-codecs/base65536.js'
+import * as base65536 from '../../src/replay-codecs/base65536.ts'
 
 describe('base65536', () => {
   it('works', () => {
