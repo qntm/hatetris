@@ -5,9 +5,9 @@ import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
 import * as sinon from 'sinon'
-import Game from '../../../src/components/Game/Game.jsx'
-import type { GameProps } from '../../../src/components/Game/Game.jsx'
-import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.js'
+import Game from '../../../src/components/Game/Game.tsx'
+import type { GameProps } from '../../../src/components/Game/Game.tsx'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.ts'
 
 // It looks like Testing Library React doesn't play well with Sinon's fake timers,
 // so just do all of our testing in real time!

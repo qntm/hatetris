@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.js'
+import hatetrisRotationSystem from '../../src/rotation-systems/hatetris-rotation-system.ts'
 
 describe('hatetrisRotationSystem', () => {
   it('has the right rotations', () => {

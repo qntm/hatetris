@@ -5,6 +5,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
     "lib": [
       "dom"
     ],

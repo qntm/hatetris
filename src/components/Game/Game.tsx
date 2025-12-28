@@ -4,14 +4,14 @@
 
 import * as React from 'react'
 
-import { hatetrisAi } from '../../enemy-ais/hatetris-ai.js'
-import { hatetrisMildAi } from '../../enemy-ais/hatetris-mild.js'
-import { lovetrisAi } from '../../enemy-ais/lovetris-ai.js'
-import { brzAi } from '../../enemy-ais/brzustowski.js'
-import { burgAi } from '../../enemy-ais/burgiel.js'
-import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec.js'
-import { Well } from '../Well/Well.jsx'
-import { getLogic } from './logic.js'
+import { hatetrisAi } from '../../enemy-ais/hatetris-ai.ts'
+import { hatetrisMildAi } from '../../enemy-ais/hatetris-mild.ts'
+import { lovetrisAi } from '../../enemy-ais/lovetris-ai.ts'
+import { brzAi } from '../../enemy-ais/brzustowski.ts'
+import { burgAi } from '../../enemy-ais/burgiel.ts'
+import hatetrisReplayCodec from '../../replay-codecs/hatetris-replay-codec.ts'
+import { Well } from '../Well/Well.tsx'
+import { getLogic } from './logic.ts'
 import type {
   CoreState,
   Enemy,
@@ -21,7 +21,7 @@ import type {
   Piece,
   RotationSystem,
   WellState
-} from './logic.js'
+} from './logic.ts'
 
 const minWidth = 4
 

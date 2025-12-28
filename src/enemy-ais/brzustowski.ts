@@ -26,7 +26,7 @@
   clear that it adheres to the original algorithm.
 */
 
-import type { CoreState, EnemyAi } from '../components/Game/Game.jsx'
+import type { CoreState, EnemyAi } from '../components/Game/Game.tsx'
 
 type Step = 1 | 2 | 3 | 4
 

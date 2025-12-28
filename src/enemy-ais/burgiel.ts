@@ -17,7 +17,7 @@
   which piece to send next.
 */
 
-import type { CoreState, EnemyAi } from '../components/Game/Game.jsx'
+import type { CoreState, EnemyAi } from '../components/Game/Game.tsx'
 
 type BurgAiState = 'S' | 'Z'
 

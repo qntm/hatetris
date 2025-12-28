@@ -3,7 +3,7 @@
 */
 
 import * as base2048 from 'base2048'
-import * as uint8Array from './uint8Array.js'
+import * as uint8Array from './uint8Array.ts'
 
 export const encode = (keys: string[]): string =>
   base2048.encode(uint8Array.encode(keys))

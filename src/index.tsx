@@ -9,8 +9,8 @@ import './components/Well/Well.css'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom/client'
 
-import Game from './components/Game/Game.jsx'
-import hatetrisRotationSystem from './rotation-systems/hatetris-rotation-system.js'
+import Game from './components/Game/Game.tsx'
+import hatetrisRotationSystem from './rotation-systems/hatetris-rotation-system.ts'
 
 const root = ReactDOM.createRoot(document.querySelector('.index__root'))
 root.render(

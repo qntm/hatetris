@@ -1,6 +1,6 @@
 // HATETRIS as it was prior to June 2021 - without the loop prevention logic
 
-import type { CoreState, EnemyAi } from '../components/Game/Game.jsx'
+import type { CoreState, EnemyAi } from '../components/Game/Game.tsx'
 
 // S = worst for the player, T = best
 const worstPieces = 'SZOILJT'.split('')

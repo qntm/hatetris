@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import hatetrisReplayCodec from '../../src/replay-codecs/hatetris-replay-codec.js'
+import hatetrisReplayCodec from '../../src/replay-codecs/hatetris-replay-codec.ts'
 
 describe('hatetrisReplayCodec', () => {
   it('encodes', () => {

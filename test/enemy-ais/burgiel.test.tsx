@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import type { CoreState } from '../../src/components/Game/Game.jsx'
-import { burgAi } from '../../src/enemy-ais/burgiel.js'
+import type { CoreState } from '../../src/components/Game/Game.tsx'
+import { burgAi } from '../../src/enemy-ais/burgiel.ts'
 
 // Note: well bits are flipped compared to what you would see on the screen.
 // Least significant bit is rendered on the *left* on web, but appears to the

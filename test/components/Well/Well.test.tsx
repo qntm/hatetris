@@ -3,9 +3,9 @@ import { describe, it } from 'node:test'
 
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
-import { Well } from '../../../src/components/Well/Well.jsx'
-import type { WellProps } from '../../../src/components/Well/Well.jsx'
-import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.js'
+import { Well } from '../../../src/components/Well/Well.tsx'
+import type { WellProps } from '../../../src/components/Well/Well.tsx'
+import hatetrisRotationSystem from '../../../src/rotation-systems/hatetris-rotation-system.ts'
 
 const bar = 4
 const wellDepth = 20 // min = bar
