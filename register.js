@@ -16,7 +16,10 @@ module.registerHooks({
       const transformed = babel.transformSync(content, {
         filename: urlToLoad,
         presets: [
-          ['@babel/preset-react'],
+          ['@babel/preset-react', {
+            development: true,
+            useBuiltIns: true
+          }],
           ['@babel/preset-typescript', {
             isTSX: true,
             allExtensions: true
@@ -24,6 +27,8 @@ module.registerHooks({
         ],
         retainLines: true
       })
+
+      // console.log(transformed.code.split('\n').map((l, i) => `${i + 1} ${l}`).join('\n'))
 
       return {
         shortCircuit: true,
