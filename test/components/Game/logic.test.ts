@@ -19,7 +19,7 @@ const logic = getLogic({
   wellWidth: 10
 })
 
-describe('logic', { skip: true }, () => {
+describe('logic', () => {
   describe('check known replays', function () {
     const runs = [
       {
