@@ -14,7 +14,7 @@
     "cypress": "start-server-and-test \"npm run start\" http://localhost:3000/hatetris.html \"cypress run\"",
     "cypress-built": "start-server-and-test \"npm run start-built\" http://localhost:3000/hatetris.html \"cypress run\"",
     "eslint": "eslint .",
-    "unit": "node --enable-source-maps --import ./register.js --require global-jsdom/register --test --experimental-test-coverage --test-coverage-functions=100 --test-coverage-lines=100 --test-coverage-exclude \"**/*.test.{ts,tsx}\" -- \"**/*.test.{ts,tsx}\"",
+    "unit": "node --enable-source-maps --import ./register.js --require global-jsdom/register --test --experimental-test-coverage --test-coverage-functions=100 --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-exclude \"**/*.test.{ts,tsx}\" -- \"**/*.test.{ts,tsx}\"",
     "start": "node scripts/start.js",
     "start-built": "node scripts/start-built.js",
     "test": "npm run eslint && npm run tsc && npm run unit && npm run cypress && npm run build && npm run cypress-built",
