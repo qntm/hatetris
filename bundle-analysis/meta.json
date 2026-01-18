@@ -1,0 +1,374 @@
+{
+  "inputs": {
+    "src/index.css": {
+      "bytes": 1082,
+      "imports": []
+    },
+    "src/components/Game/Game.css": {
+      "bytes": 1428,
+      "imports": []
+    },
+    "src/components/Well/Well.css": {
+      "bytes": 333,
+      "imports": []
+    },
+    "src/enemy-ais/hatetris-ai.ts": {
+      "bytes": 2723,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/enemy-ais/hatetris-mild.ts": {
+      "bytes": 1652,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/enemy-ais/lovetris-ai.ts": {
+      "bytes": 166,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/enemy-ais/brzustowski.ts": {
+      "bytes": 3387,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/enemy-ais/burgiel.ts": {
+      "bytes": 1341,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/replay-codecs/raw.ts": {
+      "bytes": 171,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/replay-codecs/hex.ts": {
+      "bytes": 1399,
+      "imports": [],
+      "format": "esm"
+    },
+    "node_modules/base65536/src/index.js": {
+      "bytes": 3809,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/replay-codecs/run-length.ts": {
+      "bytes": 599,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/replay-codecs/uint8Array.ts": {
+      "bytes": 1823,
+      "imports": [
+        {
+          "path": "src/replay-codecs/run-length.ts",
+          "kind": "import-statement",
+          "original": "./run-length.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/replay-codecs/base65536.ts": {
+      "bytes": 324,
+      "imports": [
+        {
+          "path": "node_modules/base65536/src/index.js",
+          "kind": "import-statement",
+          "original": "base65536"
+        },
+        {
+          "path": "src/replay-codecs/uint8Array.ts",
+          "kind": "import-statement",
+          "original": "./uint8Array.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/base2048/src/index.js": {
+      "bytes": 4997,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/replay-codecs/base2048.ts": {
+      "bytes": 323,
+      "imports": [
+        {
+          "path": "node_modules/base2048/src/index.js",
+          "kind": "import-statement",
+          "original": "base2048"
+        },
+        {
+          "path": "src/replay-codecs/uint8Array.ts",
+          "kind": "import-statement",
+          "original": "./uint8Array.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/replay-codecs/hatetris-replay-codec.ts": {
+      "bytes": 1029,
+      "imports": [
+        {
+          "path": "src/replay-codecs/raw.ts",
+          "kind": "import-statement",
+          "original": "./raw.ts"
+        },
+        {
+          "path": "src/replay-codecs/hex.ts",
+          "kind": "import-statement",
+          "original": "./hex.ts"
+        },
+        {
+          "path": "src/replay-codecs/base65536.ts",
+          "kind": "import-statement",
+          "original": "./base65536.ts"
+        },
+        {
+          "path": "src/replay-codecs/base2048.ts",
+          "kind": "import-statement",
+          "original": "./base2048.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/classnames/index.js": {
+      "bytes": 1530,
+      "imports": [],
+      "format": "cjs"
+    },
+    "src/components/Well/Well.tsx": {
+      "bytes": 2131,
+      "imports": [
+        {
+          "path": "node_modules/classnames/index.js",
+          "kind": "import-statement",
+          "original": "classnames"
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/components/Game/logic.ts": {
+      "bytes": 10450,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/components/Game/Game.tsx": {
+      "bytes": 21091,
+      "imports": [
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/enemy-ais/hatetris-ai.ts",
+          "kind": "import-statement",
+          "original": "../../enemy-ais/hatetris-ai.ts"
+        },
+        {
+          "path": "src/enemy-ais/hatetris-mild.ts",
+          "kind": "import-statement",
+          "original": "../../enemy-ais/hatetris-mild.ts"
+        },
+        {
+          "path": "src/enemy-ais/lovetris-ai.ts",
+          "kind": "import-statement",
+          "original": "../../enemy-ais/lovetris-ai.ts"
+        },
+        {
+          "path": "src/enemy-ais/brzustowski.ts",
+          "kind": "import-statement",
+          "original": "../../enemy-ais/brzustowski.ts"
+        },
+        {
+          "path": "src/enemy-ais/burgiel.ts",
+          "kind": "import-statement",
+          "original": "../../enemy-ais/burgiel.ts"
+        },
+        {
+          "path": "src/replay-codecs/hatetris-replay-codec.ts",
+          "kind": "import-statement",
+          "original": "../../replay-codecs/hatetris-replay-codec.ts"
+        },
+        {
+          "path": "src/components/Well/Well.tsx",
+          "kind": "import-statement",
+          "original": "../Well/Well.tsx"
+        },
+        {
+          "path": "src/components/Game/logic.ts",
+          "kind": "import-statement",
+          "original": "./logic.ts"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/rotation-systems/hatetris-rotation-system.ts": {
+      "bytes": 3763,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/index.tsx": {
+      "bytes": 805,
+      "imports": [
+        {
+          "path": "src/index.css",
+          "kind": "import-statement",
+          "original": "./index.css"
+        },
+        {
+          "path": "src/components/Game/Game.css",
+          "kind": "import-statement",
+          "original": "./components/Game/Game.css"
+        },
+        {
+          "path": "src/components/Well/Well.css",
+          "kind": "import-statement",
+          "original": "./components/Well/Well.css"
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react-dom/client",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/components/Game/Game.tsx",
+          "kind": "import-statement",
+          "original": "./components/Game/Game.tsx"
+        },
+        {
+          "path": "src/rotation-systems/hatetris-rotation-system.ts",
+          "kind": "import-statement",
+          "original": "./rotation-systems/hatetris-rotation-system.ts"
+        }
+      ],
+      "format": "esm"
+    }
+  },
+  "outputs": {
+    "dist/main.js": {
+      "imports": [
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react-dom/client",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "exports": [],
+      "entryPoint": "src/index.tsx",
+      "cssBundle": "dist/main.css",
+      "inputs": {
+        "node_modules/classnames/index.js": {
+          "bytesInOutput": 1728
+        },
+        "src/index.css": {
+          "bytesInOutput": 0
+        },
+        "src/components/Game/Game.css": {
+          "bytesInOutput": 0
+        },
+        "src/components/Well/Well.css": {
+          "bytesInOutput": 0
+        },
+        "src/index.tsx": {
+          "bytesInOutput": 499
+        },
+        "src/components/Game/Game.tsx": {
+          "bytesInOutput": 19264
+        },
+        "src/enemy-ais/hatetris-ai.ts": {
+          "bytesInOutput": 1721
+        },
+        "src/enemy-ais/hatetris-mild.ts": {
+          "bytesInOutput": 927
+        },
+        "src/enemy-ais/lovetris-ai.ts": {
+          "bytesInOutput": 34
+        },
+        "src/enemy-ais/brzustowski.ts": {
+          "bytesInOutput": 1701
+        },
+        "src/enemy-ais/burgiel.ts": {
+          "bytesInOutput": 203
+        },
+        "src/replay-codecs/raw.ts": {
+          "bytesInOutput": 43
+        },
+        "src/replay-codecs/hex.ts": {
+          "bytesInOutput": 861
+        },
+        "node_modules/base65536/src/index.js": {
+          "bytesInOutput": 1784
+        },
+        "src/replay-codecs/run-length.ts": {
+          "bytesInOutput": 495
+        },
+        "src/replay-codecs/uint8Array.ts": {
+          "bytesInOutput": 1123
+        },
+        "src/replay-codecs/base65536.ts": {
+          "bytesInOutput": 52
+        },
+        "node_modules/base2048/src/index.js": {
+          "bytesInOutput": 4879
+        },
+        "src/replay-codecs/base2048.ts": {
+          "bytesInOutput": 100
+        },
+        "src/replay-codecs/hatetris-replay-codec.ts": {
+          "bytesInOutput": 412
+        },
+        "src/components/Well/Well.tsx": {
+          "bytesInOutput": 1670
+        },
+        "src/components/Game/logic.ts": {
+          "bytesInOutput": 5820
+        },
+        "src/rotation-systems/hatetris-rotation-system.ts": {
+          "bytesInOutput": 3054
+        }
+      },
+      "bytes": 48625
+    },
+    "dist/main.css": {
+      "imports": [],
+      "inputs": {
+        "src/index.css": {
+          "bytesInOutput": 887
+        },
+        "src/components/Game/Game.css": {
+          "bytesInOutput": 1245
+        },
+        "src/components/Well/Well.css": {
+          "bytesInOutput": 311
+        }
+      },
+      "bytes": 2535
+    }
+  }
+}
