@@ -12,6 +12,16 @@ import * as ReactDOM from 'react-dom/client'
 import Game from './components/Game/Game.tsx'
 import hatetrisRotationSystem from './rotation-systems/hatetris-rotation-system.ts'
 
+declare global {
+  interface Window {
+    __HATETRIS_ENV__: string
+  }
+}
+
+if (window.__HATETRIS_ENV__ === 'development') {
+  new EventSource('/esbuild').addEventListener('change', () => location.reload())
+}
+
 const root = ReactDOM.createRoot(document.querySelector('.index__root'))
 root.render(
   <Game
