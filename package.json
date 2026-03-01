@@ -42,7 +42,7 @@
     "classnames": "^2.2.6",
     "cypress": "^15.8.1",
     "esbuild": "^0.27.2",
-    "eslint": "^9.21.0",
+    "eslint": "^10.0.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "express": "^5.2.0",
