@@ -22,7 +22,12 @@ if (window.__HATETRIS_ENV__ === 'development') {
   new EventSource('/esbuild').addEventListener('change', () => location.reload())
 }
 
-const root = ReactDOM.createRoot(document.querySelector('.index__root'))
+const rootElement = document.querySelector('.index__root')
+if (rootElement === null) {
+  throw Error('Failed to find root element')
+}
+
+const root = ReactDOM.createRoot(rootElement)
 root.render(
   <Game
     bar={4}

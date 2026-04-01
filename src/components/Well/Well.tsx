@@ -7,7 +7,7 @@ type WellProps = {
   rotationSystem: RotationSystem;
   wellDepth: number;
   wellWidth: number;
-  wellState: WellState
+  wellState: WellState | null
 }
 
 type Cell = {

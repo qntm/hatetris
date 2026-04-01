@@ -15,7 +15,7 @@ export type CoreState = {
 export type WellState = {
   core: CoreState,
   ai: any,
-  piece: Piece
+  piece: Piece | null
 }
 
 export type Orientation = {
@@ -63,7 +63,7 @@ export type GameState = {
     interpretation: string,
     real: string,
     dismissable: boolean
-  },
+  } | null,
   displayEnemy: boolean,
   enemy: Enemy,
   customAiCode: string,
@@ -71,8 +71,8 @@ export type GameState = {
   wellStateId: number,
   wellStates: WellState[],
   replay: any[],
-  replayCopiedTimeoutId: ReturnType<typeof setTimeout>,
-  replayTimeoutId: ReturnType<typeof setTimeout>
+  replayCopiedTimeoutId: ReturnType<typeof setTimeout> | undefined,
+  replayTimeoutId: ReturnType<typeof setTimeout> | undefined
 }
 
 const moves = ['L', 'R', 'D', 'U']
@@ -101,7 +101,15 @@ export const getLogic = ({
     let nextWell = wellState.core.well
     let nextScore = wellState.core.score
     const nextAiState = wellState.ai
-    let nextPiece = { ...wellState.piece }
+    const piece = wellState.piece
+
+    /* node:coverage disable */
+    if (piece === null) {
+      throw Error('Can\'t get next well state if there is no piece in the well')
+    }
+    /* node:coverage enable */
+
+    let nextPiece: Piece | null = { ...piece }
 
     // apply transform
     if (move === 'L') {
@@ -134,11 +142,11 @@ export const getLogic = ({
         // Lock piece
         nextWell = wellState.core.well.slice()
 
-        const orientation = rotationSystem.rotations[wellState.piece.id][wellState.piece.o]
+        const orientation = rotationSystem.rotations[piece.id][piece.o]
 
         // this is the top left point in the bounding box of this orientation of this piece
-        const xActual = wellState.piece.x + orientation.xMin
-        const yActual = wellState.piece.y + orientation.yMin
+        const xActual = piece.x + orientation.xMin
+        const yActual = piece.y + orientation.yMin
 
         // row by row bitwise line alteration
         for (let row = 0; row < orientation.yDim; row++) {
@@ -168,7 +176,7 @@ export const getLogic = ({
         nextPiece = null
       } else {
         // No move
-        nextPiece = wellState.piece
+        nextPiece = piece
       }
     }
 
@@ -198,11 +206,19 @@ export const getLogic = ({
       piece.y + 4 < wellDepth && // piece is above the bottom
       core.well[piece.y + 4] === 0 // nothing immediately below it
     ) {
-      piece = getNextState({
+      const nextPiece = getNextState({
         core,
         ai: undefined,
         piece
       }, 'D').piece
+
+      /* node:coverage disable */
+      if (nextPiece === null) {
+        throw Error('This should be impossible')
+      }
+      /* node:coverage enable */
+
+      piece = nextPiece
     }
 
     const piecePositions = [piece]
@@ -331,7 +347,8 @@ export const getLogic = ({
         // information, whereas the well passed to the AI should be a simple
         // array of integers
         [pieceId, aiState] = await validateAiResult(enemy, nextWellState.core, nextWellState.ai)
-      } catch (error) {
+      } catch (error_) {
+        const error = error_ as Error
         console.error(error)
         return {
           ...state,

@@ -146,7 +146,8 @@ class Game extends React.Component<GameProps, GameState> {
     let firstWellState: WellState
     try {
       firstWellState = await this.getFirstWellState()
-    } catch (error) {
+    } catch (error_) {
+      const error = error_ as Error
       console.error(error)
       this.setState({
         error: {
@@ -201,7 +202,8 @@ class Game extends React.Component<GameProps, GameState> {
     let firstWellState: WellState
     try {
       firstWellState = await this.getFirstWellState()
-    } catch (error) {
+    } catch (error_) {
+      const error = error_ as Error
       console.error(error)
       this.setState({
         error: {
@@ -430,7 +432,8 @@ class Game extends React.Component<GameProps, GameState> {
         "use strict"
         return (${customAiCode})
       `)()
-    } catch (error) {
+    } catch (error_) {
+      const error = error_ as Error
       console.error(error)
       this.setState({
         error: {
