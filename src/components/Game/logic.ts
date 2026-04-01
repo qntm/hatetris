@@ -102,9 +102,12 @@ export const getLogic = ({
     let nextScore = wellState.core.score
     const nextAiState = wellState.ai
     const piece = wellState.piece
+
+    /* node:coverage disable */
     if (piece === null) {
       throw Error('Can\'t get next well state if there is no piece in the well')
     }
+    /* node:coverage enable */
 
     let nextPiece: Piece | null = { ...piece }
 
@@ -209,9 +212,11 @@ export const getLogic = ({
         piece
       }, 'D').piece
 
+      /* node:coverage disable */
       if (nextPiece === null) {
         throw Error('This should be impossible')
       }
+      /* node:coverage enable */
 
       piece = nextPiece
     }
