@@ -51,7 +51,7 @@
     "react": "^19.0.4",
     "react-dom": "^19.0.4",
     "sinon": "^21.0.0",
-    "start-server-and-test": "^2.0.3",
+    "start-server-and-test": "^3.0.0",
     "typescript": "^5.0.3"
   }
 }
