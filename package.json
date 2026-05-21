@@ -40,7 +40,7 @@
     "base2048": "^3.0.0",
     "base65536": "^5.0.0",
     "classnames": "^2.2.6",
-    "cypress": "^15.8.1",
+    "cypress": "^15.15.0",
     "esbuild": "^0.27.2",
     "eslint": "^9.21.0",
     "eslint-plugin-import": "^2.31.0",
