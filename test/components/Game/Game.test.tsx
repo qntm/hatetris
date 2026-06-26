@@ -119,6 +119,38 @@ describe('<Game>', () => {
     game.unmount()
   })
 
+  it('lets you play a few moves using on-screen controls', async () => {
+    const game = renderGame()
+
+    await user.click(screen.getByTestId('start-button'))
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
+
+    await user.click(screen.getByTestId('left-button'))
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
+
+    await user.click(screen.getByTestId('right-button'))
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
+
+    await user.click(screen.getByTestId('down-button'))
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
+
+    // Rotate, puts part of the piece in contact with the bar below
+    await user.click(screen.getByTestId('up-button'))
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 3)
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live').length, 1)
+
+    // Undo
+    await user.click(screen.getByTestId('undo-button'))
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 4)
+
+    // Redo
+    await user.click(screen.getByTestId('redo-button'))
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--live').length, 3)
+    assert.equal(screen.queryAllByTestId('well__cell well__cell--bar well__cell--live').length, 1)
+
+    game.unmount()
+  })
+
   it('just lets you play if you enter an empty replay', async () => {
     const game = renderGame()
 
@@ -130,7 +162,8 @@ describe('<Game>', () => {
     ])
     prompt.restore()
 
-    assert.equal(screen.queryAllByTestId('down').length, 1)
+    assert.equal(screen.queryAllByTestId('down-button').length, 1)
+
     game.unmount()
   })
 
@@ -306,11 +339,11 @@ describe('<Game>', () => {
     await user.click(screen.getByTestId('start-button'))
 
     for (let i = 0; i < 18; i++) {
-      await user.click(screen.getByTestId('down'))
+      await user.click(screen.getByTestId('down-button'))
     }
 
     const error = sinon.stub(console, 'error')
-    await user.click(screen.getByTestId('down'))
+    await user.click(screen.getByTestId('down-button'))
     error.restore()
 
     assert.equal(screen.getByTestId('error-real').textContent, 'FZAAPP')
@@ -370,6 +403,29 @@ describe('<Game>', () => {
     assert.deepEqual(warn.getCalls().map(call => call.args), [
       ['Ignoring input replay step because mode is', 'GAME_OVER']
     ])
+
+    game.unmount()
+    warn.restore()
+  })
+
+  it('lets you replay a too-short replay', async () => {
+    const warn = sinon.stub(console, 'warn')
+
+    const game = renderGame()
+
+    // Replay keeps pressing Down after game over
+    const prompt = sinon.stub(window, 'prompt')
+    prompt.returns('D')
+    await user.click(screen.getByTestId('replay-button'))
+    assert.deepEqual(prompt.getCalls().map(call => call.args), [
+      ['Paste replay string...']
+    ])
+    prompt.restore()
+
+    // Play beyond the end of the supplied replay.
+    await advanceReplaySteps(2)
+
+    assert.equal(screen.queryAllByTestId('down-button').length, 1)
 
     game.unmount()
     warn.restore()

@@ -704,6 +704,7 @@ class Game extends React.Component<GameProps, GameState> {
           <div className='game__bottom'>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
+                data-testid='undo-button'
                 className='game__button'
                 disabled={!(wellStateId - 1 in wellStates)}
                 type='button'
@@ -713,6 +714,7 @@ class Game extends React.Component<GameProps, GameState> {
                 ↶
               </button>
               <button
+                data-testid='up-button'
                 className='game__button'
                 type='button'
                 onClick={this.handleUp}
@@ -721,6 +723,7 @@ class Game extends React.Component<GameProps, GameState> {
                 ⟳
               </button>
               <button
+                data-testid='redo-button'
                 className='game__button'
                 disabled={!(wellStateId + 1 in wellStates)}
                 type='button'
@@ -732,6 +735,7 @@ class Game extends React.Component<GameProps, GameState> {
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
+                data-testid='left-button'
                 className='game__button'
                 type='button'
                 onClick={this.handleLeft}
@@ -740,7 +744,7 @@ class Game extends React.Component<GameProps, GameState> {
                 ←
               </button>
               <button
-                data-testid='down'
+                data-testid='down-button'
                 className='game__button'
                 type='button'
                 onClick={this.handleDown}
@@ -749,6 +753,7 @@ class Game extends React.Component<GameProps, GameState> {
                 ↓
               </button>
               <button
+                data-testid='right-button'
                 className='game__button'
                 type='button'
                 onClick={this.handleRight}
