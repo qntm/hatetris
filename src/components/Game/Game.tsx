@@ -129,7 +129,7 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   async handleMove (move: string) {
-    this.setState(await this.logic.handleMove(this.state, move))
+    return await this.logic.handleMove(this.state, move)
   }
 
   handleClickStart = async () => {
@@ -245,11 +245,12 @@ class Game extends React.Component<GameProps, GameState> {
     let nextReplayTimeoutId
 
     if (mode === 'REPLAYING') {
-      await this.handleRedo()
+      const nextState = await this.handleRedo()
+      this.setState(nextState)
 
       if (wellStateId + 1 in replay) {
         nextReplayTimeoutId = setTimeout(this.handleReplayTimeout, replayTimeout)
-      } else {
+      } else if (nextState !== 'GAME_OVER') {
         this.setState({
           mode: 'PLAYING'
         })
@@ -266,7 +267,8 @@ class Game extends React.Component<GameProps, GameState> {
   handleLeft = async () => {
     const { mode } = this.state
     if (mode === 'PLAYING') {
-      await this.handleMove('L')
+      const nextState = await this.handleMove('L')
+      this.setState(nextState)
     } else {
       console.warn('Ignoring event L because mode is', mode)
     }
@@ -275,7 +277,8 @@ class Game extends React.Component<GameProps, GameState> {
   handleRight = async () => {
     const { mode } = this.state
     if (mode === 'PLAYING') {
-      await this.handleMove('R')
+      const nextState = await this.handleMove('R')
+      this.setState(nextState)
     } else {
       console.warn('Ignoring event R because mode is', mode)
     }
@@ -284,7 +287,8 @@ class Game extends React.Component<GameProps, GameState> {
   handleDown = async () => {
     const { mode } = this.state
     if (mode === 'PLAYING') {
-      await this.handleMove('D')
+      const nextState = await this.handleMove('D')
+      this.setState(nextState)
     } else {
       console.warn('Ignoring event D because mode is', mode)
     }
@@ -293,7 +297,8 @@ class Game extends React.Component<GameProps, GameState> {
   handleUp = async () => {
     const { mode } = this.state
     if (mode === 'PLAYING') {
-      await this.handleMove('U')
+      const nextState = await this.handleMove('U')
+      this.setState(nextState)
     } else {
       console.warn('Ignoring event U because mode is', mode)
     }
@@ -331,15 +336,24 @@ class Game extends React.Component<GameProps, GameState> {
       wellStateId
     } = this.state
 
+    let nextState = this.state
+
     if (mode === 'PLAYING' || mode === 'REPLAYING') {
       if (wellStateId in replay) {
-        await this.handleMove(replay[wellStateId])
+        nextState = await this.handleMove(replay[wellStateId])
       } else {
         console.warn('Ignoring redo event because end of history has been reached')
       }
     } else {
       console.warn('Ignoring redo event because mode is', mode)
     }
+
+    return nextState
+  }
+
+  handleClickRedo = async () => {
+    const nextState = await this.handleRedo()
+    this.setState(nextState)
   }
 
   handleDocumentKeyDown = async (event: KeyboardEvent) => {
@@ -364,7 +378,8 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     if (event.key === 'y' && event.ctrlKey === true) {
-      await this.handleRedo()
+      const nextState = await this.handleRedo()
+      this.setState(nextState)
     }
   }
 
@@ -709,7 +724,7 @@ class Game extends React.Component<GameProps, GameState> {
                 className='game__button'
                 disabled={!(wellStateId + 1 in wellStates)}
                 type='button'
-                onClick={this.handleRedo}
+                onClick={this.handleClickRedo}
                 title='Press Ctrl+Y to redo'
               >
                 ↷
