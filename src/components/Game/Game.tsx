@@ -250,7 +250,7 @@ class Game extends React.Component<GameProps, GameState> {
 
       if (wellStateId + 1 in replay) {
         nextReplayTimeoutId = setTimeout(this.handleReplayTimeout, replayTimeout)
-      } else if (nextState !== 'GAME_OVER') {
+      } else if (nextState.mode !== 'GAME_OVER') {
         this.setState({
           mode: 'PLAYING'
         })
