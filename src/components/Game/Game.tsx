@@ -249,6 +249,10 @@ class Game extends React.Component<GameProps, GameState> {
 
       if (wellStateId + 1 in replay) {
         nextReplayTimeoutId = setTimeout(this.handleReplayTimeout, replayTimeout)
+      } else {
+        this.setState({
+          mode: 'PLAYING'
+        })
       }
     } else {
       console.warn('Ignoring input replay step because mode is', mode)
