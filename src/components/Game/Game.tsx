@@ -1,7 +1,3 @@
-/**
-  HATETRIS instance builder
-*/
-
 import * as React from 'react'
 
 import { hatetrisAi } from '../../enemy-ais/hatetris-ai.ts'
