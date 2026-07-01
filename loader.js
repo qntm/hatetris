@@ -1,5 +1,4 @@
 import fs from 'node:fs'
-import module from 'node:module'
 import url from 'node:url'
 
 import * as esbuild from 'esbuild'
