@@ -55,7 +55,8 @@ export type GameProps = {
 export type Enemy = {
   shortDescription: string | ReactElement,
   buttonDescription: string,
-  ai: EnemyAi
+  ai: EnemyAi,
+  highScore: number
 }
 
 export type GameState = {

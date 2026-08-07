@@ -26,7 +26,8 @@ export type { CoreState, WellState, GameProps, RotationSystem, EnemyAi, Piece }
 export const hatetris: Enemy = {
   shortDescription: 'HATETRIS',
   buttonDescription: 'HATETRIS, the original and worst',
-  ai: hatetrisAi
+  ai: hatetrisAi,
+  highScore: 3711
 }
 
 export const hatetrisMild: Enemy = {
@@ -38,13 +39,15 @@ export const hatetrisMild: Enemy = {
     </a>
   ),
   buttonDescription: 'HATETRIS without loop-prevention',
-  ai: hatetrisMildAi
+  ai: hatetrisMildAi,
+  highScore: Infinity
 }
 
 export const lovetris: Enemy = {
   shortDescription: '❤️',
   buttonDescription: 'all 4x1 pieces, all the time',
-  ai: lovetrisAi
+  ai: lovetrisAi,
+  highScore: Infinity
 }
 
 export const brz: Enemy = {
@@ -56,7 +59,8 @@ export const brz: Enemy = {
     </a>
   ),
   buttonDescription: 'Brzustowski (1992)',
-  ai: brzAi
+  ai: brzAi,
+  highScore: 0
 }
 
 const burg: Enemy = {
@@ -68,7 +72,8 @@ const burg: Enemy = {
     </a>
   ),
   buttonDescription: 'Burgiel (1997)',
-  ai: burgAi
+  ai: burgAi,
+  highScore: 676
 }
 
 const enemies = [hatetris, hatetrisMild, lovetris, brz, burg]
@@ -463,7 +468,8 @@ class Game extends React.Component<GameProps, GameState> {
     this.handleClickEnemy({
       shortDescription: 'custom',
       buttonDescription: 'this is never actually used',
-      ai
+      ai,
+      highScore: 0
     })
   }
 
@@ -565,6 +571,10 @@ class Game extends React.Component<GameProps, GameState> {
                 AI: {enemy.shortDescription}
               </p>
             )}
+
+            <p className='game__paragraph'>
+              high score: <a href='https://qntm.org/records'>{enemy.highScore === Infinity ? '∞' : enemy.highScore}</a>
+            </p>
 
             {score !== null && (
               <p
