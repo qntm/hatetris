@@ -92,8 +92,8 @@ You can use the AI state value to store state between function calls:
 
 ```js
 // Ignore well state. Return S and Z pieces, alternating
-(_, currentAiState) =>
-  currentAiState?.last === 'S'
+(_, currentAiState = { last: 'Z }) =>
+  currentAiState.last === 'S'
     ? ['Z', { last: 'Z' }]
     : ['S', { last: 'S' }]
 ```
