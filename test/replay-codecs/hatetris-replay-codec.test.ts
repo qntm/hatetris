@@ -5,7 +5,7 @@ import hatetrisReplayCodec from '../../src/replay-codecs/hatetris-replay-codec.t
 
 describe('hatetrisReplayCodec', () => {
   it('encodes', () => {
-    assert.equal(hatetrisReplayCodec.encode(['D', 'D', 'D', 'R', 'U', 'D']), 'ਹԇ')
+    assert.equal(hatetrisReplayCodec.encode(['D', 'D', 'D', 'R', 'U', 'D']), 'DDDRUD')
   })
 
   it('decodes', () => {

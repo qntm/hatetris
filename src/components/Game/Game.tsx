@@ -27,7 +27,7 @@ export const hatetris: Enemy = {
   shortDescription: 'HATETRIS',
   buttonDescription: 'HATETRIS, the original and worst',
   ai: hatetrisAi,
-  highScore: 3711
+  highScore: 4178
 }
 
 export const hatetrisMild: Enemy = {

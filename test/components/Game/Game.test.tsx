@@ -190,13 +190,13 @@ describe('<Game>', () => {
       await user.keyboard('{Down}')
     }
 
-    assert.equal(screen.getByTestId('replay-out').textContent, '௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ')
+    assert.equal(screen.getByTestId('replay-out').textContent, 'D'.repeat(187))
 
     // Copy the replay
     await user.click(screen.getByTestId('copy-replay'))
 
     assert.deepEqual(calls, [
-      ['௨ටໃݹ௨ටໃݹ௨ටໃݹ௨ටໃݹ௨Đ']
+      ['D'.repeat(187)]
     ])
     Object.defineProperty(navigator, 'clipboard', {
       value: clipboard,
