@@ -60,10 +60,10 @@ export const brz: Enemy = {
   ),
   buttonDescription: 'Brzustowski (1992)',
   ai: brzAi,
-  highScore: 0
+  highScore: 55
 }
 
-const burg: Enemy = {
+export const burg: Enemy = {
   shortDescription: (
     <a
       href='https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.55.8562&rep=rep1&type=pdf'
