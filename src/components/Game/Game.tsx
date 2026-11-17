@@ -60,7 +60,7 @@ export const brz: Enemy = {
   ),
   buttonDescription: 'Brzustowski (1992)',
   ai: brzAi,
-  highScore: 0
+  highScore: 55
 }
 
 export const burg: Enemy = {

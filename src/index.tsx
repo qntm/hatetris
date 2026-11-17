@@ -32,7 +32,7 @@ root.render(
   <Game
     bar={4}
     copyTimeout={3000}
-    replayTimeout={1}
+    replayTimeout={50}
     rotationSystem={hatetrisRotationSystem}
     wellDepth={20}
     wellWidth={10}
