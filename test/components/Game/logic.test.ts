@@ -161,7 +161,7 @@ describe('logic', () => {
             replay: hatetris232
           },
           {
-            name: 'knewjade (5)',
+            name: 'knewjade (6)',
             expectedScore: 289,
             replay: hatetris289
           },
