@@ -40,7 +40,7 @@ const brz55 = await fsPromises.readFile('./test/components/Game/runs/brz-55-qntm
 const burg643 = await fsPromises.readFile('./test/components/Game/runs/burg-643-grochowski.txt', 'utf8')
 const burg676 = await fsPromises.readFile('./test/components/Game/runs/burg-676-david&felipe.txt', 'utf8')
 
-type Runs = ReadonlyArray<{
+type Run = Readonly<{
   aiName: string
   enemy: Enemy
   name: string
@@ -59,7 +59,8 @@ const logic = getLogic({
 
 describe('logic', () => {
   describe('check known replays', function () {
-    const checkKnownReplay = ({ aiName, enemy, name, expectedScore, replay: str }) => {
+    const checkKnownReplay = (run: Run) => {
+      const { aiName, enemy, name, expectedScore, replay: str } = run
       it(`${aiName} / ${name} / ${expectedScore}`, async () => {
         const replay = hatetrisReplayCodec.decode(str)
 
