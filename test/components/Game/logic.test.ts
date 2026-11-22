@@ -36,6 +36,7 @@ const hatetris366 = await fsPromises.readFile('./test/components/Game/runs/hatet
 const hatetris3711 = await fsPromises.readFile('./test/components/Game/runs/hatetris-3711-david&felipe.txt', 'utf8')
 const hatetris4178 = await fsPromises.readFile('./test/components/Game/runs/hatetris-4178-skidikipopop.txt', 'utf8')
 const hatetris4354 = await fsPromises.readFile('./test/components/Game/runs/hatetris-4354-david&felipe.txt', 'utf8')
+const hatetris8962 = await fsPromises.readFile('./test/components/Game/runs/hatetris-8962-skidikipopop.txt', 'utf8')
 const brz55 = await fsPromises.readFile('./test/components/Game/runs/brz-55-qntm.txt', 'utf8')
 const burg643 = await fsPromises.readFile('./test/components/Game/runs/burg-643-grochowski.txt', 'utf8')
 const burg676 = await fsPromises.readFile('./test/components/Game/runs/burg-676-david&felipe.txt', 'utf8')
@@ -122,8 +123,9 @@ describe('logic', () => {
     checkKnownReplay({ aiName: 'HATETRIS', enemy: hatetris, name: 'David & Felipe (4)', expectedScore: 302, replay: hatetris302 })
     checkKnownReplay({ aiName: 'HATETRIS', enemy: hatetris, name: 'David & Felipe (5)', expectedScore: 366, replay: hatetris366 })
     checkKnownReplay({ aiName: 'HATETRIS', enemy: hatetris, name: 'David & Felipe (6)', expectedScore: 3711, replay: hatetris3711 })
-    checkKnownReplay({ aiName: 'HATETRIS', enemy: hatetris, name: 'skidikipopop', expectedScore: 4178, replay: hatetris4178 })
+    checkKnownReplay({ aiName: 'HATETRIS', enemy: hatetris, name: 'skidikipopop (1)', expectedScore: 4178, replay: hatetris4178 })
     checkKnownReplay({ aiName: 'HATETRIS', enemy: hatetris, name: 'David & Felipe (7)', expectedScore: 4354, replay: hatetris4354 })
+    checkKnownReplay({ aiName: 'HATETRIS', enemy: hatetris, name: 'skidikipopop (2)', expectedScore: 8962, replay: hatetris8962 })
 
     checkKnownReplay({
       aiName: 'HATETRIS',
