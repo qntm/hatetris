@@ -63,7 +63,6 @@ describe('logic', () => {
     const checkKnownReplay = (run: Run) => {
       const { aiName, enemy, name, expectedScore, replay: str } = run
       it(`${aiName} / ${name} / ${expectedScore}`, async () => {
-        console.log(`${aiName} / ${name} / ${expectedScore}`)
         const replay = hatetrisReplayCodec.decode(str)
 
         const firstState: GameState = {
@@ -83,11 +82,7 @@ describe('logic', () => {
         firstState.wellStateId++
 
         let state = firstState
-        let i = 0
         for (const move of replay) {
-          if (i % 1000 === 0) {
-            console.log(`${i}/${replay.length}`)
-          }
           if (state.mode === 'GAME_OVER') {
             // console.log({ move })
             throw Error('replay too long')
@@ -97,7 +92,6 @@ describe('logic', () => {
               ...await logic.handleMove(state, move)
             }
           }
-          i++
         }
 
         assert.equal(state.error, null)
